@@ -7,6 +7,8 @@ class SignupForm extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            firstname: '',
+            lastname: '',
             username: '',
             password: '',
             password2: '',
@@ -20,8 +22,10 @@ class SignupForm extends Component {
 
     async onSubmit(e) {
         e.preventDefault();
-        const { username, password } = this.state;
+        const { firstname, lastname, username, password } = this.state;
         const body = new URLSearchParams();
+        body.set('firstname', firstname);
+        body.set('lastname', lastname);
         body.set('username', username);
         body.set('password', password);
         await fetch('/user', {
@@ -31,10 +35,28 @@ class SignupForm extends Component {
     }
 
     render() {
-        const { username, password, password2, available } = this.state;
+        const { firstname, lastname, username, password, password2, available } = this.state;
         const { classes } = this.props;
         return (
             <form className={classes.root} noValidate autoComplete="off" onSubmit={this.onSubmit.bind(this)}>
+                <TextField
+                    variant="outlined"
+                    type="text"
+                    name="firstname"
+                    label="First Name"
+                    error={!firstname}
+                    value={firstname}
+                    onChange={this.onChange.bind(this)}
+                />
+                <TextField
+                    variant="outlined"
+                    type="text"
+                    name="lastname"
+                    label="Last Name"
+                    error={!lastname}
+                    value={lastname}
+                    onChange={this.onChange.bind(this)}
+                />
                 <TextField
                     variant="outlined"
                     type="text"
