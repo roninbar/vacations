@@ -4,6 +4,7 @@ import { BrowserRouter, Link, Route, Switch } from 'react-router-dom';
 import HomePage from './components/home-page';
 import LoginForm from './components/login-form';
 import SignupForm from './components/signup-form';
+import PrivateRoute from './components/private-route';
 
 function App() {
   return (
@@ -17,9 +18,7 @@ function App() {
           <LoginForm />
           <Link to="/signup">Don't have an account yet?</Link>
         </Route>
-        <Route exact path="/">
-          <HomePage />
-        </Route>
+        <PrivateRoute exact path="/" component={HomePage} />
       </Switch>
     </BrowserRouter>
   );
