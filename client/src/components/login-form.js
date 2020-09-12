@@ -2,7 +2,9 @@ import { Button } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
+import { loginAction } from '../actions/login';
 
 class LoginForm extends Component {
 
@@ -14,20 +16,23 @@ class LoginForm extends Component {
         };
     }
 
-    async onSubmit(e) {
+    onSubmit(e) {
         e.preventDefault();
-        const { username, password } = this.state;
-        const body = new URLSearchParams();
-        body.set('username', username);
-        body.set('password', password);
-        const { status } = await fetch('/login', {
-            method: 'POST',
-            body,
-        });
-        const { history } = this.props;
-        if (history && 200 <= status && status < 300) {
-            history.push('/');
-        }
+        const { logIn, history } = this.props;
+        const { username } = this.state;
+        logIn(username);
+        history.push('/');
+        // const body = new URLSearchParams();
+        // body.set('username', username);
+        // body.set('password', password);
+        // const { status } = await fetch('/login', {
+        //     method: 'POST',
+        //     body,
+        // });
+        // const { history } = this.props;
+        // if (history && 200 <= status && status < 300) {
+        //     history.push('/');
+        // }
     }
 
     onChangeField({ target: { name, value } }) {
@@ -77,4 +82,9 @@ const styles = theme => ({
     },
 });
 
-export default withRouter(withStyles(styles)(LoginForm));
+const mapDispatchToProps = dispatch => ({ logIn: username => dispatch(loginAction(username)) });
+
+const withRedux = connect(null, mapDispatchToProps);
+
+export default withRedux(withRouter(withStyles(styles)(LoginForm)));
+

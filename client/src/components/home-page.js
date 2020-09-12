@@ -1,9 +1,11 @@
 import { Grid, Typography, withStyles } from '@material-ui/core';
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { Link, withRouter } from 'react-router-dom';
+import { logoutAction } from '../actions/logout';
 import Vacation from './vacation';
 
-function HomePage({ classes }) {
+function HomePage({ classes, history, logOut }) {
     const vacations = [
         {
             id: 1,
@@ -92,10 +94,19 @@ function HomePage({ classes }) {
         }
     ];
 
+    async function onClickLogOut() {
+        logOut();
+        history.push('/');
+        // const { status } = await fetch('/logout', { method: 'POST' });
+        // if (status === 205) {
+        //     history.push('/login');
+        // }
+    }
+
     return (
         <div className={classes.root}>
             <Typography className={classes.logout}>
-                <Link to="#">Log Out</Link>
+                <Link to="#" onClick={onClickLogOut}>Log Out</Link>
             </Typography>
             <Grid container spacing={4}>
                 {vacations.map(({ id, ...rest }) => (
@@ -118,5 +129,10 @@ const styles = {
     },
 };
 
-export default withStyles(styles)(HomePage);
+const mapDispatchToProps = dispatch => ({ logOut: () => dispatch(logoutAction()) });
+
+const withRedux = connect(null, mapDispatchToProps);
+
+export default withRedux(withRouter(withStyles(styles)(HomePage)));
+
 
