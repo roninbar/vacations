@@ -1,5 +1,11 @@
-import { Button, Card, CardActions, CardContent, Typography, withStyles } from '@material-ui/core';
+import { Avatar, Button, Card, CardActions, CardContent, CardHeader, CardMedia, IconButton, withStyles } from '@material-ui/core';
+import FavoriteIcon from '@material-ui/icons/Favorite';
+import MoreVertIcon from '@material-ui/icons/MoreVert';
+import ShareIcon from '@material-ui/icons/Share';
+import { Html5Entities } from 'html-entities';
 import React from 'react';
+
+const entities = new Html5Entities();
 
 function HomePage({ classes }) {
     const vacations = [
@@ -12,29 +18,37 @@ function HomePage({ classes }) {
             to: new Date('2020-11-11'),
         }
     ];
-    const bull = <span className={classes.bullet}>•</span>;
     return (
         <div className={classes.container}>
             {vacations.map(({ id, desc, price, picture, from, to }) => (
-                <Card className={classes.root}>
-                    <CardContent>
-                        <Typography className={classes.title} color="textSecondary" gutterBottom>
-                            Word of the Day
-                    </Typography>
-                        <Typography variant="h5" component="h2">
-                            be{bull}nev{bull}o{bull}lent
-                    </Typography>
-                        <Typography className={classes.pos} color="textSecondary">
-                            adjective
-                    </Typography>
-                        <Typography variant="body2" component="p">
-                            well meaning and kindly.
-                    <br />
-                            {'"a benevolent smile"'}
-                        </Typography>
+                <Card key={id} className={classes.root}>
+                    <CardHeader
+                        avatar={
+                            <Avatar aria-label="recipe" className={classes.avatar}>R</Avatar>
+                        }
+                        action={
+                            <IconButton aria-label="settings">
+                                <MoreVertIcon />
+                            </IconButton>
+                        }
+                        title={desc}
+                        subheader={entities.decode(`${from.toDateString()}&ndash;${to.toDateString()}`)}
+                    />
+                    <CardMedia
+                        className={classes.media}
+                        image={picture}
+                        title={desc}
+                    />
+                    <CardContent className={classes.content}>
+                        <Button variant="contained" color="primary">Book</Button>
                     </CardContent>
-                    <CardActions>
-                        <Button size="small">Learn More</Button>
+                    <CardActions disableSpacing>
+                        <IconButton>
+                            <FavoriteIcon />
+                        </IconButton>
+                        <IconButton>
+                            <ShareIcon />
+                        </IconButton>
                     </CardActions>
                 </Card>
             ))}
@@ -46,21 +60,19 @@ const styles = {
     root: {
         minWidth: 275,
     },
-    bullet: {
-        display: 'inline-block',
-        margin: '0 2px',
-        transform: 'scale(0.8)',
+    media: {
+        height: 0,
+        paddingTop: '56.25%', // 16:9
     },
-    title: {
-        fontSize: 14,
-    },
-    pos: {
-        marginBottom: 12,
+    content: {
+        display: 'flex',
+        justifyContent: 'center',
     },
     container: {
         display: 'flex',
         justifyContent: 'center',
         margin: 'auto',
+        padding: '24px',
         backgroundColor: '#f5f5f5',
     },
 };
