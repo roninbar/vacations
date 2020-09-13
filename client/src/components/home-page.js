@@ -5,7 +5,8 @@ import { Link, withRouter } from 'react-router-dom';
 import { logoutAction } from '../actions/logout';
 import Vacation from './vacation';
 
-function HomePage({ classes, history, logOut }) {
+function HomePage({ classes, history, username, logOut }) {
+
     const vacations = [
         {
             id: 1,
@@ -94,7 +95,7 @@ function HomePage({ classes, history, logOut }) {
         }
     ];
 
-    async function onClickLogOut() {
+    function onClickLogOut() {
         logOut();
         history.push('/');
         // const { status } = await fetch('/logout', { method: 'POST' });
@@ -106,7 +107,7 @@ function HomePage({ classes, history, logOut }) {
     return (
         <div className={classes.root}>
             <Typography className={classes.logout}>
-                <Link to="#" onClick={onClickLogOut}>Log Out</Link>
+                {username} (<Link to="#" onClick={onClickLogOut}>log out</Link>)
             </Typography>
             <Grid container spacing={4}>
                 {vacations.map(({ id, ...rest }) => (
@@ -129,9 +130,11 @@ const styles = {
     },
 };
 
+const mapStateToProps = ({ user: { name: username } }) => ({ username });
+
 const mapDispatchToProps = dispatch => ({ logOut: () => dispatch(logoutAction()) });
 
-const withRedux = connect(null, mapDispatchToProps);
+const withRedux = connect(mapStateToProps, mapDispatchToProps);
 
 export default withRedux(withRouter(withStyles(styles)(HomePage)));
 
