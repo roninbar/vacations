@@ -1,11 +1,11 @@
-import { Avatar, Button, Card, CardActions, CardContent, CardHeader, CardMedia, IconButton, Typography, withStyles } from '@material-ui/core';
+import { Avatar, Card, CardActions, CardContent, CardHeader, CardMedia, IconButton, Typography, withStyles } from '@material-ui/core';
+import { red } from '@material-ui/core/colors';
+import { Subscriptions } from '@material-ui/icons';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import MoreVertIcon from '@material-ui/icons/MoreVert';
 import ShareIcon from '@material-ui/icons/Share';
-import { Subscriptions } from '@material-ui/icons';
 import { Html5Entities } from 'html-entities';
 import React from 'react';
-import { red } from '@material-ui/core/colors';
 
 const entities = new Html5Entities();
 
@@ -31,7 +31,6 @@ function Vacation({ classes, desc, from, to, picture, price }) {
                 <Typography>
                     &euro;{price}
                 </Typography>
-                <Button variant="contained" color="primary">Book</Button>
             </CardContent>
             <CardActions disableSpacing>
                 <IconButton>
