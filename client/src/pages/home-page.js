@@ -3,7 +3,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { Link, withRouter } from 'react-router-dom';
 import { logoutAction } from '../actions/logout';
-import Vacation from './vacation';
+import Vacation from '../components/vacation';
 
 function HomePage({ classes, history, username, logOut }) {
 
