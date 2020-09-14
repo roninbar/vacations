@@ -20,7 +20,7 @@ function Vacation({ classes, desc, from, to, picture, price, followers = 0 }) {
                     <Typography variant="subtitle1" gutterBottom>
                         {entities.decode(`${from.toDateString()}&ndash;${to.toDateString()}`)}
                     </Typography>
-                    <Typography variant="subtitle2">&euro;{price}</Typography>
+                    <Typography variant="h6">&euro;{price}</Typography>
                 </CardContent>
             </CardActionArea>
             <CardActions>
