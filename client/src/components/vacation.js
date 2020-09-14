@@ -1,47 +1,36 @@
-import { Avatar, Card, CardActions, CardContent, CardHeader, CardMedia, IconButton, Typography, withStyles } from '@material-ui/core';
-import { red } from '@material-ui/core/colors';
-import { Subscriptions } from '@material-ui/icons';
-import FavoriteIcon from '@material-ui/icons/Favorite';
-import MoreVertIcon from '@material-ui/icons/MoreVert';
-import ShareIcon from '@material-ui/icons/Share';
+import { Badge, Button, Card, CardActionArea, CardActions, CardContent, CardMedia, Typography, withStyles } from '@material-ui/core';
 import { Html5Entities } from 'html-entities';
 import React from 'react';
 
 const entities = new Html5Entities();
 
-function Vacation({ classes, desc, from, to, picture, price }) {
+function Vacation({ classes, desc, from, to, picture, price, followers = 0 }) {
     return (
         <Card className={classes.root}>
-            <CardHeader
-                avatar={
-                    <Avatar className={classes.avatar}>{desc.charAt(0).toUpperCase()}</Avatar>
-                }
-                action={
-                    <IconButton>
-                        <MoreVertIcon />
-                    </IconButton>
-                }
-                title={desc}
-                subheader={entities.decode(`${from.toDateString()}&ndash;${to.toDateString()}`)} />
-            <CardMedia
-                className={classes.media}
-                image={picture}
-                title={desc} />
-            <CardContent className={classes.content}>
-                <Typography>
-                    &euro;{price}
-                </Typography>
-            </CardContent>
-            <CardActions disableSpacing>
-                <IconButton>
-                    <FavoriteIcon />
-                </IconButton>
-                <IconButton>
-                    <ShareIcon />
-                </IconButton>
-                <IconButton>
-                    <Subscriptions />
-                </IconButton>
+            <CardActionArea>
+                <CardMedia
+                    className={classes.media}
+                    image={picture}
+                    title={desc}
+                />
+                <CardContent>
+                    <Typography variant="h5" gutterBottom>
+                        {desc}
+                    </Typography>
+                    <Typography variant="subtitle1" gutterBottom>
+                        {entities.decode(`${from.toDateString()}&ndash;${to.toDateString()}`)}
+                    </Typography>
+                    <Typography variant="subtitle2">&euro;{price}</Typography>
+                </CardContent>
+            </CardActionArea>
+            <CardActions>
+                <Badge badgeContent={followers} color="primary">
+                    <Button size="small" color="primary">
+                        <Typography variant="button">
+                            Follow
+                        </Typography>
+                    </Button>
+                </Badge>
             </CardActions>
         </Card>
     );
@@ -49,18 +38,10 @@ function Vacation({ classes, desc, from, to, picture, price }) {
 
 const styles = {
     root: {
-        minWidth: 275,
+        maxWidth: 345,
     },
     media: {
-        height: 0,
-        paddingTop: '56.25%', // 16:9
-    },
-    content: {
-        display: 'flex',
-        justifyContent: 'center',
-    },
-    avatar: {
-        backgroundColor: red[500],
+        height: 140,
     },
 };
 

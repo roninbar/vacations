@@ -15,6 +15,7 @@ function HomePage({ classes, history, username, logOut }) {
             picture: 'https://radiogenial.cl/wp-content/uploads/2019/09/foto-centro-coyhaique--696x426.jpg',
             from: new Date('2020-11-01'),
             to: new Date('2020-11-11'),
+            followers: 5,
         }, {
             id: 2,
             desc: 'Puerto Aysén',
