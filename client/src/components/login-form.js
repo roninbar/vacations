@@ -4,7 +4,7 @@ import TextField from '@material-ui/core/TextField';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { loginAction } from '../actions/login';
+import { logInAsync } from '../actions/login';
 
 class LoginForm extends Component {
 
@@ -16,23 +16,12 @@ class LoginForm extends Component {
         };
     }
 
-    onSubmit(e) {
+    async onSubmit(e) {
         e.preventDefault();
         const { logIn, history } = this.props;
-        const { username } = this.state;
-        logIn(username);
+        const { username, password } = this.state;
+        await logIn(username, password);
         history.push('/');
-        // const body = new URLSearchParams();
-        // body.set('username', username);
-        // body.set('password', password);
-        // const { status } = await fetch('/login', {
-        //     method: 'POST',
-        //     body,
-        // });
-        // const { history } = this.props;
-        // if (history && 200 <= status && status < 300) {
-        //     history.push('/');
-        // }
     }
 
     onChangeField({ target: { name, value } }) {
@@ -82,7 +71,7 @@ const styles = theme => ({
     },
 });
 
-const mapDispatchToProps = dispatch => ({ logIn: username => dispatch(loginAction(username)) });
+const mapDispatchToProps = dispatch => ({ logIn: (username, password) => dispatch(logInAsync(username, password)) });
 
 const withRedux = connect(null, mapDispatchToProps);
 
