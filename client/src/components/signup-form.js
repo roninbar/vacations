@@ -1,5 +1,5 @@
 import { Button, TextField, withStyles } from '@material-ui/core';
-import React, { Component, createRef } from 'react';
+import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 
 class SignupForm extends Component {
@@ -31,10 +31,19 @@ class SignupForm extends Component {
             body.set('lastname', lastname);
             body.set('username', username);
             body.set('password', password);
-            await fetch('/user', {
+            const { status } = await fetch('/user', {
                 method: 'POST',
                 body,
             });
+            if (status === 201) {
+                this.setState({
+                    firstname: '',
+                    lastname: '',
+                    username: '',
+                    password: '',
+                    password2: '',
+                });
+            }
         } finally {
             this.setState({ submitted: false });
         }
