@@ -2,7 +2,7 @@ import { Grid, Typography, withStyles } from '@material-ui/core';
 import React from 'react';
 import { connect } from 'react-redux';
 import { Link, withRouter } from 'react-router-dom';
-import { logoutAction } from '../actions/logout';
+import { logOutAsync } from '../actions/user';
 import Vacation from '../components/vacation';
 
 function HomePage({ classes, history, username, logOut }) {
@@ -98,11 +98,7 @@ function HomePage({ classes, history, username, logOut }) {
 
     function onClickLogOut() {
         logOut();
-        history.push('/');
-        // const { status } = await fetch('/logout', { method: 'POST' });
-        // if (status === 205) {
-        //     history.push('/login');
-        // }
+        history.replace('/');
     }
 
     return (
@@ -133,7 +129,7 @@ const styles = {
 
 const mapStateToProps = ({ user: { name: username } }) => ({ username });
 
-const mapDispatchToProps = dispatch => ({ logOut: () => dispatch(logoutAction()) });
+const mapDispatchToProps = dispatch => ({ logOut: () => dispatch(logOutAsync()) });
 
 const withRedux = connect(mapStateToProps, mapDispatchToProps);
 

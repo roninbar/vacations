@@ -7,6 +7,10 @@ function loginAction(username) {
     return { type: LOGIN, payload: username };
 }
 
+function logoutAction() {
+    return { type: LOGOUT };
+}
+
 function authError() {
     return { type: ERR_AUTH };
 }
@@ -30,6 +34,17 @@ export function logInAsync(username, password) {
             dispatch(authError());
         } else {
             dispatch(unknownError());
+        }
+    };
+}
+
+export function logOutAsync() {
+    return async function(dispatch) {
+        const { status } = await fetch('/user/logout', { method: 'POST' });
+        if (200 <= status && status < 300) {
+            return dispatch(logoutAction());
+        } else {
+            return dispatch(unknownError())
         }
     };
 }

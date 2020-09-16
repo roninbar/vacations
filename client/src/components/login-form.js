@@ -4,7 +4,7 @@ import TextField from '@material-ui/core/TextField';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { logInAsync } from '../actions/login';
+import { logInAsync } from '../actions/user';
 
 class LoginForm extends Component {
 
@@ -13,6 +13,7 @@ class LoginForm extends Component {
         this.state = {
             username: '',
             password: '',
+            submitted: false,
         };
     }
 
@@ -20,8 +21,9 @@ class LoginForm extends Component {
         e.preventDefault();
         const { logIn, history } = this.props;
         const { username, password } = this.state;
+        this.setState({ submitted: true });
         await logIn(username, password);
-        history.push('/');
+        history.replace('/');
     }
 
     onChangeField({ target: { name, value } }) {
@@ -30,7 +32,7 @@ class LoginForm extends Component {
 
     render() {
         const { classes } = this.props;
-        const { username, password } = this.state;
+        const { username, password, submitted } = this.state;
         return (
             <form className={classes.root} noValidate autoComplete="off" onSubmit={this.onSubmit.bind(this)}>
                 <TextField
@@ -52,7 +54,7 @@ class LoginForm extends Component {
                     variant="contained"
                     color="primary"
                     size="large"
-                    disabled={!username || !password}
+                    disabled={!username || !password || submitted}
                 >Log In</Button>
             </form>
         );
