@@ -12,8 +12,7 @@ async function addUser(username, password, firstname, lastname) {
         \`name\` = :username, 
         \`password_hash\` = :passwordHash, 
         \`first_name\` = :firstname, 
-        \`last_name\` = :lastname, 
-        \`role_id\` = (SELECT \`id\` FROM \`role\` WHERE \`name\` = 'user')`,
+        \`last_name\` = :lastname`,
       namedPlaceholders: true,
     }, {
       firstname,
