@@ -5,6 +5,24 @@
   "version": "0.2.0",
   "configurations": [
     {
+      "name": "Launch Server",
+      "type": "pwa-node",
+      "request": "launch",
+      "program": "${workspaceFolder}/server/bin/www",
+      "skipFiles": ["<node_internals>/**"],
+      "console": "integratedTerminal"
+    },
+    {
+      "name": "Launch Server via NPM",
+      "type": "pwa-node",
+      "request": "launch",
+      "cwd": "${workspaceFolder}/server",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run-script", "start"],
+      "skipFiles": ["<node_internals>/**"],
+      "console": "integratedTerminal"
+    },
+    {
       "name": "Launch Edge against localhost:3000",
       "type": "pwa-msedge",
       "request": "launch",
