@@ -6,7 +6,7 @@ const { hash } = require('./hash');
 passport.use(new Strategy(async function (username, password, done) {
     const conn = await mysql.createConnection({
         user: 'root',
-        database: 'todo',
+        database: 'vacations',
     });
     try {
         const [[user]] = await conn.execute('SELECT `id` FROM `user` WHERE `name` = ? AND `password_hash` = ?', [username, hash(password)]);
