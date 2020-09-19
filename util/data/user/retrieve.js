@@ -1,5 +1,19 @@
-var mysql = require('mysql2/promise');
+const mysql = require('mysql2/promise');
 const { hash } = require('../../hash');
+
+async function getUserByName(name) {
+    const conn = await mysql.createConnection({
+        user: 'root',
+        database: 'vacations',
+    });
+    try {
+        const [[user]] = await conn.execute('SELECT * FROM `user` WHERE `name` = ?', [name]);
+        return user;
+    }
+    finally {
+        await conn.end();
+    }
+}
 
 async function getUserByCredentials(username, password) {
     const conn = await mysql.createConnection({
@@ -19,5 +33,5 @@ async function getUserByCredentials(username, password) {
     }
 }
 
-exports.getUserByCredentials = getUserByCredentials;
+Object.assign(exports, { getUserByName, getUserByCredentials });
 
