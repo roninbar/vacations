@@ -98,13 +98,12 @@ function HomePage({ classes, history, username, logOut }) {
 
     function onClickLogOut() {
         logOut();
-        history.replace('/');
     }
 
     return (
         <div className={classes.root}>
             <Typography className={classes.logout}>
-                {username} (<Link to="#" onClick={onClickLogOut}>log out</Link>)
+                {username} (<Link to="/login" onClick={onClickLogOut}>log out</Link>)
             </Typography>
             <Grid container spacing={4}>
                 {vacations.map(({ id, ...rest }) => (
@@ -134,5 +133,4 @@ const mapDispatchToProps = dispatch => ({ logOut: () => dispatch(logOutAsync()) 
 const withRedux = connect(mapStateToProps, mapDispatchToProps);
 
 export default withRedux(withRouter(withStyles(styles)(HomePage)));
-
 
