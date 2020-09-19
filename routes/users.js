@@ -1,5 +1,5 @@
-const { addUser } = require('../util/data/user/create');
-const { getUserByName } = require('../util/data/user/retrieve');
+const { addUser } = require('../entities/user/create');
+const { getUserByName } = require('../entities/user/retrieve');
 var passport = require('../util/passport');
 var express = require('express');
 

@@ -1,6 +1,6 @@
 var passport = require('passport');
 var { Strategy } = require('passport-local');
-const { getUserByCredentials } = require("./data/user/retrieve");
+const { getUserByCredentials } = require("../entities/user/retrieve");
 
 passport.use(new Strategy(async function (username, password, done) {
     try {
