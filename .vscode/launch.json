@@ -9,7 +9,9 @@
       "type": "pwa-node",
       "request": "launch",
       "program": "${workspaceFolder}/server/bin/www",
-      "skipFiles": ["<node_internals>/**"],
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
       "console": "integratedTerminal"
     },
     {
@@ -18,8 +20,16 @@
       "request": "launch",
       "cwd": "${workspaceFolder}/server",
       "runtimeExecutable": "npm",
-      "runtimeArgs": ["run-script", "start"],
-      "skipFiles": ["<node_internals>/**"],
+      "runtimeArgs": [
+        "run-script",
+        "start"
+      ],
+      "env": {
+        "PORT": "4000"
+      },
+      "skipFiles": [
+        "<node_internals>/**"
+      ],
       "console": "integratedTerminal"
     },
     {
