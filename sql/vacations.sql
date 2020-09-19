@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 18, 2020 at 04:14 PM
+-- Generation Time: Sep 20, 2020 at 12:22 AM
 -- Server version: 10.4.14-MariaDB
 -- PHP Version: 7.4.9
 
@@ -54,13 +54,6 @@ CREATE TABLE `sessions` (
   `data` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
---
--- Dumping data for table `sessions`
---
-
-INSERT INTO `sessions` (`session_id`, `expires`, `data`) VALUES
-('0R5hBcZFEB3bcdLrJIfx4HBFeHekCNvZ', 1600445719, '{\"cookie\":{\"originalMaxAge\":null,\"expires\":null,\"httpOnly\":true,\"path\":\"/\"},\"passport\":{\"user\":22}}');
-
 -- --------------------------------------------------------
 
 --
@@ -82,7 +75,31 @@ CREATE TABLE `user` (
 
 INSERT INTO `user` (`id`, `name`, `password_hash`, `first_name`, `last_name`, `role_id`) VALUES
 (22, 'ron', '+OZPF0NlweGlAV+4kh5pZh1ZKB7HbsKvVaM54XoNS7Q=', 'Ron', 'Inbar', 2),
-(23, 'dan', '+OZPF0NlweGlAV+4kh5pZh1ZKB7HbsKvVaM54XoNS7Q=', 'Dan', 'Inbar', 1);
+(26, 'girit', '+OZPF0NlweGlAV+4kh5pZh1ZKB7HbsKvVaM54XoNS7Q=', 'Girit', 'Inbar', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `vacation`
+--
+
+CREATE TABLE `vacation` (
+  `id` int(11) NOT NULL,
+  `desc` varchar(280) NOT NULL,
+  `price` decimal(8,2) NOT NULL DEFAULT 0.00,
+  `picture` varchar(500) DEFAULT NULL,
+  `from` date NOT NULL,
+  `to` date NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `vacation`
+--
+
+INSERT INTO `vacation` (`id`, `desc`, `price`, `picture`, `from`, `to`) VALUES
+(1, 'Coyhaique', '5000.00', 'https://radiogenial.cl/wp-content/uploads/2019/09/foto-centro-coyhaique--696x426.jpg', '2020-11-01', '2020-11-05'),
+(2, 'Puerto Aysén', '6500.00', 'https://s0.wklcdn.com/image_38/1145035/7179015/4066224Master.jpg', '2020-11-11', '2020-11-15'),
+(3, 'Punta Arenas', '8000.00', 'https://creatividadnatural.com/wp-content/uploads/2018/09/MG_9778.jpg', '2020-10-06', '2020-09-10');
 
 --
 -- Indexes for dumped tables
@@ -110,6 +127,12 @@ ALTER TABLE `user`
   ADD KEY `FK_USER_ROLE` (`role_id`);
 
 --
+-- Indexes for table `vacation`
+--
+ALTER TABLE `vacation`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -117,13 +140,19 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT for table `role`
 --
 ALTER TABLE `role`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=24;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT for table `vacation`
+--
+ALTER TABLE `vacation`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- Constraints for dumped tables
