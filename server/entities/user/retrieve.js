@@ -1,5 +1,5 @@
 const mysql = require('mysql2/promise');
-const { hash } = require('../../hash');
+const { hash } = require('../../util/hash');
 
 async function getUserByName(name) {
     const conn = await mysql.createConnection({
