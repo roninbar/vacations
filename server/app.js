@@ -35,4 +35,6 @@ app.use(function (req, res, next) {
     }
 });
 
+app.use('/vacation', require('./routes/vacations'));
+
 module.exports = app;
