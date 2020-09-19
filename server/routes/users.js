@@ -25,7 +25,7 @@ router.head('/:name', async function (req, res) {
 router.post('/login',
   passport.authenticate('local'),
   function (req, res) {
-    res.sendStatus(204);
+    res.json(req.user);
   }
 );
 

@@ -3,8 +3,8 @@ export const LOGOUT = 'LOGOUT';
 export const ERR_AUTH = 'ERR_AUTH';
 export const ERR_UNKNOWN = 'ERR_UNKNOWN';
 
-function loginAction(username) {
-    return { type: LOGIN, payload: username };
+function loginAction(user) {
+    return { type: LOGIN, payload: user };
 }
 
 function logoutAction() {
@@ -24,13 +24,13 @@ export function logInAsync(username, password) {
         const body = new URLSearchParams();
         body.set('username', username);
         body.set('password', password);
-        const { status } = await fetch('/user/login', {
+        const response = await fetch('/user/login', {
             method: 'POST',
             body,
         });
-        if (200 <= status && status < 300) {
-            dispatch(loginAction(username));
-        } else if (400 <= status && status < 500) {
+        if (200 <= response.status && response.status < 300) {
+            dispatch(loginAction(await response.json()));
+        } else if (400 <= response.status && response.status < 500) {
             dispatch(authError());
         } else {
             dispatch(unknownError());

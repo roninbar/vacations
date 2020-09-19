@@ -9,7 +9,11 @@ passport.use(new Strategy(async function (username, password, done) {
         database: 'vacations',
     });
     try {
-        const [[user]] = await conn.execute('SELECT `id` FROM `user` WHERE `name` = ? AND `password_hash` = ?', [username, hash(password)]);
+        const [[user]] = await conn.execute(
+            'SELECT `user`.`id` AS `id`, `user`.`name` as `name`, `role`.`name` AS `role` ' +
+            'FROM `user` JOIN `role` ON `role_id` = `role`.`id` ' +
+            'WHERE `user`.`name` = ? AND `password_hash` = ?',
+            [username, hash(password)]);
         return done(null, user, { message: user ? 'Greetings, Professor Falken!' : 'Invalid username/password.' });
     }
     catch (error) {
@@ -20,8 +24,8 @@ passport.use(new Strategy(async function (username, password, done) {
     }
 }));
 
-passport.serializeUser(function ({ id }, done) {
-    done(null, id);
+passport.serializeUser(function (user, done) {
+    done(null, user);
 });
 
 passport.deserializeUser(function (id, done) {

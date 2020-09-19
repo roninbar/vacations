@@ -1,14 +1,17 @@
-import { ERR_AUTH, LOGIN, LOGOUT } from '../actions/user';
+import { ERR_AUTH, ERR_UNKNOWN, LOGIN, LOGOUT } from '../actions/user';
 
-export function reduceUser({ name, error } = { name: '', error: false }, { type, payload }) {
+export function reduceUser({ error, ...data } = { error: false }, { type, payload }) {
   switch (type) {
     case LOGIN:
-      return { name: payload, error: false };
+      return { error: false, ...payload };
     case LOGOUT:
-      return { name: '', error: false };
+      return { error: false };
     case ERR_AUTH:
-      return { name, error: true }
+      return { error: true };
+    case ERR_UNKNOWN:
+      return { error: true, ...data }
     default:
-      return { name, error };
+      return { error, ...data };
   }
 }
+
