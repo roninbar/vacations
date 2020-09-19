@@ -20,6 +20,7 @@ function PrivateRoute({ username, component: Component, ...rest }) {
       }
     />
   );
+  
 }
 
 const withRedux = connect(({ user: { name: username } }) => ({ username }), null);

@@ -5,7 +5,7 @@ import { Link, withRouter } from 'react-router-dom';
 import { logOutAsync } from '../actions/user';
 import Vacation from '../components/vacation';
 
-function HomePage({ classes, history, username, logOut }) {
+function HomePage({ classes, username, logOut }) {
 
     const vacations = [
         {
@@ -96,14 +96,10 @@ function HomePage({ classes, history, username, logOut }) {
         }
     ];
 
-    function onClickLogOut() {
-        logOut();
-    }
-
     return (
         <div className={classes.root}>
             <Typography className={classes.logout}>
-                {username} (<Link to="/login" onClick={onClickLogOut}>log out</Link>)
+                {username} (<Link to="/login" onClick={logOut}>log out</Link>)
             </Typography>
             <Grid container spacing={4}>
                 {vacations.map(({ id, ...rest }) => (

@@ -9,18 +9,18 @@ import HomePage from './pages/home-page';
 function App() {
   return (
     <BrowserRouter>
-        <Switch>
-          <Route exact path="/signup">
-            <SignupForm />
-            <Link to="/login">Already have an account?</Link>
-          </Route>
-          <Route exact path="/login">
-            <LoginForm />
-            <Link to="/signup">Don't have an account yet?</Link>
-          </Route>
-          <PrivateRoute exact path="/" component={HomePage} />
-        </Switch>
-      </BrowserRouter>
+      <Switch>
+        <Route exact path="/signup">
+          <SignupForm />
+          <Link to="/login">Already have an account?</Link>
+        </Route>
+        <Route exact path="/login">
+          <LoginForm />
+          <Link to="/signup">Don't have an account yet?</Link>
+        </Route>
+        <PrivateRoute exact path="/" component={HomePage} />
+      </Switch>
+    </BrowserRouter>
   );
 }
 
