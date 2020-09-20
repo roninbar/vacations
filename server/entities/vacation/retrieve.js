@@ -6,7 +6,12 @@ async function getAllVacations() {
         database: 'vacations',
     });
     try {
-        const [vacations] = await conn.execute('SELECT * FROM `vacation`');
+        const [vacations] = await conn.execute(
+            'SELECT `vacation`.*, COUNT(`user_id`) AS `followers` ' +
+            'FROM `user_vacation` ' +
+            'RIGHT JOIN `vacation` ON `vacation_id` = `vacation`.`id` ' +
+            'GROUP BY `vacation`.`id`'
+        );
         return vacations;
     }
     finally {
