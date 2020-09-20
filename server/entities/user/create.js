@@ -28,3 +28,4 @@ async function addUser(username, password, firstname, lastname) {
 }
 
 exports.addUser = addUser;
+

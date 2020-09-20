@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 20, 2020 at 12:22 AM
+-- Generation Time: Sep 20, 2020 at 10:52 PM
 -- Server version: 10.4.14-MariaDB
 -- PHP Version: 7.4.9
 
@@ -80,6 +80,25 @@ INSERT INTO `user` (`id`, `name`, `password_hash`, `first_name`, `last_name`, `r
 -- --------------------------------------------------------
 
 --
+-- Table structure for table `user_vacation`
+--
+
+CREATE TABLE `user_vacation` (
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `vacation_id` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+--
+-- Dumping data for table `user_vacation`
+--
+
+INSERT INTO `user_vacation` (`id`, `user_id`, `vacation_id`) VALUES
+(15, 26, 1);
+
+-- --------------------------------------------------------
+
+--
 -- Table structure for table `vacation`
 --
 
@@ -127,6 +146,15 @@ ALTER TABLE `user`
   ADD KEY `FK_USER_ROLE` (`role_id`);
 
 --
+-- Indexes for table `user_vacation`
+--
+ALTER TABLE `user_vacation`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `UNIQUE_USER_VACATION` (`user_id`,`vacation_id`) USING BTREE,
+  ADD KEY `FK_VACATION` (`vacation_id`),
+  ADD KEY `FK_USER` (`user_id`);
+
+--
 -- Indexes for table `vacation`
 --
 ALTER TABLE `vacation`
@@ -149,6 +177,12 @@ ALTER TABLE `user`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
+-- AUTO_INCREMENT for table `user_vacation`
+--
+ALTER TABLE `user_vacation`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
 -- AUTO_INCREMENT for table `vacation`
 --
 ALTER TABLE `vacation`
@@ -163,6 +197,13 @@ ALTER TABLE `vacation`
 --
 ALTER TABLE `user`
   ADD CONSTRAINT `FK_USER_ROLE` FOREIGN KEY (`role_id`) REFERENCES `role` (`id`);
+
+--
+-- Constraints for table `user_vacation`
+--
+ALTER TABLE `user_vacation`
+  ADD CONSTRAINT `FK_USER` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `FK_VACATION` FOREIGN KEY (`vacation_id`) REFERENCES `vacation` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
