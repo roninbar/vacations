@@ -2,12 +2,10 @@ import { Badge, Card, CardActions, CardContent, CardMedia, Typography, withStyle
 import { ToggleButton } from '@material-ui/lab';
 import { Html5Entities } from 'html-entities';
 import React from 'react';
-import { connect } from 'react-redux';
-import { setFollowingAsync } from '../actions/vacations';
 
 const entities = new Html5Entities();
 
-function Vacation({ classes, desc, from, to, picture, price, followers = 0, isFollowing = false, setFollowing }) {
+function Vacation({ classes, desc, from, to, picture, price, followers = 0, isFollowing = false, onChangeFollowing }) {
     return (
         <Card className={classes.root}>
             <CardMedia
@@ -28,7 +26,7 @@ function Vacation({ classes, desc, from, to, picture, price, followers = 0, isFo
             </CardContent>
             <CardActions>
                 <Badge badgeContent={followers} color="primary">
-                    <ToggleButton value="check" selected={isFollowing} onChange={() => setFollowing(!isFollowing)} >
+                    <ToggleButton value="check" selected={isFollowing} onChange={() => onChangeFollowing(!isFollowing)} >
                         <Typography variant="button">
                             Follow
                         </Typography>
@@ -48,16 +46,5 @@ const styles = {
     },
 };
 
-const mapDispatchToProps = (dispatch, { id }) => ({
-    setFollowing: (isFollowing) => dispatch(setFollowingAsync(id, isFollowing)),
-});
+export default withStyles(styles)(Vacation);
 
-const hydrate = ({ from, to, ...rest }) => ({ from: new Date(from), to: new Date(to), ...rest });
-
-const mapStateToProps = ({ vacations: { vacations } }, { id }) => {
-    return hydrate(vacations.find(({ id: vid }) => vid === id));
-};
-
-const withRedux = connect(mapStateToProps, mapDispatchToProps);
-
-export default withRedux(withStyles(styles)(Vacation));

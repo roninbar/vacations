@@ -34,9 +34,9 @@ export function loadVacations() {
     };
 }
 
-export function setFollowingAsync(id, isFollowing) {
+export function setFollowingAsync(vacationId, isFollowing) {
     return async function (dispatch) {
-        return dispatch(setFollowing(id, isFollowing));
+        return dispatch(setFollowing(vacationId, isFollowing));
     };
 }
 
