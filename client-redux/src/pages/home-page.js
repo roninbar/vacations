@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link, withRouter } from 'react-router-dom';
 import { logOutAsync } from '../actions/user';
-import { requestVacationsAsync } from '../actions/vacations';
+import { loadVacations } from '../actions/vacations';
 import Vacation from '../components/vacation';
 
 class HomePage extends Component {
@@ -34,8 +34,7 @@ class HomePage extends Component {
     }
 
     async componentDidMount() {
-        const { requestVacations } = this.props;
-        requestVacations();
+        this.props.loadVacations();
     }
 
 }
@@ -54,7 +53,7 @@ const mapStateToProps = ({ user: { name: username }, vacations: { vacations } })
 
 const mapDispatchToProps = dispatch => ({
     logOut: () => dispatch(logOutAsync()),
-    requestVacations: () => dispatch(requestVacationsAsync()),
+    loadVacations: () => dispatch(loadVacations()),
 });
 
 const withRedux = connect(mapStateToProps, mapDispatchToProps);

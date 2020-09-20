@@ -14,7 +14,7 @@ function unknownError(status, message) {
     return { type: UNKNOWN_ERROR, payload: { status, message } };
 }
 
-export function requestVacationsAsync() {
+export function loadVacations() {
     return async function (dispatch) {
         dispatch(requestVacations());
         const response = await fetch('/vacation/all');
