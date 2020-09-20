@@ -1,7 +1,7 @@
 export const LOGIN = 'LOGIN';
 export const LOGOUT = 'LOGOUT';
-export const ERR_AUTH = 'ERR_AUTH';
-export const ERR_UNKNOWN = 'ERR_UNKNOWN';
+export const AUTH_ERROR = 'AUTH_ERROR';
+export const UNKNOWN_ERROR = 'UNKNOWN_ERROR';
 
 function loginAction(user) {
     return { type: LOGIN, payload: user };
@@ -12,11 +12,11 @@ function logoutAction() {
 }
 
 function authError() {
-    return { type: ERR_AUTH };
+    return { type: AUTH_ERROR };
 }
 
 function unknownError() {
-    return { type: ERR_UNKNOWN };
+    return { type: UNKNOWN_ERROR };
 }    
 
 export function logInAsync(username, password) {
