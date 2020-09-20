@@ -8,13 +8,6 @@ import Vacation from '../components/vacation';
 
 class HomePage extends Component {
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            vacations: [],
-        };
-    }
-
     render() {
         const { classes, username, logOut, vacations } = this.props;
         return (
