@@ -1,9 +1,9 @@
 import './App.css';
 import React from 'react';
 import { BrowserRouter, Link, Route, Switch } from 'react-router-dom';
-import LoginForm from './components/login-form';
+import LoginForm from './pages/login-form';
 import PrivateRoute from './components/private-route';
-import SignupForm from './components/signup-form';
+import SignupForm from './pages/signup-form';
 import HomePage from './pages/home-page';
 
 function App() {
