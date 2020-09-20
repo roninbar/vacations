@@ -16,9 +16,9 @@ class HomePage extends Component {
                     {username} (<Link to="/login" onClick={logOut}>log out</Link>)
                 </Typography>
                 <Grid container spacing={4}>
-                    {vacations.map(({ id, ...rest }) => (
+                    {vacations.map(({ id }) => (
                         <Grid item key={id} xs={12} sm={6} md={4} lg={3} xl={2}>
-                            <Vacation {...rest} />
+                            <Vacation id={id} />
                         </Grid>
                     ))}
                 </Grid>

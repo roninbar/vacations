@@ -1,10 +1,13 @@
-import { Badge, Button, Card, CardActions, CardContent, CardMedia, Typography, withStyles } from '@material-ui/core';
+import { Badge, Card, CardActions, CardContent, CardMedia, Typography, withStyles } from '@material-ui/core';
+import { ToggleButton } from '@material-ui/lab';
 import { Html5Entities } from 'html-entities';
 import React from 'react';
+import { connect } from 'react-redux';
+import { setFollowingAsync } from '../actions/vacations';
 
 const entities = new Html5Entities();
 
-function Vacation({ classes, desc, from, to, picture, price, followers = 0 }) {
+function Vacation({ classes, desc, from, to, picture, price, followers = 0, isFollowing = false, setFollowing }) {
     return (
         <Card className={classes.root}>
             <CardMedia
@@ -25,11 +28,11 @@ function Vacation({ classes, desc, from, to, picture, price, followers = 0 }) {
             </CardContent>
             <CardActions>
                 <Badge badgeContent={followers} color="primary">
-                    <Button variant="outlined" size="small" color="primary">
+                    <ToggleButton value="check" selected={isFollowing} onChange={() => setFollowing(!isFollowing)} >
                         <Typography variant="button">
                             Follow
                         </Typography>
-                    </Button>
+                    </ToggleButton>
                 </Badge>
             </CardActions>
         </Card>
@@ -45,4 +48,16 @@ const styles = {
     },
 };
 
-export default withStyles(styles)(Vacation);
+const mapDispatchToProps = (dispatch, { id }) => ({
+    setFollowing: (isFollowing) => dispatch(setFollowingAsync(id, isFollowing)),
+});
+
+const hydrate = ({ from, to, ...rest }) => ({ from: new Date(from), to: new Date(to), ...rest });
+
+const mapStateToProps = ({ vacations: { vacations } }, { id }) => {
+    return hydrate(vacations.find(({ id: vid }) => vid === id));
+};
+
+const withRedux = connect(mapStateToProps, mapDispatchToProps);
+
+export default withRedux(withStyles(styles)(Vacation));

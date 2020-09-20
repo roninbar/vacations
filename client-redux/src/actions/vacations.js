@@ -1,5 +1,6 @@
 export const REQUEST_VACATIONS = 'REQUEST_VACATIONS';
 export const RECEIVE_VACATIONS = 'RECEIVE_VACATIONS';
+export const SET_FOLLOWING = 'SET_FOLLOWING';
 export const UNKNOWN_ERROR = 'UNKNOWN_ERROR';
 
 function requestVacations() {
@@ -8,6 +9,10 @@ function requestVacations() {
 
 function receiveVacations(payload) {
     return { type: RECEIVE_VACATIONS, payload };
+}
+
+function setFollowing(id, isFollowing) {
+    return { type: SET_FOLLOWING, payload: { id, isFollowing } };
 }
 
 function unknownError(status, message) {
@@ -20,15 +25,18 @@ export function loadVacations() {
         const response = await fetch('/vacation/all');
         if (200 <= response.status && response.status < 300) {
             const vacations = await response.json();
-            dispatch(receiveVacations(vacations.map(({ from, to, ...rest }) => ({
-                from: new Date(from),
-                to: new Date(to),
-                ...rest,
-            }))));
+            return dispatch(receiveVacations(vacations));
         }
         else {
-            dispatch(unknownError(response.status, response.statusText));
+            const { status, statusText } = response;
+            return dispatch(unknownError(status, statusText));
         }
+    };
+}
+
+export function setFollowingAsync(id, isFollowing) {
+    return async function (dispatch) {
+        return dispatch(setFollowing(id, isFollowing));
     };
 }
 
