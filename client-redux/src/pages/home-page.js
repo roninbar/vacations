@@ -3,6 +3,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link, withRouter } from 'react-router-dom';
 import { logOutAsync } from '../actions/user';
+import { requestVacationsAsync } from '../actions/vacations';
 import Vacation from '../components/vacation';
 
 class HomePage extends Component {
@@ -15,8 +16,7 @@ class HomePage extends Component {
     }
 
     render() {
-        const { classes, username, logOut } = this.props;
-        const { vacations } = this.state;
+        const { classes, username, logOut, vacations } = this.props;
         return (
             <div className={classes.root}>
                 <Typography className={classes.logout}>
@@ -34,19 +34,10 @@ class HomePage extends Component {
     }
 
     async componentDidMount() {
-        const response = await fetch('/vacation/all');
-        if (200 <= response.status && response.status < 300) {
-            const vacations = await response.json();
-            this.setState({
-                vacations: vacations.map(({ from, to, ...rest }) => ({
-                    from: new Date(from),
-                    to: new Date(to),
-                    ...rest,
-                })),
-            });
-        }
+        const { requestVacations } = this.props;
+        requestVacations();
     }
-    
+
 }
 
 const styles = {
@@ -59,9 +50,12 @@ const styles = {
     },
 };
 
-const mapStateToProps = ({ user: { name: username } }) => ({ username });
+const mapStateToProps = ({ user: { name: username }, vacations: { vacations } }) => ({ username, vacations });
 
-const mapDispatchToProps = dispatch => ({ logOut: () => dispatch(logOutAsync()) });
+const mapDispatchToProps = dispatch => ({
+    logOut: () => dispatch(logOutAsync()),
+    requestVacations: () => dispatch(requestVacationsAsync()),
+});
 
 const withRedux = connect(mapStateToProps, mapDispatchToProps);
 
