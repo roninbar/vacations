@@ -1,42 +1,61 @@
-export const REQUEST_VACATIONS = 'REQUEST_VACATIONS';
-export const RECEIVE_VACATIONS = 'RECEIVE_VACATIONS';
+export const REQUEST_ALL_VACATIONS = 'REQUEST_ALL_VACATIONS';
+export const RECEIVE_ALL_VACATIONS = 'RECEIVE_ALL_VACATIONS';
+export const RECEIVE_ONE_VACATION = 'RECEIVE_ONE_VACATION';
 export const SET_FOLLOWING = 'SET_FOLLOWING';
-export const UNKNOWN_ERROR = 'UNKNOWN_ERROR';
+export const ERROR = 'ERROR';
 
-function requestVacations() {
-    return { type: REQUEST_VACATIONS };
+function requestAllVacations() {
+    return { type: REQUEST_ALL_VACATIONS };
 }
 
-function receiveVacations(payload) {
-    return { type: RECEIVE_VACATIONS, payload };
+function receiveAllVacations(payload) {
+    return { type: RECEIVE_ALL_VACATIONS, payload };
+}
+
+function receiveOneVacation(payload) {
+    return { type: RECEIVE_ONE_VACATION, payload };
 }
 
 function setFollowing(id, isFollowing) {
     return { type: SET_FOLLOWING, payload: { id, isFollowing } };
 }
 
-function unknownError(status, message) {
-    return { type: UNKNOWN_ERROR, payload: { status, message } };
+function error({ status, statusText }) {
+    return { type: ERROR, payload: { status, statusText } };
 }
 
-export function loadVacations() {
+export function loadVacationsAsync() {
     return async function (dispatch) {
-        dispatch(requestVacations());
+        dispatch(requestAllVacations());
         const response = await fetch('/vacation/all');
         if (200 <= response.status && response.status < 300) {
             const vacations = await response.json();
-            return dispatch(receiveVacations(vacations));
+            return dispatch(receiveAllVacations(vacations));
         }
         else {
-            const { status, statusText } = response;
-            return dispatch(unknownError(status, statusText));
+            return dispatch(error(response));
         }
     };
 }
 
 export function setFollowingAsync(vacationId, isFollowing) {
     return async function (dispatch) {
-        return dispatch(setFollowing(vacationId, isFollowing));
+        dispatch(setFollowing(vacationId, isFollowing));
+        const response = await fetch(`/vacation/${vacationId}`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                isFollowing,
+            }),
+        });
+        if (200 <= response.status && response.status < 300) {
+            const vacation = await response.json();
+            return dispatch(receiveOneVacation(vacation));
+        } else {
+            return dispatch(error(response));
+        }
     };
 }
 

@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link, withRouter } from 'react-router-dom';
 import { logOutAsync } from '../actions/user';
-import { loadVacations, setFollowingAsync } from '../actions/vacations';
+import { loadVacationsAsync, setFollowingAsync } from '../actions/vacations';
 import Vacation from '../components/vacation';
 
 class HomePage extends Component {
@@ -55,7 +55,7 @@ const mapStateToProps = ({ user: { name: username }, vacations: { vacations } })
 
 const mapDispatchToProps = dispatch => ({
     logOut: () => dispatch(logOutAsync()),
-    loadVacations: () => dispatch(loadVacations()),
+    loadVacations: () => dispatch(loadVacationsAsync()),
     setFollowing: (vacationId, isFollowing) => dispatch(setFollowingAsync(vacationId, isFollowing)),
 });
 

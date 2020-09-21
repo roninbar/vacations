@@ -5,7 +5,7 @@ import React from 'react';
 
 const entities = new Html5Entities();
 
-function Vacation({ classes, desc, from, to, picture, price, followers = 0, isFollowing = false, onChangeFollowing }) {
+function Vacation({ classes, desc, from, to, picture, price, followers, isFollowing, onChangeFollowing }) {
     return (
         <Card className={classes.root}>
             <CardMedia
@@ -26,7 +26,7 @@ function Vacation({ classes, desc, from, to, picture, price, followers = 0, isFo
             </CardContent>
             <CardActions>
                 <Badge badgeContent={followers} color="primary">
-                    <ToggleButton value="check" selected={isFollowing} onChange={() => onChangeFollowing(!isFollowing)} >
+                    <ToggleButton value="check" selected={Boolean(isFollowing)} onChange={() => onChangeFollowing(!isFollowing)} >
                         <Typography variant="button">
                             Follow
                         </Typography>

@@ -1,12 +1,14 @@
 import { LOGOUT } from '../actions/user';
-import { RECEIVE_VACATIONS, REQUEST_VACATIONS, SET_FOLLOWING, UNKNOWN_ERROR } from '../actions/vacations';
+import { RECEIVE_ALL_VACATIONS, RECEIVE_ONE_VACATION, REQUEST_ALL_VACATIONS, SET_FOLLOWING, ERROR } from '../actions/vacations';
 
 export function reduceVacations({ error, loading, vacations } = { error: false, loading: false, vacations: [] }, { type, payload }) {
     switch (type) {
-        case REQUEST_VACATIONS:
+        case REQUEST_ALL_VACATIONS:
             return { error: false, loading: true, vacations };
-        case RECEIVE_VACATIONS:
-            return { error: false, loading: false, vacations: payload.map(vacation => ({ ...vacation, isFollowing: false })) };
+        case RECEIVE_ALL_VACATIONS:
+            return { error: false, loading: false, vacations: payload };
+        case RECEIVE_ONE_VACATION:
+            return { error: false, loading: false, vacations: vacations.map(vacation => vacation.id === payload.id ? payload : vacation) };
         case SET_FOLLOWING:
             return {
                 error: false,
@@ -17,7 +19,7 @@ export function reduceVacations({ error, loading, vacations } = { error: false, 
                     ...rest,
                 })),
             };
-        case UNKNOWN_ERROR:
+        case ERROR:
             return { error: true, loading: false, vacations };
         case LOGOUT:
             return { error: false, loading: false, vacations: [] };
