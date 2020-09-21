@@ -1,4 +1,4 @@
-var { getAllVacations } = require('../entities/vacation/retrieve');
+var { getVacation, getAllVacations } = require('../entities/vacation/retrieve');
 var { followVacation, unfollowVacation } = require('../entities/vacation/update');
 var express = require('express');
 var router = express.Router();
@@ -8,16 +8,29 @@ router.get('/all', async function ({ user: { id: userId } }, res) {
     res.json(await getAllVacations(userId));
 });
 
-// Follow vacation.
-router.put('/:id/follow', async function ({ params: { id: vacationId }, user: { id: userId } }, res) {
-    const insertId = await followVacation(userId, vacationId);
-    res.sendStatus(insertId > 0 ? 201 : 204);
+// GET one vacation.
+router.get('/:id', async function ({ params: { id: vacationId }, user: { id: userId } }, res) {
+    const vacation = await getVacation(userId, vacationId);
+    if (vacation) {
+        res.json(vacation);
+    } else {
+        res.sendStatus(404);
+    }
 });
 
-// Unfollow vacation.
-router.delete('/:id/follow', async function ({ params: { id: vacationId }, user: { id: userId } }, res) {
-    const affectedRows = await unfollowVacation(userId, vacationId);
-    res.sendStatus(affectedRows > 0 ? 204 : 404);
+// Follow/unfollow vacation.
+router.patch('/:id', async function ({ params: { id: vacationId }, user: { id: userId }, body: { isFollowing } }, res) {
+    if (typeof isFollowing !== 'boolean') {
+        res.sendStatus(400);
+    } else {
+        const vacation = await getVacation(userId, vacationId);
+        if (vacation) {
+            await (isFollowing ? followVacation : unfollowVacation)(userId, vacationId);
+            res.json(await getVacation(userId, vacationId));
+        } else {
+            res.sendStatus(404);
+        }
+    }
 });
 
 module.exports = router;

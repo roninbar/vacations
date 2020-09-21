@@ -6,7 +6,7 @@ async function followVacation(userId, vacationId) {
         database: 'vacations',
     });
     try {
-        const [{ insertId }] = await conn.execute('INSERT IGNORE INTO `user_vacation` (`user_id`, `vacation_id`) VALUES (?, ?)', [userId, vacationId]);
+        const [{insertId}] = await conn.execute('INSERT IGNORE INTO `user_vacation` (`user_id`, `vacation_id`) VALUES (?, ?)', [userId, vacationId]);
         return insertId;
     }
     finally {
