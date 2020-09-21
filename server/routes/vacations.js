@@ -4,8 +4,8 @@ var express = require('express');
 var router = express.Router();
 
 // GET all the vacations.
-router.get('/all', async function ({ user }, res) {
-    res.json(await getAllVacations(user));
+router.get('/all', async function ({ user: { id: userId } }, res) {
+    res.json(await getAllVacations(userId));
 });
 
 // Follow vacation.
