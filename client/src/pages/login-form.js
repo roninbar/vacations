@@ -19,10 +19,10 @@ class LoginForm extends Component {
 
     async onSubmit(e) {
         e.preventDefault();
-        const { logIn, history } = this.props;
+        const { logInAsync, history } = this.props;
         const { username, password } = this.state;
         this.setState({ submitted: true });
-        await logIn(username, password);
+        await logInAsync(username, password);
         history.replace('/');
     }
 
@@ -73,7 +73,7 @@ const styles = theme => ({
     },
 });
 
-const mapDispatchToProps = dispatch => ({ logIn: (username, password) => dispatch(logInAsync(username, password)) });
+const mapDispatchToProps = { logInAsync };
 
 const withRedux = connect(null, mapDispatchToProps);
 

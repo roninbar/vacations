@@ -9,15 +9,15 @@ import Vacation from 'components/vacation';
 class HomePage extends Component {
 
     onChangeFollowing(vacationId, isFollowing) {
-        this.props.setFollowing(vacationId, isFollowing);
+        this.props.setFollowingAsync(vacationId, isFollowing);
     }
 
     render() {
-        const { classes, username, logOut, vacations } = this.props;
+        const { classes, username, logOutAsync, vacations } = this.props;
         return (
             <div className={classes.root}>
                 <Typography className={classes.logout}>
-                    {username} (<Link to="/login" onClick={logOut}>log out</Link>)
+                    {username} (<Link to="/login" onClick={logOutAsync}>log out</Link>)
                 </Typography>
                 <Grid container spacing={4}>
                     {vacations.map(({ id, from, to, ...rest }) => (
@@ -36,7 +36,7 @@ class HomePage extends Component {
     }
 
     async componentDidMount() {
-        this.props.loadVacations();
+        this.props.loadVacationsAsync();
     }
 
 }
@@ -53,11 +53,7 @@ const styles = {
 
 const mapStateToProps = ({ user: { name: username }, vacations: { vacations } }) => ({ username, vacations });
 
-const mapDispatchToProps = dispatch => ({
-    logOut: () => dispatch(logOutAsync()),
-    loadVacations: () => dispatch(loadVacationsAsync()),
-    setFollowing: (vacationId, isFollowing) => dispatch(setFollowingAsync(vacationId, isFollowing)),
-});
+const mapDispatchToProps = { logOutAsync, loadVacationsAsync, setFollowingAsync };
 
 const withRedux = connect(mapStateToProps, mapDispatchToProps);
 
