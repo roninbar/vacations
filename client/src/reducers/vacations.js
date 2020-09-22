@@ -1,5 +1,6 @@
 import { LOGOUT } from '../actions/user';
 import { RECEIVE_ALL_VACATIONS, RECEIVE_ONE_VACATION, REQUEST_ALL_VACATIONS, SET_FOLLOWING, ERROR } from '../actions/vacations';
+import { logout } from '../features/userSlice';
 
 export function reduceVacations({ error, loading, vacations } = { error: false, loading: false, vacations: [] }, { type, payload }) {
     switch (type) {
@@ -22,6 +23,7 @@ export function reduceVacations({ error, loading, vacations } = { error: false, 
         case ERROR:
             return { error: true, loading: false, vacations };
         case LOGOUT:
+        case logout.type:
             return { error: false, loading: false, vacations: [] };
         default:
             return { error, loading, vacations };
