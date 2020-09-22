@@ -1,4 +1,5 @@
 import { login, logout } from 'features/userSlice';
+import { truncate } from 'features/vacationsSlice';
 
 export const LOGIN = 'LOGIN';
 export const LOGOUT = 'LOGOUT';
@@ -36,7 +37,7 @@ export function logOutAsync() {
     return async function (dispatch) {
         const { status } = await fetch('/user/logout', { method: 'POST' });
         if (200 <= status && status < 300) {
-            return dispatch(logout());
+            return dispatch(truncate()) && dispatch(logout());
         } else {
             return dispatch(unknownError())
         }

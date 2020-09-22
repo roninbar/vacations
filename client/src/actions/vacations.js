@@ -1,28 +1,4 @@
-export const REQUEST_ALL_VACATIONS = 'REQUEST_ALL_VACATIONS';
-export const RECEIVE_ALL_VACATIONS = 'RECEIVE_ALL_VACATIONS';
-export const RECEIVE_ONE_VACATION = 'RECEIVE_ONE_VACATION';
-export const SET_FOLLOWING = 'SET_FOLLOWING';
-export const ERROR = 'ERROR';
-
-function requestAllVacations() {
-    return { type: REQUEST_ALL_VACATIONS };
-}
-
-function receiveAllVacations(payload) {
-    return { type: RECEIVE_ALL_VACATIONS, payload };
-}
-
-function receiveOneVacation(payload) {
-    return { type: RECEIVE_ONE_VACATION, payload };
-}
-
-function setFollowing(id, isFollowing) {
-    return { type: SET_FOLLOWING, payload: { id, isFollowing } };
-}
-
-function error({ status, statusText }) {
-    return { type: ERROR, payload: { status, statusText } };
-}
+import { error, receiveAllVacations, receiveOneVacation, requestAllVacations, setFollowing } from 'features/vacationsSlice';
 
 export function loadVacationsAsync() {
     return async function (dispatch) {
@@ -38,10 +14,10 @@ export function loadVacationsAsync() {
     };
 }
 
-export function setFollowingAsync(vacationId, isFollowing) {
+export function setFollowingAsync(id, isFollowing) {
     return async function (dispatch) {
-        dispatch(setFollowing(vacationId, isFollowing));
-        const response = await fetch(`/vacation/${vacationId}`, {
+        dispatch(setFollowing({ id, isFollowing }));
+        const response = await fetch(`/vacation/${id}`, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
