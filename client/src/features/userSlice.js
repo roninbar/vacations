@@ -1,5 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
 
+function reset(user) {
+    user.id = 0;
+    user.name = '';
+    user.role = '';
+}
+
 const userSlice = createSlice({
     name: 'user',
     initialState: {
@@ -17,17 +23,20 @@ const userSlice = createSlice({
         },
         logout(user) {
             user.error = false;
-            user.id = 0;
-            user.name = '';
-            user.role = '';
+            reset(user);
         },
         authError(user) {
             user.error = true;
+            reset(user);
         },
-    }
+        error(user, { payload: { status, statusText } }) {
+            user.error = { status, statusText };
+            reset(user);
+        },
+    },
 });
 
-export const { login, logout, authError } = userSlice.actions;
+export const { login, logout, authError, error } = userSlice.actions;
 
 export default userSlice.reducer;
 

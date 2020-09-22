@@ -12,10 +12,10 @@ const vacationsSlice = createSlice({
             state.error = false;
             state.loading = true;
         },
-        receiveAllVacations(state, { payload }) {
+        receiveAllVacations(state, { payload: vacations }) {
             state.error = false;
             state.loading = false;
-            state.vacations = payload;
+            state.vacations = vacations;
         },
         receiveOneVacation(state, { payload: { id, ...rest } }) {
             state.error = false;
