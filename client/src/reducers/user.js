@@ -1,4 +1,4 @@
-import { AUTH_ERROR, UNKNOWN_ERROR, LOGIN, LOGOUT } from '../actions/user';
+import { AUTH_ERROR, UNKNOWN_ERROR, LOGIN, LOGOUT } from 'actions/user';
 
 export function reduceUser({ error, ...data } = { error: false }, { type, payload }) {
   switch (type) {

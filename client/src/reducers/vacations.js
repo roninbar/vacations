@@ -1,6 +1,6 @@
-import { LOGOUT } from '../actions/user';
-import { RECEIVE_ALL_VACATIONS, RECEIVE_ONE_VACATION, REQUEST_ALL_VACATIONS, SET_FOLLOWING, ERROR } from '../actions/vacations';
-import { logout } from '../features/userSlice';
+import { LOGOUT } from 'actions/user';
+import { ERROR, RECEIVE_ALL_VACATIONS, RECEIVE_ONE_VACATION, REQUEST_ALL_VACATIONS, SET_FOLLOWING } from 'actions/vacations';
+import { logout } from 'features/userSlice';
 
 export function reduceVacations({ error, loading, vacations } = { error: false, loading: false, vacations: [] }, { type, payload }) {
     switch (type) {

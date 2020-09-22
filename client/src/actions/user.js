@@ -1,4 +1,4 @@
-import { login, logout } from '../features/userSlice';
+import { login, logout } from 'features/userSlice';
 
 export const LOGIN = 'LOGIN';
 export const LOGOUT = 'LOGOUT';
