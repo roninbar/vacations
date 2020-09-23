@@ -4,7 +4,7 @@ import TextField from '@material-ui/core/TextField';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { logInAsync } from 'actions/user';
+import { logInAsync } from 'features/userSlice';
 
 class LoginForm extends Component {
 

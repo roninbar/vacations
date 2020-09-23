@@ -2,8 +2,8 @@ import { Grid, Typography, withStyles } from '@material-ui/core';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link, withRouter } from 'react-router-dom';
-import { logOutAsync } from 'actions/user';
-import { loadVacationsAsync, setFollowingAsync } from 'actions/vacations';
+import { logOutAsync } from 'features/userSlice';
+import { loadVacationsAsync, setFollowingAsync } from 'features/vacationsSlice';
 import Vacation from 'components/vacation';
 
 class HomePage extends Component {
