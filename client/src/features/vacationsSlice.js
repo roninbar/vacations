@@ -55,7 +55,8 @@ export function loadVacationsAsync() {
             return dispatch(receiveAllVacations(vacations));
         }
         else {
-            return dispatch(error(response));
+            const { status, statusText } = response;
+            dispatch(error({ status, statusText }));
         }
     };
 }
@@ -76,7 +77,8 @@ export function setFollowingAsync(id, isFollowing) {
             const vacation = await response.json();
             return dispatch(receiveOneVacation(vacation));
         } else {
-            return dispatch(error(response));
+            const { status, statusText } = response;
+            dispatch(error({ status, statusText }));
         }
     };
 }

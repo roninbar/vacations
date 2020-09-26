@@ -51,7 +51,8 @@ export function logInAsync(username, password) {
         } else if (400 <= response.status && response.status < 500) {
             dispatch(authError());
         } else {
-            dispatch(error(response));
+            const { status, statusText } = response;
+            dispatch(error({ status, statusText }));
         }
     };
 }
