@@ -2,7 +2,7 @@ const mysql = require('mysql2');
 
 const getSqlConnection = (function () {
     let pool = null;
-    return function () {
+    return async function () {
         if (!pool) {
             pool = mysql.createPool({
                 user: process.env['USER'],
@@ -10,8 +10,10 @@ const getSqlConnection = (function () {
                 database: 'vacations',
             });
         }
-        const conn = Object.create(pool.promise());
-        conn.end = Function.prototype; // no-op
+        const conn = Object.create(await pool.promise().getConnection());
+        conn.end = function() {
+            pool.releaseConnection(this.connection);
+        };
         return conn;
     };
 })();
