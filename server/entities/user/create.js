@@ -21,7 +21,7 @@ async function addUser(username, password, firstname, lastname) {
     return insertId;
   }
   finally {
-    await conn.end();
+    await conn.release();
   }
 }
 

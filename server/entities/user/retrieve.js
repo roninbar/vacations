@@ -9,7 +9,7 @@ async function getUserByName(name) {
         return user;
     }
     finally {
-        await conn.end();
+        await conn.release();
     }
 }
 
@@ -24,7 +24,7 @@ async function getUserByCredentials(username, password) {
         return user;
     }
     finally {
-        await conn.end();
+        await conn.release();
     }
 }
 
