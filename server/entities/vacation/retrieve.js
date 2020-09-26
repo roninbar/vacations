@@ -1,4 +1,5 @@
 const mysql = require('mysql2/promise');
+const { getSqlConnection } = require('../connect');
 
 const SELECT_VACATIONS =
     'SELECT `vacation`.*, ' +
@@ -9,10 +10,7 @@ const SELECT_VACATIONS =
     'GROUP BY `vacation`.`id`';
 
 async function getVacation(userId, vacationId) {
-    const conn = await mysql.createConnection({
-        user: 'root',
-        database: 'vacations',
-    });
+    const conn = await getSqlConnection();
     try {
         const [[vacation]] = await conn.execute({
             sql: SELECT_VACATIONS + ' HAVING `vacation`.`id` = :vacationId',
@@ -29,10 +27,7 @@ async function getVacation(userId, vacationId) {
 }
 
 async function getAllVacations(userId) {
-    const conn = await mysql.createConnection({
-        user: 'root',
-        database: 'vacations',
-    });
+    const conn = await getSqlConnection();
     try {
         const [vacations] = await conn.execute({
             sql: SELECT_VACATIONS,
