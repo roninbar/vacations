@@ -1,11 +1,9 @@
 const mysql = require('mysql2/promise');
 const { hash } = require('../../util/hash');
+const { getSqlConnection } = require('../connect');
 
 async function addUser(username, password, firstname, lastname) {
-  const conn = await mysql.createConnection({
-    user: 'root',
-    database: 'vacations',
-  });
+  const conn = await getSqlConnection();
   try {
     const [{ insertId }] = await conn.execute({
       sql: `INSERT INTO \`user\` SET 
