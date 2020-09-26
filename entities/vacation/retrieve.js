@@ -22,7 +22,7 @@ async function getVacation(userId, vacationId) {
         return vacation;
     }
     finally {
-        await conn.end();
+        await conn.release();
     }
 }
 
@@ -38,7 +38,7 @@ async function getAllVacations(userId) {
         return vacations;
     }
     finally {
-        await conn.end();
+        await conn.release();
     }
 }
 

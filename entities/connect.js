@@ -10,11 +10,7 @@ const getSqlConnection = (function () {
                 database: 'vacations',
             });
         }
-        const conn = Object.create(await pool.promise().getConnection());
-        conn.end = function() {
-            pool.releaseConnection(this.connection);
-        };
-        return conn;
+        return await pool.promise().getConnection();
     };
 })();
 
