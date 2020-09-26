@@ -10,6 +10,7 @@
       "request": "launch",
       "program": "${workspaceFolder}/server/bin/www",
       "cwd": "${workspaceFolder}/server",
+      "env": { "PORT": "4000", "USER": "root", "PASS": "" },
       "skipFiles": ["<node_internals>/**"],
       "console": "integratedTerminal"
     },
