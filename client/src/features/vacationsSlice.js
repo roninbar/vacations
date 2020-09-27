@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { logout } from './userSlice';
 
 const vacationsSlice = createSlice({
     name: 'vacations',
@@ -36,14 +37,15 @@ const vacationsSlice = createSlice({
                 state.error = { status: 404, statusText: 'Not Found' };
             }
         },
-        truncate(state) {
-            state.error = false;
-            state.vacations = [];
-        },
         error(state, { payload: { status, statusText } }) {
             state.error = { status, statusText };
         },
     },
+    extraReducers: {
+        [logout.type](state) {
+            state.vacations = [];
+        },
+    }
 });
 
 export function loadVacationsAsync() {

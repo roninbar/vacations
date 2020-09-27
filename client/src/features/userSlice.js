@@ -1,5 +1,4 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { truncate } from 'features/vacationsSlice';
 
 function reset(user) {
     user.id = 0;
@@ -61,7 +60,7 @@ export function logOutAsync() {
     return async function (dispatch) {
         const { status, statusText } = await fetch('/user/logout', { method: 'POST' });
         if (200 <= status && status < 300) {
-            return dispatch(truncate()) && dispatch(logout());
+            return dispatch(logout());
         } else {
             return dispatch(error({ status, statusText }));
         }
