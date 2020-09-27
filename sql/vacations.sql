@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 20, 2020 at 10:52 PM
+-- Generation Time: Sep 27, 2020 at 03:46 PM
 -- Server version: 10.4.14-MariaDB
 -- PHP Version: 7.4.9
 
@@ -116,9 +116,9 @@ CREATE TABLE `vacation` (
 --
 
 INSERT INTO `vacation` (`id`, `desc`, `price`, `picture`, `from`, `to`) VALUES
-(1, 'Coyhaique', '5000.00', 'https://radiogenial.cl/wp-content/uploads/2019/09/foto-centro-coyhaique--696x426.jpg', '2020-11-01', '2020-11-05'),
-(2, 'Puerto Aysén', '6500.00', 'https://s0.wklcdn.com/image_38/1145035/7179015/4066224Master.jpg', '2020-11-11', '2020-11-15'),
-(3, 'Punta Arenas', '8000.00', 'https://creatividadnatural.com/wp-content/uploads/2018/09/MG_9778.jpg', '2020-10-06', '2020-09-10');
+(1, 'Coyhaique', '5000.00', '/images/foto-centro-coyhaique--696x426.jpg', '2020-11-01', '2020-11-05'),
+(2, 'Puerto Aysén', '6500.00', '/images/4066224Master.jpg', '2020-11-11', '2020-11-15'),
+(3, 'Punta Arenas', '8000.00', '/images/MG_9778.jpg', '2020-10-06', '2020-09-10');
 
 --
 -- Indexes for dumped tables
