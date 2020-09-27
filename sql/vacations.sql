@@ -74,8 +74,11 @@ CREATE TABLE `user` (
 --
 
 INSERT INTO `user` (`id`, `name`, `password_hash`, `first_name`, `last_name`, `role_id`) VALUES
-(22, 'ron', '+OZPF0NlweGlAV+4kh5pZh1ZKB7HbsKvVaM54XoNS7Q=', 'Ron', 'Inbar', 2),
-(26, 'girit', '+OZPF0NlweGlAV+4kh5pZh1ZKB7HbsKvVaM54XoNS7Q=', 'Girit', 'Inbar', 1);
+(22, 'ron', '+OZPF0NlweGlAV+4kh5pZh1ZKB7HbsKvVaM54XoNS7Q=', 'Ron', 'Inbar', 1),
+(26, 'girit', '+OZPF0NlweGlAV+4kh5pZh1ZKB7HbsKvVaM54XoNS7Q=', 'Girit', 'Inbar', 1),
+(27, 'dan', '+OZPF0NlweGlAV+4kh5pZh1ZKB7HbsKvVaM54XoNS7Q=', 'Dan', 'Inbar', 1),
+(28, 'uri', '+OZPF0NlweGlAV+4kh5pZh1ZKB7HbsKvVaM54XoNS7Q=', 'Uri', 'Inbar', 1),
+(29, 'admin', 'G9a/pOtmKqmPqNm1Q8nBG1y/K7h1prIjizOM0E7vMvM=', 'Ron', 'Inbar', 2);
 
 -- --------------------------------------------------------
 
@@ -94,7 +97,14 @@ CREATE TABLE `user_vacation` (
 --
 
 INSERT INTO `user_vacation` (`id`, `user_id`, `vacation_id`) VALUES
-(15, 26, 1);
+(212, 22, 1),
+(211, 22, 3),
+(179, 26, 1),
+(181, 26, 3),
+(93, 27, 1),
+(92, 27, 3),
+(68, 28, 1),
+(109, 28, 3);
 
 -- --------------------------------------------------------
 
