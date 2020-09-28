@@ -13,7 +13,7 @@ function Vacation({ classes, desc, from, to, picture, price, followers, isFollow
             <CardMedia className={classes.media} image={picture} title={desc} >
                 {userRole === 'admin' &&
                     <GridListTileBar actionIcon={
-                        <IconButton className={classes.icon}>
+                        <IconButton className={classes.mediaIcon}>
                             <EditIcon />
                         </IconButton>
                     }
@@ -21,23 +21,42 @@ function Vacation({ classes, desc, from, to, picture, price, followers, isFollow
                 }
             </CardMedia>
             <CardContent>
-                <Typography variant="h5" gutterBottom>
+                <Typography variant="h5" gutterBottom className={classes.contentRow}>
                     {desc}
+                    {userRole === 'admin' &&
+                        <div className="overlay">
+                            <IconButton>
+                                <EditIcon />
+                            </IconButton>
+                        </div>
+                    }
                 </Typography>
-                <Typography variant="subtitle1" gutterBottom>
+                <Typography variant="subtitle1" gutterBottom className={classes.contentRow}>
                     {entities.decode(`${from.toDateString()}&ndash;${to.toDateString()}`)}
+                    {userRole === 'admin' &&
+                        <div className="overlay">
+                            <IconButton>
+                                <EditIcon />
+                            </IconButton>
+                        </div>
+                    }
                 </Typography>
-                <Typography variant="h6">
+                <Typography variant="h6" className={classes.contentRow}>
                     &euro;{price}
+                    {userRole === 'admin' &&
+                        <div className="overlay">
+                            <IconButton>
+                                <EditIcon />
+                            </IconButton>
+                        </div>
+                    }
                 </Typography>
             </CardContent>
-            <CardActions>
+            <CardActions className={classes.actions}>
                 {userRole === 'user' &&
                     <Badge badgeContent={followers} color="primary">
                         <ToggleButton value="check" selected={Boolean(isFollowing)} onChange={() => onChangeFollowing(!isFollowing)} >
-                            <Typography variant="button">
-                                Follow
-                        </Typography>
+                            <Typography variant="button">Follow</Typography>
                         </ToggleButton>
                     </Badge>
                 }
@@ -65,8 +84,27 @@ const styles = {
             opacity: 1,
         },
     },
-    icon: {
-        color: 'rgba(255, 255, 255, 0.54)',
+    mediaIcon: {
+        color: 'rgba(255, 255, 255, 1.0)',
+    },
+    contentRow: {
+        position: 'relative',
+        '& .overlay': {
+            display: 'flex',
+            flexDirection: 'row-reverse',
+            position: 'absolute',
+            top: 0,
+            right: 0,
+            bottom: 0,
+            left: 0,
+            opacity: 0,
+        },
+        '&:hover .overlay': {
+            opacity: 1,
+        },
+    },
+    actions: {
+        flexDirection: ({ userRole }) => userRole === 'admin' ? 'row-reverse' : 'row',
     },
 };
 
