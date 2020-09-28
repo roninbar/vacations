@@ -1,4 +1,4 @@
-import { Grid, Typography, withStyles } from '@material-ui/core';
+import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, Typography, withStyles } from '@material-ui/core';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link, withRouter } from 'react-router-dom';
@@ -8,16 +8,38 @@ import Vacation from 'components/vacation';
 
 class HomePage extends Component {
 
+    constructor(props) {
+        super(props);
+        this.state = {
+            idToDelete: 0,
+        };
+    }
+
     onChangeFollowing(vacationId, isFollowing) {
         this.props.setFollowingAsync(vacationId, isFollowing);
     }
 
     onDelete(vacationId) {
-        this.props.deleteOne({ id: vacationId });
+        this.setState({ idToDelete: vacationId });
+    }
+
+    onCancelDelete() {
+        this.setState({ idToDelete: 0 });
+    }
+
+    onOkDelete() {
+        const { idToDelete } = this.state;
+        this.setState({ idToDelete: 0 });
+        this.props.deleteOne({ id: idToDelete });
     }
 
     render() {
         const { classes, username, userRole, logOutAsync, vacations } = this.props;
+        const { idToDelete } = this.state;
+        let descToDelete = '';
+        if (idToDelete > 0) {
+            ({ desc: descToDelete } = vacations.find(v => v.id === idToDelete));
+        }
         return (
             <div className={classes.root}>
                 <Typography className={classes.logout}>
@@ -37,6 +59,14 @@ class HomePage extends Component {
                         </Grid>
                     ))}
                 </Grid>
+                <Dialog open={idToDelete > 0}>
+                    <DialogTitle>Delete {descToDelete}?</DialogTitle>
+                    <DialogContent>This space for rent.</DialogContent>
+                    <DialogActions>
+                        <Button autoFocus onClick={this.onCancelDelete.bind(this)} color="primary">Cancel</Button>
+                        <Button onClick={this.onOkDelete.bind(this)} color="primary">OK</Button>
+                    </DialogActions>
+                </Dialog>
             </div>
         );
     }
