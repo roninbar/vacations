@@ -37,6 +37,12 @@ const vacationsSlice = createSlice({
                 state.error = { status: 404, statusText: 'Not Found' };
             }
         },
+        deleteOne(state, { payload: { id } }) {
+            const index = state.vacations.findIndex(v => v.id === id);
+            if (index >= 0) {
+                state.vacations.splice(index, 1);
+            }
+        },
         error(state, { payload: { status, statusText } }) {
             state.error = { status, statusText };
         },
@@ -85,7 +91,7 @@ export function setFollowingAsync(id, isFollowing) {
     };
 }
 
-export const { requestAllVacations, receiveAllVacations, receiveOneVacation, setFollowing, truncate, error } = vacationsSlice.actions;
+export const { requestAllVacations, receiveAllVacations, receiveOneVacation, setFollowing, deleteOne, error } = vacationsSlice.actions;
 
 export default vacationsSlice.reducer;
 

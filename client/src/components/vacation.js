@@ -7,7 +7,7 @@ import React from 'react';
 
 const entities = new Html5Entities();
 
-function Vacation({ classes, desc, from, to, picture, price, followers, isFollowing, onChangeFollowing, userRole }) {
+function Vacation({ classes, desc, from, to, picture, price, followers, isFollowing, onChangeFollowing, userRole, onDelete }) {
     return (
         <Card className={classes.root}>
             <CardMedia className={classes.media} image={picture} title={desc} >
@@ -61,7 +61,7 @@ function Vacation({ classes, desc, from, to, picture, price, followers, isFollow
                     </Badge>
                 }
                 {userRole === 'admin' &&
-                    <IconButton>
+                    <IconButton onClick={onDelete}>
                         <DeleteIcon />
                     </IconButton>
                 }

@@ -3,13 +3,17 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link, withRouter } from 'react-router-dom';
 import { logOutAsync } from 'features/userSlice';
-import { loadVacationsAsync, setFollowingAsync } from 'features/vacationsSlice';
+import { loadVacationsAsync, setFollowingAsync, deleteOne } from 'features/vacationsSlice';
 import Vacation from 'components/vacation';
 
 class HomePage extends Component {
 
     onChangeFollowing(vacationId, isFollowing) {
         this.props.setFollowingAsync(vacationId, isFollowing);
+    }
+
+    onDelete(vacationId) {
+        this.props.deleteOne({ id: vacationId });
     }
 
     render() {
@@ -26,8 +30,9 @@ class HomePage extends Component {
                                 from={new Date(from)}
                                 to={new Date(to)}
                                 {...rest}
-                                onChangeFollowing={this.onChangeFollowing.bind(this, id)}
                                 userRole={userRole}
+                                onDelete={this.onDelete.bind(this, id)}
+                                onChangeFollowing={this.onChangeFollowing.bind(this, id)}
                             />
                         </Grid>
                     ))}
@@ -54,7 +59,7 @@ const styles = {
 
 const mapStateToProps = ({ user: { name: username, role: userRole }, vacations: { vacations } }) => ({ username, userRole, vacations });
 
-const mapDispatchToProps = { logOutAsync, loadVacationsAsync, setFollowingAsync };
+const mapDispatchToProps = { logOutAsync, loadVacationsAsync, setFollowingAsync, deleteOne };
 
 const withRedux = connect(mapStateToProps, mapDispatchToProps);
 
