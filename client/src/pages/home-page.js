@@ -13,7 +13,7 @@ class HomePage extends Component {
     }
 
     render() {
-        const { classes, username, logOutAsync, vacations } = this.props;
+        const { classes, username, userRole, logOutAsync, vacations } = this.props;
         return (
             <div className={classes.root}>
                 <Typography className={classes.logout}>
@@ -27,6 +27,7 @@ class HomePage extends Component {
                                 to={new Date(to)}
                                 {...rest}
                                 onChangeFollowing={this.onChangeFollowing.bind(this, id)}
+                                userRole={userRole}
                             />
                         </Grid>
                     ))}
@@ -51,7 +52,7 @@ const styles = {
     },
 };
 
-const mapStateToProps = ({ user: { name: username }, vacations: { vacations } }) => ({ username, vacations });
+const mapStateToProps = ({ user: { name: username, role: userRole }, vacations: { vacations } }) => ({ username, userRole, vacations });
 
 const mapDispatchToProps = { logOutAsync, loadVacationsAsync, setFollowingAsync };
 
