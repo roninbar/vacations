@@ -36,9 +36,18 @@ class HomePage extends Component {
     render() {
         const { classes, username, userRole, logOutAsync, vacations } = this.props;
         const { idToDelete } = this.state;
-        let descToDelete = '';
+        let descToDelete = '', startToDelete = '', finishToDelete = '';
         if (idToDelete > 0) {
-            ({ desc: descToDelete } = vacations.find(v => v.id === idToDelete));
+            (
+                {
+                    desc: descToDelete,
+                    from: startToDelete,
+                    to: finishToDelete,
+                }
+                = vacations.find(v => v.id === idToDelete)
+            );
+            startToDelete = startToDelete.toDateString();
+            finishToDelete = finishToDelete.toDateString();
         }
         return (
             <div className={classes.root}>
@@ -46,11 +55,9 @@ class HomePage extends Component {
                     {username} (<Link to="/login" onClick={logOutAsync}>log out</Link>)
                 </Typography>
                 <Grid container spacing={4}>
-                    {vacations.map(({ id, from, to, ...rest }) => (
+                    {vacations.map(({ id, ...rest }) => (
                         <Grid item key={id} xs={12} sm={6} md={4} lg={3} xl={2}>
                             <Vacation
-                                from={new Date(from)}
-                                to={new Date(to)}
                                 {...rest}
                                 userRole={userRole}
                                 onDelete={this.onDelete.bind(this, id)}
@@ -59,12 +66,14 @@ class HomePage extends Component {
                         </Grid>
                     ))}
                 </Grid>
-                <Dialog open={idToDelete > 0}>
+                <Dialog open={idToDelete > 0} className={classes.deleteDialog}>
                     <DialogTitle>Delete {descToDelete}?</DialogTitle>
-                    <DialogContent>This space for rent.</DialogContent>
+                    <DialogContent>
+                        {startToDelete}&ndash;{finishToDelete}
+                    </DialogContent>
                     <DialogActions>
-                        <Button autoFocus onClick={this.onCancelDelete.bind(this)} color="primary">Cancel</Button>
-                        <Button onClick={this.onOkDelete.bind(this)} color="primary">OK</Button>
+                        {/* <Button variant="outlined" onClick={this.onCancelDelete.bind(this)} color="primary" autoFocus>Cancel</Button> */}
+                        <Button variant="outlined" color="secondary" fullWidth onClick={this.onOkDelete.bind(this)} >Yes, delete {descToDelete}</Button>
                     </DialogActions>
                 </Dialog>
             </div>
@@ -85,9 +94,46 @@ const styles = {
     logout: {
         float: 'right',
     },
+    deleteDialog: {
+        '& .MuiDialogTitle-root': {
+            textAlign: 'center',
+        },
+        '& .MuiDialogActions-root': {
+            '& button': {
+                color: '#cb2431',
+                backgroundColor: '#fff',
+                transitionProperty: 'all',
+            },
+            '& button:hover': {
+                color: '#fff',
+                backgroundColor: '#cb2431',
+                transitionProperty: 'all',
+            },
+        },
+    },
 };
 
-const mapStateToProps = ({ user: { name: username, role: userRole }, vacations: { vacations } }) => ({ username, userRole, vacations });
+const mapStateToProps = ({
+    user: {
+        name: username,
+        role: userRole,
+    },
+    vacations: {
+        vacations,
+    },
+}) => ({
+    username,
+    userRole,
+    vacations: vacations.map(({
+        from,
+        to,
+        ...rest
+    }) => ({
+        from: new Date(from),
+        to: new Date(to),
+        ...rest,
+    })),
+});
 
 const mapDispatchToProps = { logOutAsync, loadVacationsAsync, setFollowingAsync, deleteOne };
 
