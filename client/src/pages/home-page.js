@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link, withRouter } from 'react-router-dom';
 import { logOutAsync } from 'features/userSlice';
-import { loadVacationsAsync, setFollowingAsync, deleteAsync } from 'features/vacationsSlice';
+import { loadAllAsync, setFollowingAsync, deleteAsync } from 'features/vacationsSlice';
 import Vacation from 'components/vacation';
 
 class HomePage extends Component {
@@ -16,7 +16,8 @@ class HomePage extends Component {
     }
 
     onChangeFollowing(vacationId, isFollowing) {
-        this.props.setFollowingAsync(vacationId, isFollowing);
+        const { setFollowingAsync } = this.props;
+        setFollowingAsync({ id: vacationId, isFollowing });
     }
 
     onDelete(vacationId) {
@@ -28,10 +29,11 @@ class HomePage extends Component {
     }
 
     onOkDelete() {
+        const { deleteAsync } = this.props;
         const { idToDelete } = this.state;
         // TODO
         this.setState({ idToDelete: 0 });
-        this.props.deleteAsync(idToDelete);
+        deleteAsync(idToDelete);
     }
 
     render() {
@@ -82,7 +84,8 @@ class HomePage extends Component {
     }
 
     async componentDidMount() {
-        this.props.loadVacationsAsync();
+        const { loadAllAsync } = this.props;
+        loadAllAsync();
     }
 
 }
@@ -136,7 +139,7 @@ const mapStateToProps = ({
     })),
 });
 
-const mapDispatchToProps = { logOutAsync, loadVacationsAsync, setFollowingAsync, deleteAsync };
+const mapDispatchToProps = { logOutAsync, loadAllAsync, setFollowingAsync, deleteAsync };
 
 const withRedux = connect(mapStateToProps, mapDispatchToProps);
 

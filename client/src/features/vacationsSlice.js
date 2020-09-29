@@ -1,19 +1,50 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { logout } from './userSlice';
 
+export const loadAllAsync = createAsyncThunk(
+    'vacations/load-all',
+    request.bind(null, '/vacation/all')
+);
+
+export const loadOneAsync = createAsyncThunk(
+    'vacations/load-one',
+    async function (id) {
+        return await request(`/vacation/${id}`);
+    }
+);
+
+export const setFollowingAsync = createAsyncThunk(
+    'vacations/follow',
+    async function ({ id, isFollowing }) {
+        return await request(`/vacation/${id}`, {
+            method: 'PATCH',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                isFollowing,
+            }),
+        });
+    }
+);
+
 export const deleteAsync = createAsyncThunk(
     'vacations/delete',
     async function (id) {
-        const response = await fetch(`/vacation/${id}`, { method: 'DELETE' });
-        const { status, statusText } = response;
-        if (200 <= status && status < 300) {
-            return await response.json();
-        }
-        else {
-            throw new Error(`${status} ${statusText}`);
-        }
+        return await request(`/vacation/${id}`, { method: 'DELETE' });
     }
 );
+
+async function request(url, options) {
+    const response = await fetch(url, options);
+    const { status, statusText } = response;
+    if (200 <= status && status < 300) {
+        return await response.json();
+    }
+    else {
+        throw new Error(`${status} ${statusText}`);
+    }
+}
 
 const vacationsSlice = createSlice({
     name: 'vacations',
@@ -22,17 +53,25 @@ const vacationsSlice = createSlice({
         loading: false,
         vacations: [],
     },
-    reducers: {
-        requestAllVacations(state) {
+    extraReducers: {
+        [loadAllAsync.pending](state) {
             state.error = false;
             state.loading = true;
         },
-        receiveAllVacations(state, { payload: vacations }) {
+        [loadAllAsync.fulfilled](state, { payload: vacations }) {
             state.error = false;
             state.loading = false;
             state.vacations = vacations;
         },
-        receiveOneVacation(state, { payload: { id, ...rest } }) {
+        [loadAllAsync.rejected](state, { payload: error }) {
+            state.error = error;
+            state.loading = false;
+        },
+        [loadOneAsync.pending](state) {
+            state.error = false;
+            state.loading = true;
+        },
+        [loadOneAsync.fulfilled](state, { payload: { id, ...rest } }) {
             state.error = false;
             state.loading = false;
             const vacation = state.vacations.find(v => v.id === id);
@@ -42,20 +81,26 @@ const vacationsSlice = createSlice({
                 state.vacations.push({ id, ...rest });
             }
         },
-        setFollowing(state, { payload: { id, isFollowing } }) {
+        [loadOneAsync.rejected](state, { payload: error }) {
+            state.error = error;
+            state.loading = false;
+        },
+        [setFollowingAsync.pending](state) {
+            state.loading = true;
+        },
+        [setFollowingAsync.fulfilled](state, { payload: { id, isFollowing } }) {
             state.error = false;
             const vacation = state.vacations.find(v => v.id === id);
             if (vacation) {
                 vacation.isFollowing = isFollowing;
             } else {
-                state.error = { status: 404, statusText: 'Not Found' };
+                state.error = new Error(`Vacation ID ${id} doesn't exist in the Redux store.`);
             }
         },
-        error(state, { payload: { status, statusText } }) {
-            state.error = { status, statusText };
+        [setFollowingAsync.rejected](state, { payload: error }) {
+            state.error = error;
+            state.loading = false;
         },
-    },
-    extraReducers: {
         [deleteAsync.pending](state) {
             state.loading = true;
         },
@@ -63,50 +108,14 @@ const vacationsSlice = createSlice({
             state.loading = false;
             state.vacations = payload;
         },
+        [deleteAsync.rejected](state, { payload }) {
+            state.error = payload;
+        },
         [logout](state) {
             state.vacations = [];
         },
     }
 });
-
-export function loadVacationsAsync() {
-    return async function (dispatch) {
-        dispatch(requestAllVacations());
-        const response = await fetch('/vacation/all');
-        if (200 <= response.status && response.status < 300) {
-            const vacations = await response.json();
-            return dispatch(receiveAllVacations(vacations));
-        }
-        else {
-            const { status, statusText } = response;
-            dispatch(error({ status, statusText }));
-        }
-    };
-}
-
-export function setFollowingAsync(id, isFollowing) {
-    return async function (dispatch) {
-        dispatch(setFollowing({ id, isFollowing }));
-        const response = await fetch(`/vacation/${id}`, {
-            method: 'PATCH',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                isFollowing,
-            }),
-        });
-        if (200 <= response.status && response.status < 300) {
-            const vacation = await response.json();
-            return dispatch(receiveOneVacation(vacation));
-        } else {
-            const { status, statusText } = response;
-            dispatch(error({ status, statusText }));
-        }
-    };
-}
-
-export const { requestAllVacations, receiveAllVacations, receiveOneVacation, setFollowing, deleteOne, error } = vacationsSlice.actions;
 
 export default vacationsSlice.reducer;
 
