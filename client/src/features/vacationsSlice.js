@@ -59,12 +59,9 @@ const vacationsSlice = createSlice({
         [deleteAsync.pending](state) {
             state.loading = true;
         },
-        [deleteAsync.fulfilled](state, { payload: { id } }) {
+        [deleteAsync.fulfilled](state, { payload }) {
             state.loading = false;
-            const index = state.vacations.findIndex(v => v.id === id);
-            if (index >= 0) {
-                state.vacations.splice(index, 1);
-            }
+            state.vacations = payload;
         },
         [logout](state) {
             state.vacations = [];
