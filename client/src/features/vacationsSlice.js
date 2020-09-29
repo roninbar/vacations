@@ -1,5 +1,19 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { logout } from './userSlice';
+
+export const deleteAsync = createAsyncThunk(
+    'vacations/delete',
+    async function (id) {
+        const response = await fetch(`/vacation/${id}`, { method: 'DELETE' });
+        const { status, statusText } = response;
+        if (200 <= status && status < 300) {
+            return await response.json();
+        }
+        else {
+            throw new Error(`${status} ${statusText}`);
+        }
+    }
+);
 
 const vacationsSlice = createSlice({
     name: 'vacations',
@@ -37,18 +51,22 @@ const vacationsSlice = createSlice({
                 state.error = { status: 404, statusText: 'Not Found' };
             }
         },
-        deleteOne(state, { payload: { id } }) {
-            const index = state.vacations.findIndex(v => v.id === id);
-            if (index >= 0) {
-                state.vacations.splice(index, 1);
-            }
-        },
         error(state, { payload: { status, statusText } }) {
             state.error = { status, statusText };
         },
     },
     extraReducers: {
-        [logout.type](state) {
+        [deleteAsync.pending](state) {
+            state.loading = true;
+        },
+        [deleteAsync.fulfilled](state, { payload: { id } }) {
+            state.loading = false;
+            const index = state.vacations.findIndex(v => v.id === id);
+            if (index >= 0) {
+                state.vacations.splice(index, 1);
+            }
+        },
+        [logout](state) {
             state.vacations = [];
         },
     }

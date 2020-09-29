@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link, withRouter } from 'react-router-dom';
 import { logOutAsync } from 'features/userSlice';
-import { loadVacationsAsync, setFollowingAsync, deleteOne } from 'features/vacationsSlice';
+import { loadVacationsAsync, setFollowingAsync, deleteAsync } from 'features/vacationsSlice';
 import Vacation from 'components/vacation';
 
 class HomePage extends Component {
@@ -29,8 +29,9 @@ class HomePage extends Component {
 
     onOkDelete() {
         const { idToDelete } = this.state;
+        // TODO
         this.setState({ idToDelete: 0 });
-        this.props.deleteOne({ id: idToDelete });
+        this.props.deleteAsync(idToDelete);
     }
 
     render() {
@@ -135,7 +136,7 @@ const mapStateToProps = ({
     })),
 });
 
-const mapDispatchToProps = { logOutAsync, loadVacationsAsync, setFollowingAsync, deleteOne };
+const mapDispatchToProps = { logOutAsync, loadVacationsAsync, setFollowingAsync, deleteAsync };
 
 const withRedux = connect(mapStateToProps, mapDispatchToProps);
 
