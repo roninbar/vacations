@@ -1,4 +1,4 @@
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, Typography, withStyles } from '@material-ui/core';
+import { Backdrop, Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, Grid, Typography, withStyles } from '@material-ui/core';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link, withRouter } from 'react-router-dom';
@@ -37,7 +37,7 @@ class HomePage extends Component {
     }
 
     render() {
-        const { classes, username, userRole, logOutAsync, vacations } = this.props;
+        const { classes, username, userRole, logOutAsync, vacations, loading } = this.props;
         const { idToDelete } = this.state;
         let descToDelete = '', startToDelete = '', finishToDelete = '';
         if (idToDelete > 0) {
@@ -79,6 +79,9 @@ class HomePage extends Component {
                         <Button variant="outlined" color="secondary" fullWidth onClick={this.onOkDelete.bind(this)} >Yes, delete {descToDelete}</Button>
                     </DialogActions>
                 </Dialog>
+                <Backdrop open={loading}>
+                    <CircularProgress />
+                </Backdrop>
             </div>
         );
     }
@@ -123,11 +126,13 @@ const mapStateToProps = ({
         role: userRole,
     },
     vacations: {
+        loading,
         vacations,
     },
 }) => ({
     username,
     userRole,
+    loading,
     vacations: vacations.map(({
         from,
         to,
