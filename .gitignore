@@ -1,2 +1,3 @@
 debug.log
 **/*.stackdump
+.vscode/launch.json
