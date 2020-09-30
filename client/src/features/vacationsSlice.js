@@ -55,25 +55,23 @@ const vacationsSlice = createSlice({
     },
     extraReducers: {
         [loadAllAsync.pending](state) {
-            state.error = false;
             state.loading = true;
         },
         [loadAllAsync.fulfilled](state, { payload: vacations }) {
-            state.error = false;
             state.loading = false;
+            state.error = false;
             state.vacations = vacations;
         },
         [loadAllAsync.rejected](state, { payload: error }) {
-            state.error = error;
             state.loading = false;
+            state.error = error;
         },
         [loadOneAsync.pending](state) {
-            state.error = false;
             state.loading = true;
         },
         [loadOneAsync.fulfilled](state, { payload: { id, ...rest } }) {
-            state.error = false;
             state.loading = false;
+            state.error = false;
             const vacation = state.vacations.find(v => v.id === id);
             if (vacation) {
                 Object.assign(vacation, { ...rest });
@@ -82,13 +80,14 @@ const vacationsSlice = createSlice({
             }
         },
         [loadOneAsync.rejected](state, { payload: error }) {
-            state.error = error;
             state.loading = false;
+            state.error = error;
         },
         [setFollowingAsync.pending](state) {
             state.loading = true;
         },
         [setFollowingAsync.fulfilled](state, { payload: { id, isFollowing } }) {
+            state.loading = false;
             state.error = false;
             const vacation = state.vacations.find(v => v.id === id);
             if (vacation) {
@@ -98,18 +97,20 @@ const vacationsSlice = createSlice({
             }
         },
         [setFollowingAsync.rejected](state, { payload: error }) {
-            state.error = error;
             state.loading = false;
+            state.error = error;
         },
         [deleteAsync.pending](state) {
             state.loading = true;
         },
-        [deleteAsync.fulfilled](state, { payload }) {
+        [deleteAsync.fulfilled](state, { payload: vacations }) {
             state.loading = false;
-            state.vacations = payload;
+            state.error = false;
+            state.vacations = vacations;
         },
-        [deleteAsync.rejected](state, { payload }) {
-            state.error = payload;
+        [deleteAsync.rejected](state, { payload: error }) {
+            state.loading = false;
+            state.error = error;
         },
         [logout](state) {
             state.vacations = [];
