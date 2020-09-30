@@ -87,7 +87,7 @@ const vacationsSlice = createSlice({
             state.error = false;
             state.vacations = vacations;
         },
-        [loadAllAsync.rejected](state, { payload: error }) {
+        [loadAllAsync.rejected](state, { error }) {
             state.loading = false;
             state.error = error;
         },
@@ -97,7 +97,7 @@ const vacationsSlice = createSlice({
         [loadOneAsync.fulfilled](state, { payload }) {
             updateVacation(state, payload);
         },
-        [loadOneAsync.rejected](state, { payload: error }) {
+        [loadOneAsync.rejected](state, { error }) {
             state.loading = false;
             state.error = error;
         },
@@ -107,7 +107,7 @@ const vacationsSlice = createSlice({
         [setFollowingAsync.fulfilled](state, { payload }) {
             updateVacation(state, payload);
         },
-        [setFollowingAsync.rejected](state, { payload: error }) {
+        [setFollowingAsync.rejected](state, { error }) {
             state.loading = false;
             state.error = error;
         },
@@ -119,7 +119,7 @@ const vacationsSlice = createSlice({
             state.error = false;
             state.vacations = vacations;
         },
-        [deleteAsync.rejected](state, { payload: error }) {
+        [deleteAsync.rejected](state, { error }) {
             state.loading = false;
             state.error = error;
         },
