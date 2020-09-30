@@ -31,7 +31,6 @@ class HomePage extends Component {
     onOkDelete() {
         const { deleteAsync } = this.props;
         const { idToDelete } = this.state;
-        // TODO
         this.setState({ idToDelete: 0 });
         deleteAsync(idToDelete);
     }
@@ -79,8 +78,15 @@ class HomePage extends Component {
                         <Button variant="outlined" color="secondary" fullWidth onClick={this.onOkDelete.bind(this)} >Yes, delete {descToDelete}</Button>
                     </DialogActions>
                 </Dialog>
-                <Backdrop open={loading} className={classes.backdrop}>
+                <Backdrop open={loading} className={classes.loadingBackdrop}>
                     <CircularProgress />
+                </Backdrop>
+                <Backdrop open={vacations.length === 0} className={classes.emptyBackdrop}>
+                    <Typography variant="h3" component="h3">There are no vacations in the system.</Typography>
+                    {userRole === 'admin' ?
+                        <Button variant="outlined">Click here to add some.</Button> :
+                        <Typography variant="h5">Please try again later.</Typography>
+                    }
                 </Backdrop>
             </div>
         );
@@ -118,9 +124,12 @@ const styles = theme => ({
             },
         },
     },
-    backdrop: {
+    loadingBackdrop: {
         zIndex: theme.zIndex.drawer + 1,
         color: '#fff',
+    },
+    emptyBackdrop: {
+        flexDirection: 'column',
     },
 });
 
