@@ -2,19 +2,19 @@ import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { logout } from './userSlice';
 
 export const loadAllAsync = createAsyncThunk(
-    'vacations/load-all',
+    'vacations/loadAll',
     request.bind(null, '/vacation/all')
 );
 
 export const loadOneAsync = createAsyncThunk(
-    'vacations/load-one',
+    'vacations/loadOne',
     async function (id) {
         return await request(`/vacation/${id}`);
     }
 );
 
 export const setFollowingAsync = createAsyncThunk(
-    'vacations/follow',
+    'vacations/setFollowing',
     async function ({ id, isFollowing }) {
         return await request(`/vacation/${id}`, {
             method: 'PATCH',
