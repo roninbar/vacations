@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link, withRouter } from 'react-router-dom';
 import { logOutAsync } from 'features/userSlice';
-import { loadAllAsync, setFollowingAsync, deleteAsync } from 'features/vacationsSlice';
+import { loadAllAsync, setFollowing, setFollowingAsync, deleteAsync } from 'features/vacationsSlice';
 import Vacation from 'components/vacation';
 
 class HomePage extends Component {
@@ -16,8 +16,10 @@ class HomePage extends Component {
     }
 
     onChangeFollowing(vacationId, isFollowing) {
-        const { setFollowingAsync } = this.props;
-        setFollowingAsync({ id: vacationId, isFollowing });
+        const payload = { id: vacationId, isFollowing };
+        const { setFollowing, setFollowingAsync } = this.props;
+        setFollowing(payload); // Give the user immediate feedback for the button press.
+        setFollowingAsync(payload); // Dispatch an async action that updates the database.
     }
 
     onDelete(vacationId) {
@@ -157,7 +159,7 @@ const mapStateToProps = ({
     })),
 });
 
-const mapDispatchToProps = { logOutAsync, loadAllAsync, setFollowingAsync, deleteAsync };
+const mapDispatchToProps = { logOutAsync, loadAllAsync, setFollowing, setFollowingAsync, deleteAsync };
 
 const withRedux = connect(mapStateToProps, mapDispatchToProps);
 

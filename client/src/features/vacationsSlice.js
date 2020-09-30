@@ -46,12 +46,37 @@ async function request(url, options) {
     }
 }
 
+function updateVacation(state, { id, ...rest }) {
+    state.loading = false;
+    state.error = false;
+    const vacation = state.vacations.find(v => v.id === id);
+    if (vacation) {
+        Object.assign(vacation, { ...rest });
+    } else {
+        state.vacations.push({ id, ...rest });
+    }
+}
+
 const vacationsSlice = createSlice({
     name: 'vacations',
     initialState: {
         error: false,
         loading: false,
         vacations: [],
+    },
+    reducers: {
+        /**
+         * This function is needed to give users immediate feedback when they press the 'Follow' button.
+         */
+        setFollowing(state, { payload: { id, isFollowing } }) {
+            state.error = false;
+            const vacation = state.vacations.find(v => v.id === id);
+            if (vacation) {
+                vacation.isFollowing = isFollowing;
+            } else {
+                state.error = new Error(`Vacation ID ${id} doesn't exist in the Redux store.`);
+            }
+        },
     },
     extraReducers: {
         [loadAllAsync.pending](state) {
@@ -69,15 +94,8 @@ const vacationsSlice = createSlice({
         [loadOneAsync.pending](state) {
             state.loading = true;
         },
-        [loadOneAsync.fulfilled](state, { payload: { id, ...rest } }) {
-            state.loading = false;
-            state.error = false;
-            const vacation = state.vacations.find(v => v.id === id);
-            if (vacation) {
-                Object.assign(vacation, { ...rest });
-            } else {
-                state.vacations.push({ id, ...rest });
-            }
+        [loadOneAsync.fulfilled](state, { payload }) {
+            updateVacation(state, payload);
         },
         [loadOneAsync.rejected](state, { payload: error }) {
             state.loading = false;
@@ -86,15 +104,8 @@ const vacationsSlice = createSlice({
         [setFollowingAsync.pending](state) {
             state.loading = true;
         },
-        [setFollowingAsync.fulfilled](state, { payload: { id, isFollowing } }) {
-            state.loading = false;
-            state.error = false;
-            const vacation = state.vacations.find(v => v.id === id);
-            if (vacation) {
-                vacation.isFollowing = isFollowing;
-            } else {
-                state.error = new Error(`Vacation ID ${id} doesn't exist in the Redux store.`);
-            }
+        [setFollowingAsync.fulfilled](state, { payload }) {
+            updateVacation(state, payload);
         },
         [setFollowingAsync.rejected](state, { payload: error }) {
             state.loading = false;
@@ -117,6 +128,8 @@ const vacationsSlice = createSlice({
         },
     }
 });
+
+export const { setFollowing } = vacationsSlice.actions;
 
 export default vacationsSlice.reducer;
 
