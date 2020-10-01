@@ -3,71 +3,76 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import { ToggleButton } from '@material-ui/lab';
 import { Html5Entities } from 'html-entities';
-import React from 'react';
+import React, { Component } from 'react';
 
 const entities = new Html5Entities();
 
-function Vacation({ classes, desc, from, to, picture, price, followers, isFollowing, onChangeFollowing, userRole, onDelete }) {
-    return (
-        <Card className={classes.root}>
-            <CardMedia className={classes.media} image={picture} title={desc} >
-                {userRole === 'admin' &&
-                    <GridListTileBar actionIcon={
-                        <IconButton className={classes.mediaIcon}>
-                            <EditIcon />
+class Vacation extends Component {
+
+    render() {
+        const { classes, desc, from, to, picture, price, followers, isFollowing, onChangeFollowing, userRole, onDelete } = this.props;
+        return (
+            <Card className={classes.root}>
+                <CardMedia className={classes.media} image={picture} title={desc} >
+                    {userRole === 'admin' &&
+                        <GridListTileBar actionIcon={
+                            <IconButton className={classes.mediaIcon}>
+                                <EditIcon />
+                            </IconButton>
+                        }
+                        />
+                    }
+                </CardMedia>
+                <CardContent>
+                    <Typography variant="h5" gutterBottom className={classes.contentRow}>
+                        {desc}
+                        {userRole === 'admin' &&
+                            <div className="overlay">
+                                <IconButton>
+                                    <EditIcon />
+                                </IconButton>
+                            </div>
+                        }
+                    </Typography>
+                    <Typography variant="subtitle1" gutterBottom className={classes.contentRow}>
+                        {entities.decode(`${from.toDateString()}&ndash;${to.toDateString()}`)}
+                        {userRole === 'admin' &&
+                            <div className="overlay">
+                                <IconButton>
+                                    <EditIcon />
+                                </IconButton>
+                            </div>
+                        }
+                    </Typography>
+                    <Typography variant="h6" className={classes.contentRow}>
+                        &euro;{price}
+                        {userRole === 'admin' &&
+                            <div className="overlay">
+                                <IconButton>
+                                    <EditIcon />
+                                </IconButton>
+                            </div>
+                        }
+                    </Typography>
+                </CardContent>
+                <CardActions className={classes.actions}>
+                    {userRole === 'user' &&
+                        <Badge badgeContent={followers} color="primary">
+                            <ToggleButton value="check" selected={Boolean(isFollowing)} onChange={() => onChangeFollowing(!isFollowing)} >
+                                <Typography variant="button">Follow</Typography>
+                            </ToggleButton>
+                        </Badge>
+                    }
+                    {userRole === 'admin' &&
+                        <IconButton onClick={onDelete}>
+                            <DeleteIcon />
                         </IconButton>
                     }
-                    />
-                }
-            </CardMedia>
-            <CardContent>
-                <Typography variant="h5" gutterBottom className={classes.contentRow}>
-                    {desc}
-                    {userRole === 'admin' &&
-                        <div className="overlay">
-                            <IconButton>
-                                <EditIcon />
-                            </IconButton>
-                        </div>
-                    }
-                </Typography>
-                <Typography variant="subtitle1" gutterBottom className={classes.contentRow}>
-                    {entities.decode(`${from.toDateString()}&ndash;${to.toDateString()}`)}
-                    {userRole === 'admin' &&
-                        <div className="overlay">
-                            <IconButton>
-                                <EditIcon />
-                            </IconButton>
-                        </div>
-                    }
-                </Typography>
-                <Typography variant="h6" className={classes.contentRow}>
-                    &euro;{price}
-                    {userRole === 'admin' &&
-                        <div className="overlay">
-                            <IconButton>
-                                <EditIcon />
-                            </IconButton>
-                        </div>
-                    }
-                </Typography>
-            </CardContent>
-            <CardActions className={classes.actions}>
-                {userRole === 'user' &&
-                    <Badge badgeContent={followers} color="primary">
-                        <ToggleButton value="check" selected={Boolean(isFollowing)} onChange={() => onChangeFollowing(!isFollowing)} >
-                            <Typography variant="button">Follow</Typography>
-                        </ToggleButton>
-                    </Badge>
-                }
-                {userRole === 'admin' &&
-                    <IconButton onClick={onDelete}>
-                        <DeleteIcon />
-                    </IconButton>
-                }
-            </CardActions>
-        </Card>
-    );
+                </CardActions>
+            </Card>
+        );
+    }
+
 }
 
 const styles = {
