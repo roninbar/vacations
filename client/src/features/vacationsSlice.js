@@ -129,6 +129,7 @@ const vacationsSlice = createSlice({
             state.error = error;
         },
         [logout](state) {
+            state.error = false;
             state.vacations = [];
         },
     }
