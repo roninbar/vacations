@@ -1,10 +1,11 @@
-import { Backdrop, Button, CircularProgress, Dialog, DialogActions, DialogContent, DialogTitle, Grid, Typography, withStyles } from '@material-ui/core';
+import { Backdrop, Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, LinearProgress, Snackbar, Typography, withStyles } from '@material-ui/core';
+import Alert from '@material-ui/lab/Alert';
+import Vacation from 'components/vacation';
+import { logOutAsync } from 'features/userSlice';
+import { deleteAsync, loadAllAsync, setFollowing, setFollowingAsync } from 'features/vacationsSlice';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link, withRouter } from 'react-router-dom';
-import { logOutAsync } from 'features/userSlice';
-import { loadAllAsync, setFollowing, setFollowingAsync, deleteAsync } from 'features/vacationsSlice';
-import Vacation from 'components/vacation';
 
 class HomePage extends Component {
 
@@ -38,7 +39,7 @@ class HomePage extends Component {
     }
 
     render() {
-        const { classes, username, userRole, logOutAsync, vacations, loading } = this.props;
+        const { classes, username, userRole, logOutAsync, vacations, loading, error } = this.props;
         const { idToDelete } = this.state;
         let descToDelete = '', startToDelete = '', finishToDelete = '';
         if (idToDelete > 0) {
@@ -81,7 +82,7 @@ class HomePage extends Component {
                     </DialogActions>
                 </Dialog>
                 <Backdrop open={loading} className={classes.loadingBackdrop}>
-                    <CircularProgress />
+                    <LinearProgress className={classes.progress} />
                 </Backdrop>
                 <Backdrop open={vacations.length === 0} className={classes.emptyBackdrop}>
                     <Typography variant="h3" component="h3">There are no vacations in the system.</Typography>
@@ -90,6 +91,9 @@ class HomePage extends Component {
                         <Typography variant="h5">Please try again later.</Typography>
                     }
                 </Backdrop>
+                <Snackbar open={error}>
+                    <Alert variant="filled" severity="error" elevation={6}>{error.message}</Alert>
+                </Snackbar>
             </div>
         );
     }
@@ -130,6 +134,9 @@ const styles = theme => ({
         zIndex: theme.zIndex.drawer + 1,
         color: '#fff',
     },
+    progress: {
+        width: '90%',
+    },
     emptyBackdrop: {
         flexDirection: 'column',
     },
@@ -141,12 +148,14 @@ const mapStateToProps = ({
         role: userRole,
     },
     vacations: {
+        error,
         loading,
         vacations,
     },
 }) => ({
     username,
     userRole,
+    error,
     loading,
     vacations: vacations.map(({
         from,
