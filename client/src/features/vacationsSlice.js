@@ -1,22 +1,23 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import { logout } from './userSlice';
+import { logOutAsync } from './userSlice';
+import { requestJson } from './utils';
 
 export const loadAllAsync = createAsyncThunk(
     'vacations/loadAll',
-    request.bind(null, '/vacation/all')
+    requestJson.bind(null, '/vacation/all'),
 );
 
 export const loadOneAsync = createAsyncThunk(
     'vacations/loadOne',
     async function (id) {
-        return await request(`/vacation/${id}`);
-    }
+        return await requestJson(`/vacation/${id}`);
+    },
 );
 
 export const setFollowingAsync = createAsyncThunk(
     'vacations/setFollowing',
     async function ({ id, isFollowing }) {
-        return await request(`/vacation/${id}`, {
+        return await requestJson(`/vacation/${id}`, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
@@ -25,26 +26,15 @@ export const setFollowingAsync = createAsyncThunk(
                 isFollowing,
             }),
         });
-    }
+    },
 );
 
 export const deleteAsync = createAsyncThunk(
     'vacations/delete',
     async function (id) {
-        return await request(`/vacation/${id}`, { method: 'DELETE' });
-    }
+        return await requestJson(`/vacation/${id}`, { method: 'DELETE' });
+    },
 );
-
-async function request(url, options) {
-    const response = await fetch(url, options);
-    const { status, statusText } = response;
-    if (200 <= status && status < 300) {
-        return await response.json();
-    }
-    else {
-        throw new Error(`${status} ${statusText}`);
-    }
-}
 
 function updateVacation(state, { id, ...rest }) {
     state.loading = false;
@@ -128,7 +118,7 @@ const vacationsSlice = createSlice({
             state.loading = false;
             state.error = error;
         },
-        [logout](state) {
+        [logOutAsync.fulfilled](state) {
             state.error = false;
             state.vacations = [];
         },

@@ -22,7 +22,7 @@ class LoginForm extends Component {
         const { logInAsync, history } = this.props;
         const { username, password } = this.state;
         this.setState({ submitted: true });
-        await logInAsync(username, password);
+        await logInAsync({ username, password });
         history.replace('/');
     }
 
