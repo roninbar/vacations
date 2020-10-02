@@ -1,10 +1,11 @@
-import { Button } from '@material-ui/core';
+import { Button, Snackbar } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
+import { Alert } from '@material-ui/lab';
+import { logInAsync } from 'features/userSlice';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import { logInAsync } from 'features/userSlice';
 
 class LoginForm extends Component {
 
@@ -31,32 +32,37 @@ class LoginForm extends Component {
     }
 
     render() {
-        const { classes } = this.props;
+        const { classes, error } = this.props;
         const { username, password, submitted } = this.state;
         return (
-            <form className={classes.root} noValidate autoComplete="off" onSubmit={this.onSubmit.bind(this)}>
-                <TextField
-                    variant="outlined"
-                    type="text"
-                    name="username"
-                    label="Username"
-                    value={username}
-                    onChange={this.onChangeField.bind(this)} />
-                <TextField
-                    variant="outlined"
-                    type="password"
-                    name="password"
-                    label="Password"
-                    value={password}
-                    onChange={this.onChangeField.bind(this)}
-                />
-                <Button type="submit"
-                    variant="contained"
-                    color="primary"
-                    size="large"
-                    disabled={!username || !password || submitted}
-                >Log In</Button>
-            </form>
+            <div className={classes.root}>
+                <form noValidate autoComplete="off" onSubmit={this.onSubmit.bind(this)}>
+                    <TextField
+                        variant="outlined"
+                        type="text"
+                        name="username"
+                        label="Username"
+                        value={username}
+                        onChange={this.onChangeField.bind(this)} />
+                    <TextField
+                        variant="outlined"
+                        type="password"
+                        name="password"
+                        label="Password"
+                        value={password}
+                        onChange={this.onChangeField.bind(this)}
+                    />
+                    <Button type="submit"
+                        variant="contained"
+                        color="primary"
+                        size="large"
+                        disabled={!username || !password || submitted}
+                    >Log In</Button>
+                </form>
+                <Snackbar open={error}>
+                    <Alert variant="filled" severity="error" elevation={6}>{error.message}</Alert>
+                </Snackbar>
+            </div>
         );
     }
 
@@ -73,9 +79,7 @@ const styles = theme => ({
     },
 });
 
-const mapDispatchToProps = { logInAsync };
-
-const withRedux = connect(null, mapDispatchToProps);
+const withRedux = connect(({ user: { error } }) => ({ error }), { logInAsync });
 
 export default withRedux(withRouter(withStyles(styles)(LoginForm)));
 
