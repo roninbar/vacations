@@ -61,7 +61,7 @@ class HomePage extends Component {
                 </Typography>
                 <Grid container spacing={4}>
                     {vacations.map(({ id, ...rest }) => (
-                        <Grid item key={id} xs={12} sm={6} md={4} lg={3} xl={2}>
+                        <Grid item key={id} xs={12} sm={6} md={4} xl={3}>
                             <Vacation
                                 {...rest}
                                 userRole={userRole}

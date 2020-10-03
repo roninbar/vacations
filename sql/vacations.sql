@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Sep 27, 2020 at 03:46 PM
+-- Generation Time: Oct 03, 2020 at 10:50 PM
 -- Server version: 10.4.14-MariaDB
 -- PHP Version: 7.4.9
 
@@ -78,7 +78,9 @@ INSERT INTO `user` (`id`, `name`, `password_hash`, `first_name`, `last_name`, `r
 (26, 'girit', '+OZPF0NlweGlAV+4kh5pZh1ZKB7HbsKvVaM54XoNS7Q=', 'Girit', 'Inbar', 1),
 (27, 'dan', '+OZPF0NlweGlAV+4kh5pZh1ZKB7HbsKvVaM54XoNS7Q=', 'Dan', 'Inbar', 1),
 (28, 'uri', '+OZPF0NlweGlAV+4kh5pZh1ZKB7HbsKvVaM54XoNS7Q=', 'Uri', 'Inbar', 1),
-(29, 'admin', 'G9a/pOtmKqmPqNm1Q8nBG1y/K7h1prIjizOM0E7vMvM=', 'Ron', 'Inbar', 2);
+(29, 'admin', 'G9a/pOtmKqmPqNm1Q8nBG1y/K7h1prIjizOM0E7vMvM=', 'Ron', 'Inbar', 2),
+(30, 'namir', '+OZPF0NlweGlAV+4kh5pZh1ZKB7HbsKvVaM54XoNS7Q=', 'Namir', 'Inbar', 1),
+(31, 'doovshanit', '+OZPF0NlweGlAV+4kh5pZh1ZKB7HbsKvVaM54XoNS7Q=', 'Doovshanit', 'Inbar', 1);
 
 -- --------------------------------------------------------
 
@@ -114,21 +116,22 @@ INSERT INTO `user_vacation` (`id`, `user_id`, `vacation_id`) VALUES
 
 CREATE TABLE `vacation` (
   `id` int(11) NOT NULL,
-  `desc` varchar(280) NOT NULL,
-  `price` decimal(8,2) NOT NULL DEFAULT 0.00,
-  `picture` varchar(500) DEFAULT NULL,
+  `destination` varchar(100) NOT NULL,
   `from` date NOT NULL,
-  `to` date NOT NULL
+  `to` date NOT NULL,
+  `price` decimal(8,2) NOT NULL DEFAULT 0.00,
+  `description` varchar(1000) NOT NULL,
+  `image` varchar(500) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
 -- Dumping data for table `vacation`
 --
 
-INSERT INTO `vacation` (`id`, `desc`, `price`, `picture`, `from`, `to`) VALUES
-(1, 'Coyhaique', '5000.00', '/images/foto-centro-coyhaique--696x426.jpg', '2020-11-01', '2020-11-05'),
-(2, 'Puerto Aysén', '6500.00', '/images/4066224Master.jpg', '2020-11-11', '2020-11-15'),
-(3, 'Punta Arenas', '8000.00', '/images/MG_9778.jpg', '2020-10-06', '2020-09-10');
+INSERT INTO `vacation` (`id`, `destination`, `from`, `to`, `price`, `description`, `image`) VALUES
+(1, 'Coyhaique', '2020-11-01', '2020-11-05', '5000.00', 'If adventure runs through your veins, this is the right place for you. This corner of Patagonia challenges you to climb its amazing peaks, like the Mackay or the Castillo. Trekking is a must and fly fishing gives you time to relax on the amazing rivers.\r\n\r\nWonder at the untouched nature of this area in the heart of Patagonia, with its evergreen forests and lengthy Carretera Austral, which will captivate you with beautiful views. This is the perfect destination if you want to push your senses to the limit and get in touch with your wild side.\r\n\r\nVisit the arts and crafts fair in Coyhaique’s Main Square. You’ll find handmade products on the stands made with materials like native wood, leather, stone and wool, souvenirs that will remind you of your trip through the south of Chile.\r\n\r\n', '/images/foto-centro-coyhaique--696x426.jpg'),
+(2, 'Puerto Aysén', '2020-11-11', '2020-11-15', '6500.00', 'Have you imagined how life goes on in the fjords of Patagonia? Here we will tell you the history of Puerto Aysén, a town located on the banks of the river, a few kilometers from the sea and surrounded by huge mountains full of evergreen forests. It is an almost pristine place, where 80% of the territory has not been explored by humans. This presents a tremendous challenge for its people, Chileans who are united to receive tourists and show them the best of Puerto Aysén.\r\n\r\n', '/images/4066224Master.jpg'),
+(3, 'Punta Arenas', '2020-10-06', '2020-09-10', '8000.00', 'With port and sheep-breeding history, the gateway into Antartica will captivate you with its clean air and sophisticated European architecture. Take a boat or a kayak along the Magellan Straits and you’ll be surprised by the penguins as they welcome you to Magdalena Island. Go on an adventure to Tierra del Fuego and discover the best kept secrets of the Kawesqar and Selk’nam people, indigenous to the southernmost part of Chile.', '/images/MG_9778.jpg');
 
 --
 -- Indexes for dumped tables

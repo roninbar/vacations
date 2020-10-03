@@ -10,10 +10,10 @@ const entities = new Html5Entities();
 class Vacation extends Component {
 
     render() {
-        const { classes, desc, from, to, picture, price, followers, isFollowing, onChangeFollowing, userRole, onDelete } = this.props;
+        const { destination, from, to, price, description, image, followers, isFollowing, onChangeFollowing, onDelete, userRole, classes } = this.props;
         return (
             <Card className={classes.root}>
-                <CardMedia className={classes.media} image={picture} title={desc} >
+                <CardMedia className={classes.media} image={image} title={destination} >
                     {userRole === 'admin' &&
                         <GridListTileBar actionIcon={
                             <IconButton className={classes.mediaIcon}>
@@ -25,7 +25,7 @@ class Vacation extends Component {
                 </CardMedia>
                 <CardContent>
                     <Typography variant="h5" gutterBottom className={classes.contentRow}>
-                        {desc}
+                        {destination}
                         {userRole === 'admin' &&
                             <div className="overlay">
                                 <IconButton>
@@ -35,7 +35,17 @@ class Vacation extends Component {
                         }
                     </Typography>
                     <Typography variant="subtitle1" gutterBottom className={classes.contentRow}>
-                        {entities.decode(`${from.toDateString()}&ndash;${to.toDateString()}`)}
+                        <strong>{entities.decode(`${from.toDateString()}&ndash;${to.toDateString()}`)}</strong>
+                        {userRole === 'admin' &&
+                            <div className="overlay">
+                                <IconButton>
+                                    <EditIcon />
+                                </IconButton>
+                            </div>
+                        }
+                    </Typography>
+                    <Typography variant="body1" gutterBottom className={classes.contentRow}>
+                        {description}
                         {userRole === 'admin' &&
                             <div className="overlay">
                                 <IconButton>
@@ -45,7 +55,7 @@ class Vacation extends Component {
                         }
                     </Typography>
                     <Typography variant="h6" className={classes.contentRow}>
-                        &euro;{price}
+                        <strong>&euro;{price}</strong>
                         {userRole === 'admin' &&
                             <div className="overlay">
                                 <IconButton>
@@ -77,7 +87,6 @@ class Vacation extends Component {
 
 const styles = {
     root: {
-        maxWidth: 345,
     },
     media: {
         position: 'relative',
