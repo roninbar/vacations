@@ -24,7 +24,7 @@ class LoginForm extends Component {
         const { username, password } = this.state;
         this.setState({ submitted: true });
         await logInAsync({ username, password });
-        history.replace('/');
+        history.push('/');
     }
 
     onChangeField({ target: { name, value } }) {
