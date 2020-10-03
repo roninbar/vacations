@@ -36,6 +36,7 @@ const userSlice = createSlice({
     },
     extraReducers: {
         [logInAsync.pending](user) {
+            user.error = false;
             user.loading = true;
         },
         [logInAsync.fulfilled](user, { payload: { id, name, role } }) {
@@ -51,6 +52,7 @@ const userSlice = createSlice({
             reset(user);
         },
         [logOutAsync.pending](user) {
+            user.error = false;
             user.loading = true;
         },
         [logOutAsync.fulfilled](user) {

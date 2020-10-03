@@ -71,6 +71,7 @@ const vacationsSlice = createSlice({
     },
     extraReducers: {
         [loadAllAsync.pending](state) {
+            state.error = false;
             state.loading = true;
         },
         [loadAllAsync.fulfilled](state, { payload: vacations }) {
@@ -83,6 +84,7 @@ const vacationsSlice = createSlice({
             state.error = error;
         },
         [loadOneAsync.pending](state) {
+            state.error = false;
             state.loading = true;
         },
         [loadOneAsync.fulfilled](state, { payload }) {
@@ -93,6 +95,7 @@ const vacationsSlice = createSlice({
             state.error = error;
         },
         [setFollowingAsync.pending](state, { meta: { arg, requestId } }) {
+            state.error = false;
             state.loading = true;
             state.pendingRequests[requestId] = arg;
         },
@@ -107,6 +110,7 @@ const vacationsSlice = createSlice({
             state.vacations.find(v => v.id === id).isFollowing = !isFollowing;
         },
         [deleteAsync.pending](state) {
+            state.error = false;
             state.loading = true;
         },
         [deleteAsync.fulfilled](state, { payload: vacations }) {
