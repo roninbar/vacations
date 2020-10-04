@@ -2,7 +2,7 @@ import { Backdrop, Button, Grid, LinearProgress, Snackbar, Typography, withStyle
 import Alert from '@material-ui/lab/Alert';
 import Vacation from 'components/vacation';
 import { logOutAsync } from 'features/userSlice';
-import { deleteAsync, loadAllAsync, setFollowing, setFollowingAsync } from 'features/vacationsSlice';
+import { deleteAsync, loadAllAsync, setFollowing, changeAsync } from 'features/vacationsSlice';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link, withRouter } from 'react-router-dom';
@@ -156,7 +156,7 @@ const mapStateToProps = ({
     })),
 });
 
-const mapDispatchToProps = { logOutAsync, loadAllAsync, setFollowing, setFollowingAsync, deleteAsync };
+const mapDispatchToProps = { logOutAsync, loadAllAsync, setFollowing, setFollowingAsync: changeAsync, deleteAsync };
 
 const withRedux = connect(mapStateToProps, mapDispatchToProps);
 

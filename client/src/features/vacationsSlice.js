@@ -14,17 +14,15 @@ export const loadOneAsync = createAsyncThunk(
     },
 );
 
-export const setFollowingAsync = createAsyncThunk(
-    'vacations/setFollowing',
-    async function ({ id, isFollowing }) {
+export const changeAsync = createAsyncThunk(
+    'vacations/change',
+    async function ({ id, ...rest }) {
         return await requestJson(`/vacation/${id}`, {
             method: 'PATCH',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({
-                isFollowing,
-            }),
+            body: JSON.stringify(rest),
         });
     },
 );
@@ -94,16 +92,16 @@ const vacationsSlice = createSlice({
             state.loading = false;
             state.error = error;
         },
-        [setFollowingAsync.pending](state, { meta: { arg, requestId } }) {
+        [changeAsync.pending](state, { meta: { arg, requestId } }) {
             state.error = false;
             state.loading = true;
             state.pendingRequests[requestId] = arg;
         },
-        [setFollowingAsync.fulfilled](state, { payload, meta: { requestId } }) {
+        [changeAsync.fulfilled](state, { payload, meta: { requestId } }) {
             delete state.pendingRequests[requestId];
             updateVacation(state, payload);
         },
-        [setFollowingAsync.rejected](state, { error, meta: { requestId, arg: { id, isFollowing } } }) {
+        [changeAsync.rejected](state, { error, meta: { requestId, arg: { id, isFollowing } } }) {
             delete state.pendingRequests[requestId];
             state.loading = false;
             state.error = error;
