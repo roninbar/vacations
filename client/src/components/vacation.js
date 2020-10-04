@@ -1,4 +1,4 @@
-import { Badge, Card, CardActions, CardContent, CardMedia, GridListTileBar, IconButton, Typography, withStyles } from '@material-ui/core';
+import { Badge, Card, CardActions, CardContent, CardMedia, ClickAwayListener, GridListTileBar, IconButton, TextField, Typography, withStyles } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import { ToggleButton } from '@material-ui/lab';
@@ -9,12 +9,38 @@ const entities = new Html5Entities();
 
 class Vacation extends Component {
 
+    constructor(props) {
+        super(props);
+        this.state = {
+            editing: 'nothing',
+        };
+    }
+
+    onChange({ target: { name, value } }) {
+        this.setState({ [name]: value });
+    }
+
+    onSubmitField() {
+        this.setState({ editing: 'nothing' });
+    }
+
+    onKeyUp(e) {
+        if (e.key === 'Escape') {
+            this.setState({ editing: 'nothing' });
+        }
+    }
+
+    onClickAway() {
+        this.setState({ editing: 'nothing' });
+    }
+
     render() {
         const { destination, from, to, price, description, image, followers, isFollowing, onChangeFollowing, onDelete, userRole, classes } = this.props;
+        const { editing } = this.state;
         return (
-            <Card className={classes.root}>
-                <CardMedia className={classes.media} image={image} title={destination} >
-                    {userRole === 'admin' &&
+            <Card className={classes.root} onKeyUp={this.onKeyUp.bind(this)}>
+                <CardMedia className={classes.media} image={image} title={destination}>
+                    {userRole === 'admin' && editing === 'nothing' &&
                         <GridListTileBar actionIcon={
                             <IconButton className={classes.mediaIcon}>
                                 <EditIcon />
@@ -24,19 +50,32 @@ class Vacation extends Component {
                     }
                 </CardMedia>
                 <CardContent>
-                    <Typography variant="h5" gutterBottom className={classes.contentRow}>
-                        {destination}
-                        {userRole === 'admin' &&
-                            <div className="overlay">
-                                <IconButton>
-                                    <EditIcon />
-                                </IconButton>
-                            </div>
-                        }
-                    </Typography>
-                    <Typography variant="subtitle1" gutterBottom className={classes.contentRow}>
+                    {editing === 'destination'
+                        ? (
+                            <ClickAwayListener onClickAway={this.onClickAway.bind(this)}>
+                                <form onSubmit={this.onSubmitField.bind(this)}>
+                                    <TextField
+                                        name="destination"
+                                        value={this.state.destination || destination}
+                                        onChange={this.onChange.bind(this)}
+                                    />
+                                </form>
+                            </ClickAwayListener>)
+                        : (
+                            <Typography className={classes.contentRow} variant="h5" gutterBottom>
+                                {destination}
+                                {userRole === 'admin' && editing === 'nothing' &&
+                                    <div className="overlay">
+                                        <IconButton onClick={() => this.setState({ editing: 'destination' })}>
+                                            <EditIcon />
+                                        </IconButton>
+                                    </div>
+                                }
+                            </Typography>)
+                    }
+                    <Typography className={classes.contentRow} variant="subtitle1" gutterBottom>
                         <strong>{entities.decode(`${from.toDateString()}&ndash;${to.toDateString()}`)}</strong>
-                        {userRole === 'admin' &&
+                        {userRole === 'admin' && editing === 'nothing' &&
                             <div className="overlay">
                                 <IconButton>
                                     <EditIcon />
@@ -44,9 +83,9 @@ class Vacation extends Component {
                             </div>
                         }
                     </Typography>
-                    <Typography variant="body1" gutterBottom className={classes.contentRow}>
+                    <Typography className={classes.contentRow} variant="body1" gutterBottom>
                         {description}
-                        {userRole === 'admin' &&
+                        {userRole === 'admin' && editing === 'nothing' &&
                             <div className="overlay">
                                 <IconButton>
                                     <EditIcon />
@@ -54,9 +93,9 @@ class Vacation extends Component {
                             </div>
                         }
                     </Typography>
-                    <Typography variant="h6" className={classes.contentRow}>
+                    <Typography className={classes.contentRow} variant="h6">
                         <strong>&euro;{price}</strong>
-                        {userRole === 'admin' &&
+                        {userRole === 'admin' && editing === 'nothing' &&
                             <div className="overlay">
                                 <IconButton>
                                     <EditIcon />
@@ -79,7 +118,7 @@ class Vacation extends Component {
                         </IconButton>
                     }
                 </CardActions>
-            </Card>
+            </Card >
         );
     }
 
@@ -91,11 +130,11 @@ const styles = {
     media: {
         position: 'relative',
         height: 140,
-        [`& .MuiGridListTileBar-root`]: {
-            opacity: 0,
+        '& .MuiGridListTileBar-root': {
+            display: 'none',
         },
-        [`&:hover .MuiGridListTileBar-root`]: {
-            opacity: 1,
+        '&:hover .MuiGridListTileBar-root': {
+            display: 'flex',
         },
     },
     mediaIcon: {
@@ -104,17 +143,15 @@ const styles = {
     contentRow: {
         position: 'relative',
         '& .overlay': {
-            display: 'flex',
+            display: 'none',
             flexDirection: 'row-reverse',
             position: 'absolute',
-            top: 0,
             right: 0,
             bottom: 0,
             left: 0,
-            opacity: 0,
         },
         '&:hover .overlay': {
-            opacity: 1,
+            display: 'flex',
         },
     },
     actions: {
