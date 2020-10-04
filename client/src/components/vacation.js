@@ -38,7 +38,7 @@ class Vacation extends Component {
         const { destination, from, to, price, description, image, followers, isFollowing, onChangeFollowing, onDelete, userRole, classes } = this.props;
         const { editing } = this.state;
         return (
-            <Card className={classes.root} onKeyUp={this.onKeyUp.bind(this)}>
+            <Card className={classes.root}>
                 <CardMedia className={classes.media} image={image} title={destination}>
                     {userRole === 'admin' && editing === 'nothing' &&
                         <GridListTileBar actionIcon={
@@ -58,6 +58,7 @@ class Vacation extends Component {
                                         name="destination"
                                         value={this.state.destination || destination}
                                         onChange={this.onChange.bind(this)}
+                                        onKeyUp={this.onKeyUp.bind(this)}
                                     />
                                 </form>
                             </ClickAwayListener>)
