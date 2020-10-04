@@ -34,7 +34,8 @@ class Vacation extends Component {
         this.setState({ [name]: value });
     }
 
-    onSubmitField() {
+    onSubmitField(e) {
+        e.preventDefault();
         this.setState({ editing: 'nothing' });
     }
 
