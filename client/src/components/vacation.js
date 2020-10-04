@@ -1,4 +1,4 @@
-import { Badge, Card, CardActions, CardContent, CardMedia, ClickAwayListener, IconButton, TextField, Typography, withStyles } from '@material-ui/core';
+import { Badge, Card, CardActions, CardContent, CardMedia, ClickAwayListener, IconButton, TextField as MuiTextField, Typography, withStyles } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import { ToggleButton } from '@material-ui/lab';
@@ -7,6 +7,16 @@ import React, { Component } from 'react';
 
 const entities = new Html5Entities();
 
+function TextField({ onSubmit, onClickAway, ...rest }) {
+    return (
+        <ClickAwayListener onClickAway={onClickAway}>
+            <form onSubmit={onSubmit}>
+                <MuiTextField {...rest} />
+            </form>
+        </ClickAwayListener>
+    );
+}
+
 class Vacation extends Component {
 
     constructor(props) {
@@ -14,6 +24,10 @@ class Vacation extends Component {
         this.state = {
             editing: 'nothing',
         };
+    }
+
+    onClickEditButton(what) {
+        this.setState({ editing: what });
     }
 
     onChange({ target: { name, value } }) {
@@ -51,22 +65,21 @@ class Vacation extends Component {
                 <CardContent>
                     {editing === 'destination'
                         ? (
-                            <ClickAwayListener onClickAway={this.onClickAway.bind(this)}>
-                                <form onSubmit={this.onSubmitField.bind(this)}>
-                                    <TextField
-                                        name="destination"
-                                        value={this.state.destination || destination}
-                                        onChange={this.onChange.bind(this)}
-                                        onKeyUp={this.onKeyUp.bind(this)}
-                                    />
-                                </form>
-                            </ClickAwayListener>)
+                            <TextField
+                                autoFocus
+                                name="destination"
+                                value={this.state.destination || destination}
+                                onChange={this.onChange.bind(this)}
+                                onSubmit={this.onSubmitField.bind(this)}
+                                onClickAway={this.onClickAway.bind(this)}
+                                onKeyUp={this.onKeyUp.bind(this)}
+                            />)
                         : (
                             <Typography className={classes.contentRow} variant="h5" gutterBottom>
                                 {destination}
                                 {userRole === 'admin' && editing === 'nothing' &&
                                     <div className="overlay">
-                                        <IconButton onClick={() => this.setState({ editing: 'destination' })}>
+                                        <IconButton onClick={this.onClickEditButton.bind(this, 'destination')}>
                                             <EditIcon />
                                         </IconButton>
                                     </div>
