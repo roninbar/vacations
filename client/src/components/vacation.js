@@ -83,7 +83,7 @@ class Vacation extends Component {
                             </div>
                         }
                     </Typography>
-                    <Typography className={classes.contentRow} variant="body1" gutterBottom>
+                    <Typography className={classes.contentRow} variant="body1" gutterBottom component="div">
                         {description}
                         {userRole === 'admin' && editing === 'nothing' &&
                             <div className="overlay">
