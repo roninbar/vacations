@@ -45,17 +45,18 @@ class Vacation extends Component {
         }
     }
 
-    onBlur({ target }) {
-        console.log(target);
-    }
-
     onClickAway() {
         this.setState({ editing: 'nothing' });
     }
 
     render() {
-        const { destination, from, to, price, description, image, followers, isFollowing, onChangeFollowing, onDelete, userRole, classes } = this.props;
+        const { destination, from, to, price, description, image, followers, isFollowing, onChangeFollowing, onChangeField, onDelete, userRole, classes } = this.props;
         const { editing } = this.state;
+
+        function onBlur(name, { target: { innerText: value } }) {
+            return onChangeField(name, value);
+        }
+
         return (
             <Card className={classes.root}>
                 <CardMedia className={classes.media} image={image} title={destination}>
@@ -92,16 +93,16 @@ class Vacation extends Component {
                             </Typography>)
                     }
                     <Typography className={classes.contentRow} variant="subtitle1" gutterBottom>
-                        <strong contentEditable={userRole === 'admin'} onBlur={this.onBlur.bind(this)}>
+                        <strong contentEditable={userRole === 'admin'} onBlur={onBlur.bind(null, 'dates')}>
                             {entities.decode(`${from.toDateString()}&ndash;${to.toDateString()}`)}
                         </strong>
                     </Typography>
-                    <Typography className={classes.contentRow} variant="body1" gutterBottom component="div" contentEditable={userRole === 'admin'} onBlur={this.onBlur.bind(this)}>
+                    <Typography className={classes.contentRow} variant="body1" gutterBottom component="div" contentEditable={userRole === 'admin'} onBlur={onBlur.bind(null, 'description')}>
                         {description}
                     </Typography>
                     <Typography className={classes.contentRow} variant="h6">
                         <strong>
-                            &euro;<span contentEditable={userRole === 'admin'} onBlur={this.onBlur.bind(this)}>{price}</span>
+                            &euro;<span contentEditable={userRole === 'admin'} onBlur={onBlur.bind(null, 'price')}>{price}</span>
                         </strong>
                     </Typography>
                 </CardContent>

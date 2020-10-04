@@ -24,6 +24,10 @@ class HomePage extends Component {
         setFollowingAsync(payload); // Dispatch an async action that updates the database.
     }
 
+    onChangeField(id, name, value) {
+        console.log(id, name, value);
+    }
+
     onDelete(vacationId) {
         this.setState({ idToDelete: vacationId });
     }
@@ -68,6 +72,7 @@ class HomePage extends Component {
                                 userRole={userRole}
                                 onDelete={this.onDelete.bind(this, id)}
                                 onChangeFollowing={this.onChangeFollowing.bind(this, id)}
+                                onChangeField={this.onChangeField.bind(this, id)}
                             />
                         </Grid>
                     ))}
