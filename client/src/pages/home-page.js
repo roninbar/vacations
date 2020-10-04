@@ -1,4 +1,4 @@
-import { Backdrop, Button, Dialog, DialogActions, DialogContent, DialogTitle, Grid, LinearProgress, Snackbar, Typography, withStyles } from '@material-ui/core';
+import { Backdrop, Button, Grid, LinearProgress, Snackbar, Typography, withStyles } from '@material-ui/core';
 import Alert from '@material-ui/lab/Alert';
 import Vacation from 'components/vacation';
 import { logOutAsync } from 'features/userSlice';
@@ -6,6 +6,7 @@ import { deleteAsync, loadAllAsync, setFollowing, setFollowingAsync } from 'feat
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { Link, withRouter } from 'react-router-dom';
+import DeleteDialog from './delete-dialog';
 
 class HomePage extends Component {
 
@@ -41,11 +42,11 @@ class HomePage extends Component {
     render() {
         const { classes, username, userRole, logOutAsync, vacations, loading, error } = this.props;
         const { idToDelete } = this.state;
-        let descToDelete = '', startToDelete = '', finishToDelete = '';
+        let destinationToDelete = '', startToDelete = '', finishToDelete = '';
         if (idToDelete > 0) {
             (
                 {
-                    desc: descToDelete,
+                    destination: destinationToDelete,
                     from: startToDelete,
                     to: finishToDelete,
                 }
@@ -71,16 +72,15 @@ class HomePage extends Component {
                         </Grid>
                     ))}
                 </Grid>
-                <Dialog open={idToDelete > 0} className={classes.deleteDialog}>
-                    <DialogTitle>Delete {descToDelete}?</DialogTitle>
-                    <DialogContent>
-                        {startToDelete}&ndash;{finishToDelete}
-                    </DialogContent>
-                    <DialogActions>
-                        {/* <Button variant="outlined" onClick={this.onCancelDelete.bind(this)} color="primary" autoFocus>Cancel</Button> */}
-                        <Button variant="outlined" color="secondary" fullWidth onClick={this.onOkDelete.bind(this)} >Yes, delete {descToDelete}</Button>
-                    </DialogActions>
-                </Dialog>
+                <DeleteDialog
+                    classes={classes}
+                    destination={destinationToDelete}
+                    start={startToDelete}
+                    finish={finishToDelete}
+                    open={idToDelete > 0}
+                    onOk={this.onOkDelete.bind(this)}
+                    onCancel={this.onCancelDelete.bind(this)}
+                />
                 <Backdrop open={loading} className={classes.loadingBackdrop}>
                     <LinearProgress className={classes.progress} />
                 </Backdrop>
@@ -112,23 +112,6 @@ const styles = theme => ({
     },
     logout: {
         float: 'right',
-    },
-    deleteDialog: {
-        '& .MuiDialogTitle-root': {
-            textAlign: 'center',
-        },
-        '& .MuiDialogActions-root': {
-            '& button': {
-                color: '#cb2431',
-                backgroundColor: '#fff',
-                transitionProperty: 'all',
-            },
-            '& button:hover': {
-                color: '#fff',
-                backgroundColor: '#cb2431',
-                transitionProperty: 'all',
-            },
-        },
     },
     loadingBackdrop: {
         zIndex: theme.zIndex.drawer + 1,
