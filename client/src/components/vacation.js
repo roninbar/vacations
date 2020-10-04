@@ -1,4 +1,4 @@
-import { Badge, Card, CardActions, CardContent, CardMedia, ClickAwayListener, GridListTileBar, IconButton, TextField, Typography, withStyles } from '@material-ui/core';
+import { Badge, Card, CardActions, CardContent, CardMedia, ClickAwayListener, IconButton, TextField, Typography, withStyles } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import { ToggleButton } from '@material-ui/lab';
@@ -41,12 +41,11 @@ class Vacation extends Component {
             <Card className={classes.root}>
                 <CardMedia className={classes.media} image={image} title={destination}>
                     {userRole === 'admin' && editing === 'nothing' &&
-                        <GridListTileBar actionIcon={
-                            <IconButton className={classes.mediaIcon}>
+                        <div className="overlay">
+                            <IconButton className={classes.imageEditButton}>
                                 <EditIcon />
                             </IconButton>
-                        }
-                        />
+                        </div>
                     }
                 </CardMedia>
                 <CardContent>
@@ -131,14 +130,21 @@ const styles = {
     media: {
         position: 'relative',
         height: 140,
-        '& .MuiGridListTileBar-root': {
+        '& .overlay': {
             display: 'none',
+            flexDirection: 'row-reverse',
+            position: 'absolute',
+            right: 0,
+            bottom: 0,
+            left: 0,
+            opacity: 0.5,
+            backgroundColor: 'black',
         },
-        '&:hover .MuiGridListTileBar-root': {
+        '&:hover .overlay': {
             display: 'flex',
         },
     },
-    mediaIcon: {
+    imageEditButton: {
         color: 'rgba(255, 255, 255, 1.0)',
     },
     contentRow: {
