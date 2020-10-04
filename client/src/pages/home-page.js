@@ -19,13 +19,14 @@ class HomePage extends Component {
 
     onChangeFollowing(vacationId, isFollowing) {
         const payload = { id: vacationId, isFollowing };
-        const { setFollowing, setFollowingAsync } = this.props;
+        const { setFollowing, changeAsync } = this.props;
         setFollowing(payload); // Give the user immediate feedback for the button press.
-        setFollowingAsync(payload); // Dispatch an async action that updates the database.
+        changeAsync(payload); // Dispatch an async action that updates the database.
     }
 
-    onChangeField(id, name, value) {
-        console.log(id, name, value);
+    onChangeField(vacationId, name, value) {
+        const { changeAsync } = this.props;
+        changeAsync({ id: vacationId, [name]: value });
     }
 
     onDelete(vacationId) {
@@ -156,7 +157,7 @@ const mapStateToProps = ({
     })),
 });
 
-const mapDispatchToProps = { logOutAsync, loadAllAsync, setFollowing, setFollowingAsync: changeAsync, deleteAsync };
+const mapDispatchToProps = { logOutAsync, loadAllAsync, setFollowing, changeAsync, deleteAsync };
 
 const withRedux = connect(mapStateToProps, mapDispatchToProps);
 
