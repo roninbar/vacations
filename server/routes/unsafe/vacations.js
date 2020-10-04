@@ -7,7 +7,7 @@ const router = express.Router();
 router.delete('/:id', async function ({ params: { id: vacationId }, user: { id: userId } }, res) {
     const conn = await getSqlConnection();
     try {
-        conn.execute('delete from vacation where id = ?', [vacationId]);
+        conn.execute('DELETE FROM `vacation` WHERE `id` = ?', [vacationId]);
     }
     finally {
         conn.release();
