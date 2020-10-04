@@ -1,3 +1,4 @@
-debug.log
-**/*.stackdump
 .vscode/launch.json
+**/*.stackdump
+/node_modules
+debug.log

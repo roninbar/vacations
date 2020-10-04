@@ -1,0 +1,25 @@
+{
+  "name": "vacations",
+  "version": "0.1.0",
+  "description": "React + Node project",
+  "main": "index.js",
+  "dependencies": {},
+  "devDependencies": {
+    "eslint": "^7.10.0",
+    "eslint-plugin-react": "^7.21.3",
+    "typescript": "^4.0.3"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/roninbar/2020-09-11-vacations.git"
+  },
+  "author": "Ron Inbar",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/roninbar/2020-09-11-vacations/issues"
+  },
+  "homepage": "https://github.com/roninbar/2020-09-11-vacations#readme"
+}
