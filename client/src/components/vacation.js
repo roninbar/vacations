@@ -45,6 +45,10 @@ class Vacation extends Component {
         }
     }
 
+    onBlur({ target }) {
+        console.log(target);
+    }
+
     onClickAway() {
         this.setState({ editing: 'nothing' });
     }
@@ -88,34 +92,17 @@ class Vacation extends Component {
                             </Typography>)
                     }
                     <Typography className={classes.contentRow} variant="subtitle1" gutterBottom>
-                        <strong>{entities.decode(`${from.toDateString()}&ndash;${to.toDateString()}`)}</strong>
-                        {userRole === 'admin' && editing === 'nothing' &&
-                            <div className="overlay">
-                                <IconButton>
-                                    <EditIcon />
-                                </IconButton>
-                            </div>
-                        }
+                        <strong contentEditable={userRole === 'admin'} onBlur={this.onBlur.bind(this)}>
+                            {entities.decode(`${from.toDateString()}&ndash;${to.toDateString()}`)}
+                        </strong>
                     </Typography>
-                    <Typography className={classes.contentRow} variant="body1" gutterBottom component="div">
+                    <Typography className={classes.contentRow} variant="body1" gutterBottom component="div" contentEditable={userRole === 'admin'} onBlur={this.onBlur.bind(this)}>
                         {description}
-                        {userRole === 'admin' && editing === 'nothing' &&
-                            <div className="overlay">
-                                <IconButton>
-                                    <EditIcon />
-                                </IconButton>
-                            </div>
-                        }
                     </Typography>
                     <Typography className={classes.contentRow} variant="h6">
-                        <strong>&euro;{price}</strong>
-                        {userRole === 'admin' && editing === 'nothing' &&
-                            <div className="overlay">
-                                <IconButton>
-                                    <EditIcon />
-                                </IconButton>
-                            </div>
-                        }
+                        <strong>
+                            &euro;<span contentEditable={userRole === 'admin'} onBlur={this.onBlur.bind(this)}>{price}</span>
+                        </strong>
                     </Typography>
                 </CardContent>
                 <CardActions className={classes.actions}>
