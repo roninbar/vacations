@@ -1,3 +1,4 @@
+/* eslint-disable dot-notation */
 const mysql = require('mysql2');
 
 const getSqlConnection = (function () {
@@ -12,6 +13,6 @@ const getSqlConnection = (function () {
         }
         return await pool.promise().getConnection();
     };
-})();
+}());
 
 exports.getSqlConnection = getSqlConnection;

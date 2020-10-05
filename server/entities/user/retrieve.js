@@ -1,4 +1,3 @@
-const mysql = require('mysql2/promise');
 const { hash } = require('../../util/hash');
 const { getSqlConnection } = require('../connect');
 
@@ -20,7 +19,10 @@ async function getUserByCredentials(username, password) {
             'SELECT `user`.`id` AS `id`, `user`.`name` as `name`, `role`.`name` AS `role` ' +
             'FROM `user` JOIN `role` ON `role_id` = `role`.`id` ' +
             'WHERE `user`.`name` = ? AND `password_hash` = ?',
-            [username, hash(password)]);
+            [
+                username,
+                hash(password),
+            ]);
         return user;
     }
     finally {

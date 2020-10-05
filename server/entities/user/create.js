@@ -1,4 +1,4 @@
-const mysql = require('mysql2/promise');
+/* eslint-disable max-params */
 const { hash } = require('../../util/hash');
 const { getSqlConnection } = require('../connect');
 
