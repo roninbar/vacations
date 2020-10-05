@@ -1,4 +1,3 @@
-const mysql = require('mysql2/promise');
 const { getSqlConnection } = require('../connect');
 
 const SELECT_VACATIONS =
@@ -13,6 +12,7 @@ async function getVacation(userId, vacationId) {
     const conn = await getSqlConnection();
     try {
         const [[vacation]] = await conn.execute({
+            // eslint-disable-next-line prefer-template
             sql: SELECT_VACATIONS + ' HAVING `vacation`.`id` = :vacationId',
             namedPlaceholders: true,
         }, {

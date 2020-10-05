@@ -1,9 +1,9 @@
 const { addUser } = require('../entities/user/create');
 const { getUserByName } = require('../entities/user/retrieve');
-var passport = require('../util/passport');
-var express = require('express');
+const passport = require('../util/passport');
+const express = require('express');
 
-var router = express();
+const router = express();
 
 // Create a new user account.
 router.post('/', async function (req, res) {
@@ -36,7 +36,7 @@ router.post('/logout', function (req, res) {
     }
     req.logout();
     res.clearCookie('connect.sid').sendStatus(205);
-  })
+  });
 });
 
 module.exports = router;

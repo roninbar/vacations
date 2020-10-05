@@ -1,6 +1,8 @@
 const { getSqlConnection } = require('../../entities/connect');
 const { getAllVacations } = require('../../entities/vacation/retrieve');
 const express = require('express');
+
+// eslint-disable-next-line new-cap
 const router = express.Router();
 
 // Delete vacation.

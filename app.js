@@ -1,12 +1,12 @@
-var path = require('path');
-var logger = require('morgan');
-var express = require('express');
-var session = require('express-session');
-var MySQLStore = require('express-mysql-session');
-var cookieParser = require('cookie-parser');
-var passport = require('./util/passport');
+const path = require('path');
+const logger = require('morgan');
+const express = require('express');
+const session = require('express-session');
+const MySQLStore = require('express-mysql-session');
+const cookieParser = require('cookie-parser');
+const passport = require('./util/passport');
 
-var app = express();
+const app = express();
 
 app.use(logger('dev'));
 app.use(express.static(path.join(__dirname, 'public')));

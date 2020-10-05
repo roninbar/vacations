@@ -1,7 +1,9 @@
-var { getVacation, getAllVacations } = require('../entities/vacation/retrieve');
-var { followVacation, unfollowVacation } = require('../entities/vacation/update');
-var express = require('express');
-var router = express.Router();
+const { getVacation, getAllVacations } = require('../entities/vacation/retrieve');
+const { followVacation, unfollowVacation } = require('../entities/vacation/update');
+const express = require('express');
+
+// eslint-disable-next-line new-cap
+const router = express.Router();
 
 // GET all the vacations.
 router.get('/all', async function ({ user: { id: userId } }, res) {

@@ -1,7 +1,11 @@
-var crypto = require('crypto');
+const crypto = require('crypto');
 
 function hash(password) {
-  return crypto.createHmac('sha256', 'xyzzy').update(password).digest('base64');
+  return crypto
+    .createHmac('sha256', 'xyzzy')
+    .update(password)
+    .digest('base64');
 }
 
 exports.hash = hash;
+
