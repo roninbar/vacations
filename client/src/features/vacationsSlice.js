@@ -51,7 +51,6 @@ const vacationsSlice = createSlice({
         error: false,
         loading: false,
         vacations: [],
-        pendingRequests: {},
     },
     reducers: {
         /**
@@ -85,27 +84,26 @@ const vacationsSlice = createSlice({
             state.error = false;
             state.loading = true;
         },
-        [loadOneAsync.fulfilled](state, { payload }) {
-            updateVacation(state, payload);
+        [loadOneAsync.fulfilled](state, { payload: vacation }) {
+            updateVacation(state, vacation);
         },
         [loadOneAsync.rejected](state, { error }) {
             state.loading = false;
             state.error = error;
         },
-        [changeAsync.pending](state, { meta: { arg, requestId } }) {
+        [changeAsync.pending](state) {
             state.error = false;
             state.loading = true;
-            state.pendingRequests[requestId] = arg;
         },
-        [changeAsync.fulfilled](state, { payload, meta: { requestId } }) {
-            delete state.pendingRequests[requestId];
-            updateVacation(state, payload);
+        [changeAsync.fulfilled](state, { payload: vacation }) {
+            updateVacation(state, vacation);
         },
-        [changeAsync.rejected](state, { error, meta: { requestId, arg: { id, isFollowing } } }) {
-            delete state.pendingRequests[requestId];
+        [changeAsync.rejected](state, { error, meta: { arg: { id, isFollowing } } }) {
             state.loading = false;
             state.error = error;
-            state.vacations.find(v => v.id === id).isFollowing = !isFollowing;
+            if (typeof isFollowing === 'boolean') {
+                state.vacations.find(v => v.id === id).isFollowing = !isFollowing;
+            }
         },
         [deleteAsync.pending](state) {
             state.error = false;
