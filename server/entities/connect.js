@@ -6,9 +6,9 @@ const getSqlConnection = (function () {
     return async function () {
         if (!pool) {
             pool = mysql.createPool({
-                user: process.env['USER'],
-                password: process.env['PASS'],
-                database: 'vacations',
+                user: process.env['DBUSER'],
+                password: process.env['DBPASS'],
+                database: process.env['DBNAME'],
             });
         }
         return await pool.promise().getConnection();
