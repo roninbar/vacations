@@ -96,16 +96,34 @@ class Vacation extends Component {
                             </Typography>)
                     }
                     <Typography className={classes.contentRow} variant="subtitle1" gutterBottom>
-                        <strong contentEditable={userRole === 'admin'} onBlur={onBlur.bind(null, 'dates')}>
+                        <strong
+                            contentEditable={userRole === 'admin'}
+                            suppressContentEditableWarning={true}
+                            onBlur={onBlur.bind(null, 'dates')}
+                        >
                             {entities.decode(`${from.toDateString()}&ndash;${to.toDateString()}`)}
                         </strong>
                     </Typography>
-                    <Typography className={classes.contentRow} variant="body1" gutterBottom component="div" contentEditable={userRole === 'admin'} onBlur={onBlur.bind(null, 'description')}>
+                    <Typography
+                        className={classes.contentRow}
+                        variant="body1"
+                        gutterBottom component="div"
+                        contentEditable={userRole === 'admin'}
+                        suppressContentEditableWarning={true}
+                        onBlur={onBlur.bind(null, 'description')}
+                    >
                         {description}
                     </Typography>
                     <Typography className={classes.contentRow} variant="h6">
                         <strong>
-                            &euro;<span contentEditable={userRole === 'admin'} onBlur={onBlur.bind(null, 'price')}>{price}</span>
+                            &euro;
+                            <span
+                                contentEditable={userRole === 'admin'}
+                                suppressContentEditableWarning={true}
+                                onBlur={onBlur.bind(null, 'price')}
+                            >
+                                {price}
+                            </span>
                         </strong>
                     </Typography>
                 </CardContent>

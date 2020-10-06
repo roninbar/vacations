@@ -79,7 +79,6 @@ class HomePage extends Component {
                     ))}
                 </Grid>
                 <DeleteDialog
-                    classes={classes}
                     destination={destinationToDelete}
                     start={startToDelete}
                     finish={finishToDelete}
@@ -97,8 +96,8 @@ class HomePage extends Component {
                         <Typography variant="h5">Please try again later.</Typography>
                     }
                 </Backdrop>
-                <Snackbar open={error}>
-                    <Alert variant="filled" severity="error" elevation={6}>{error.message}</Alert>
+                <Snackbar open={typeof error?.message === 'string'}>
+                    <Alert variant="filled" severity="error" elevation={6}>{error?.message}</Alert>
                 </Snackbar>
             </div>
         );
