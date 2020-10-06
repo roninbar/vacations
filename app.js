@@ -51,5 +51,10 @@ app.use(function(req, res, next) {
 
 app.use('/vacation', require('./routes/unsafe/vacations'));
 
+// Any request that was not handled by the previous middleware must be invalid.
+app.use('/vacation', function(req, res) {
+    return res.sendStatus(400);
+});
+
 module.exports = app;
 
