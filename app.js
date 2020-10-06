@@ -1,3 +1,4 @@
+/* eslint-disable dot-notation */
 const path = require('path');
 const logger = require('morgan');
 const express = require('express');
@@ -14,12 +15,13 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(session({
-    secret: 'xyzzy',
+    secret: process.env['SECRET'],
     resave: false,
     saveUninitialized: true,
     store: new MySQLStore({
-        user: 'root',
-        database: 'vacations',
+        user: process.env['DBUSER'],
+        password: process.env['DBPASS'],
+        database: process.env['DBNAME'],
     }),
 }));
 app.use(passport.initialize());
