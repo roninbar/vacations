@@ -34,6 +34,18 @@ class Vacation extends PureComponent {
         };
     }
 
+    fireChangeField() {
+        const { onChangeField } = this.props;
+        const { editing: name, [name]: value } = this.state;
+        if (value) {
+            onChangeField(name, value);
+        }
+        this.setState({
+            [name]: undefined,
+            editing: 'nothing',
+        });
+    }
+
     onClickEditButton(what) {
         this.setState({ editing: what });
     }
@@ -44,10 +56,7 @@ class Vacation extends PureComponent {
 
     onSubmitField(e) {
         e.preventDefault();
-        const { onChangeField } = this.props;
-        const { editing: name, [name]: value } = this.state;
-        onChangeField(name, value);
-        this.setState({ editing: 'nothing' });
+        this.fireChangeField();
     }
 
     onKeyUp(e) {
@@ -57,7 +66,7 @@ class Vacation extends PureComponent {
     }
 
     onClickAway() {
-        this.setState({ editing: 'nothing' });
+        this.fireChangeField();
     }
 
     render() {
@@ -70,20 +79,24 @@ class Vacation extends PureComponent {
 
         return (
             <Card className={classes.root}>
-                <CardMedia className={classes.media} image={image} title={destination}>
+                <CardMedia className={classes.media + (editing === 'image' ? ' editing' : '')} image={image} title={destination}>
                     {userRole === 'admin' &&
                         <div className="overlay">
                             {editing === 'image'
                                 ? (
                                     <TextField
+                                        variant="outlined"
                                         autoFocus
-                                        type="url"
+                                        type="text"
                                         name="image"
-                                        value={this.state.image || image}
+                                        value={typeof this?.state?.image === 'string' ? this?.state?.image : image}
                                         onChange={this.onChange.bind(this)}
                                         onSubmit={this.onSubmitField.bind(this)}
                                         onClickAway={this.onClickAway.bind(this)}
                                         onKeyUp={this.onKeyUp.bind(this)}
+                                        inputProps={{
+                                            pattern: '^(?:([A-Za-z]+):)?(\\/{0,3})([0-9.\\-A-Za-z]+)(?::(\\d+))?(?:\\/([^?#]*))?(?:\\?([^#]*))?(?:#(.*))?$',
+                                        }}
                                         className={classes.imageEditTextField}
                                     />)
                                 : (
@@ -98,9 +111,10 @@ class Vacation extends PureComponent {
                     {editing === 'destination'
                         ? (
                             <TextField
+                                variant="outlined"
                                 autoFocus
                                 name="destination"
-                                value={this.state.destination || destination}
+                                value={typeof this?.state?.destination === 'string' ? this?.state?.destination : destination}
                                 onChange={this.onChange.bind(this)}
                                 onSubmit={this.onSubmitField.bind(this)}
                                 onClickAway={this.onClickAway.bind(this)}
@@ -177,17 +191,20 @@ const styles = {
         position: 'relative',
         height: 140,
         '& .overlay': {
-            display: 'none',
+            display: 'flex',
             flexFlow: 'row-reverse nowrap',
             position: 'absolute',
             right: 0,
             bottom: 0,
             left: 0,
-            opacity: 0.5,
+            opacity: 0,
             backgroundColor: 'black',
         },
         '&:hover .overlay': {
-            display: 'flex',
+            opacity: 0.5,
+        },
+        '&.editing .overlay': {
+            opacity: 1,
         },
     },
     imageEditTextField: {
