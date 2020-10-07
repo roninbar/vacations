@@ -18,8 +18,8 @@ router.delete('/:id', async function ({ params: { id: vacationId }, user: { id: 
 });
 
 // Change other fields in the vacation, such as the destination or the dates.
-router.patch('/:id', async function ({ params: { id: vacationId }, user: { id: userId }, body: { destination, from, to, description, price } }, res, next) {
-    const body = { destination, from, to, description, price };
+router.patch('/:id', async function ({ params: { id: vacationId }, user: { id: userId }, body: { image, destination, from, to, description, price } }, res, next) {
+    const body = { image, destination, from, to, description, price };
     const assignments = Object.keys(body)
         .filter(key => typeof body[key] === 'string')
         .map(col => `\`${col}\` = :${col}`)
