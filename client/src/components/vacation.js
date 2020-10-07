@@ -2,8 +2,9 @@ import { Badge, Box, Card, CardActions, CardContent, CardMedia, ClickAwayListene
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import { ToggleButton } from '@material-ui/lab';
+import { KeyboardDatePicker } from '@material-ui/pickers';
 import { Html5Entities } from 'html-entities';
-import React, { PureComponent } from 'react';
+import React, { PureComponent, Fragment } from 'react';
 
 const entities = new Html5Entities();
 
@@ -54,6 +55,17 @@ class Vacation extends PureComponent {
         this.setState({ [name]: value });
     }
 
+    onChangeDate(name, value) {
+        this.setState({ [name]: value });
+    }
+
+    onAcceptDate(name, value) {
+        this.setState({
+            [name]: value,
+            editing: 'nothing',
+        });
+    }
+
     onSubmitField(e) {
         e.preventDefault();
         this.fireChangeField();
@@ -73,12 +85,15 @@ class Vacation extends PureComponent {
         const { destination, from, to, price, description, image, followers, isFollowing, onChangeFollowing, onChangeField, onDelete, userRole, classes } = this.props;
         const { editing } = this.state;
 
-        function onBlur(name, { target: { innerText: value } }) {
-            return onChangeField(name, value);
-        }
+        const onBlur = (name, { target: { innerText: value } }) => {
+            if (value !== this.props[name]) {
+                return onChangeField(name, value);
+            }
+        };
 
         return (
             <Card className={classes.root}>
+
                 <CardMedia className={classes.media + (editing === 'image' ? ' editing' : '')} image={image} title={destination}>
                     {userRole === 'admin' &&
                         <div className="overlay">
@@ -107,7 +122,10 @@ class Vacation extends PureComponent {
                         </div>
                     }
                 </CardMedia>
+
                 <CardContent>
+
+                    {/* Destination */}
                     {editing === 'destination'
                         ? (
                             <TextField
@@ -132,15 +150,60 @@ class Vacation extends PureComponent {
                                 }
                             </Typography>)
                     }
-                    <Typography className={classes.contentRow} variant="subtitle1" gutterBottom>
-                        <Box fontWeight="fontWeightBold"
-                            contentEditable={userRole === 'admin'}
-                            suppressContentEditableWarning={true}
-                            onBlur={onBlur.bind(null, 'dates')}
-                        >
-                            {entities.decode(`${from.toDateString()}&ndash;${to.toDateString()}`)}
-                        </Box>
-                    </Typography>
+
+                    {/* Dates */}
+                    {editing === 'dates'
+                        ? (
+                            <Fragment>
+                                <KeyboardDatePicker
+                                    disablePast
+                                    disableToolbar
+                                    variant="inline"
+                                    format="yyyy-MM-DD"
+                                    margin="normal"
+                                    label="Start Date"
+                                    name="from"
+                                    value={this.state.from}
+                                    onChange={this.onChangeDate.bind(this, 'from')}
+                                    onAccept={this.onAcceptDate.bind(this, 'from')}
+                                    KeyboardButtonProps={{
+                                        'aria-label': 'change date',
+                                    }}
+                                />
+                                <KeyboardDatePicker
+                                    disablePast
+                                    disableToolbar
+                                    variant="inline"
+                                    format="yyyy-MM-DD"
+                                    margin="normal"
+                                    label="End Date"
+                                    name="to"
+                                    value={this.state.to}
+                                    onChange={this.onChangeDate.bind(this, 'to')}
+                                    onAccept={this.onAcceptDate.bind(this, 'to')}
+                                    KeyboardButtonProps={{
+                                        'aria-label': 'change date',
+                                    }}
+                                />
+                            </Fragment>)
+                        : (
+                            <Typography className={classes.contentRow} variant="subtitle1" gutterBottom>
+                                <Box fontWeight="fontWeightBold"
+                                    onBlur={onBlur.bind(null, 'dates')}
+                                >
+                                    {entities.decode(`${from.toDateString()}&ndash;${to.toDateString()}`)}
+                                </Box>
+                                {userRole === 'admin' && editing === 'nothing' &&
+                                    <div className="overlay">
+                                        <IconButton onClick={this.onClickEditButton.bind(this, 'dates')}>
+                                            <EditIcon />
+                                        </IconButton>
+                                    </div>
+                                }
+                            </Typography>)
+                    }
+
+                    {/* Description */}
                     <Typography
                         className={classes.contentRow}
                         variant="body1"
@@ -151,6 +214,8 @@ class Vacation extends PureComponent {
                     >
                         {description}
                     </Typography>
+
+                    {/* Price */}
                     <Typography className={classes.contentRow} variant="h6">
                         <Box fontWeight="fontWeightBold">
                             &euro;
@@ -163,7 +228,9 @@ class Vacation extends PureComponent {
                             </span>
                         </Box>
                     </Typography>
+
                 </CardContent>
+
                 <CardActions className={classes.actions}>
                     {userRole === 'user' &&
                         <Badge badgeContent={followers} color="primary">
@@ -178,6 +245,7 @@ class Vacation extends PureComponent {
                         </IconButton>
                     }
                 </CardActions>
+
             </Card >
         );
     }
