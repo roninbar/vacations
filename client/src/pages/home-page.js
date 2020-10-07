@@ -1,5 +1,7 @@
+import MomentUtils from '@date-io/moment';
 import { Backdrop, Button, Grid, LinearProgress, Snackbar, Typography, withStyles } from '@material-ui/core';
 import Alert from '@material-ui/lab/Alert';
+import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import Vacation from 'components/vacation';
 import { logOutAsync } from 'features/userSlice';
 import { deleteAsync, loadAllAsync, setFollowing, changeAsync } from 'features/vacationsSlice';
@@ -62,43 +64,45 @@ class HomePage extends Component {
         }
         return (
             <div className={classes.root}>
-                <Typography className={classes.logout}>
-                    {username} (<Link to="/login" onClick={logOutAsync}>log out</Link>)
-                </Typography>
-                <Grid container spacing={4}>
-                    {vacations.map(({ id, ...rest }) => (
-                        <Grid item key={id} xs={12} sm={6} md={4} xl={3}>
-                            <Vacation
-                                {...rest}
-                                userRole={userRole}
-                                onDelete={this.onDelete.bind(this, id)}
-                                onChangeFollowing={this.onChangeFollowing.bind(this, id)}
-                                onChangeField={this.onChangeField.bind(this, id)}
-                            />
-                        </Grid>
-                    ))}
-                </Grid>
-                <DeleteDialog
-                    destination={destinationToDelete}
-                    start={startToDelete}
-                    finish={finishToDelete}
-                    open={idToDelete > 0}
-                    onOk={this.onOkDelete.bind(this)}
-                    onCancel={this.onCancelDelete.bind(this)}
-                />
-                <Backdrop open={loading} className={classes.loadingBackdrop}>
-                    <LinearProgress className={classes.progress} />
-                </Backdrop>
-                <Backdrop open={vacations.length === 0} className={classes.emptyBackdrop}>
-                    <Typography variant="h3" component="h3">There are no vacations in the system.</Typography>
-                    {userRole === 'admin' ?
-                        <Button variant="outlined">Click here to add some.</Button> :
-                        <Typography variant="h5">Please try again later.</Typography>
-                    }
-                </Backdrop>
-                <Snackbar open={typeof error?.message === 'string'}>
-                    <Alert variant="filled" severity="error" elevation={6}>{error?.message}</Alert>
-                </Snackbar>
+                <MuiPickersUtilsProvider utils={MomentUtils}>
+                    <Typography className={classes.logout}>
+                        {username} (<Link to="/login" onClick={logOutAsync}>log out</Link>)
+                    </Typography>
+                    <Grid container spacing={4}>
+                        {vacations.map(({ id, ...rest }) => (
+                            <Grid item key={id} xs={12} sm={6} md={4} xl={3}>
+                                <Vacation
+                                    {...rest}
+                                    userRole={userRole}
+                                    onDelete={this.onDelete.bind(this, id)}
+                                    onChangeFollowing={this.onChangeFollowing.bind(this, id)}
+                                    onChangeField={this.onChangeField.bind(this, id)}
+                                />
+                            </Grid>
+                        ))}
+                    </Grid>
+                    <DeleteDialog
+                        destination={destinationToDelete}
+                        start={startToDelete}
+                        finish={finishToDelete}
+                        open={idToDelete > 0}
+                        onOk={this.onOkDelete.bind(this)}
+                        onCancel={this.onCancelDelete.bind(this)}
+                    />
+                    <Backdrop open={loading} className={classes.loadingBackdrop}>
+                        <LinearProgress className={classes.progress} />
+                    </Backdrop>
+                    <Backdrop open={vacations.length === 0} className={classes.emptyBackdrop}>
+                        <Typography variant="h3" component="h3">There are no vacations in the system.</Typography>
+                        {userRole === 'admin' ?
+                            <Button variant="outlined">Click here to add some.</Button> :
+                            <Typography variant="h5">Please try again later.</Typography>
+                        }
+                    </Backdrop>
+                    <Snackbar open={typeof error?.message === 'string'}>
+                        <Alert variant="filled" severity="error" elevation={6}>{error?.message}</Alert>
+                    </Snackbar>
+                </MuiPickersUtilsProvider>
             </div>
         );
     }
