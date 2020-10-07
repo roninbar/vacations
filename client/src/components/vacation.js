@@ -1,23 +1,31 @@
-import { Badge, Card, CardActions, CardContent, CardMedia, ClickAwayListener, IconButton, TextField as MuiTextField, Typography, withStyles } from '@material-ui/core';
+import { Badge, Box, Card, CardActions, CardContent, CardMedia, ClickAwayListener, IconButton, TextField as MuiTextField, Typography, withStyles } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import { ToggleButton } from '@material-ui/lab';
 import { Html5Entities } from 'html-entities';
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 
 const entities = new Html5Entities();
 
-function TextField({ onSubmit, onClickAway, ...rest }) {
-    return (
-        <ClickAwayListener onClickAway={onClickAway}>
-            <form onSubmit={onSubmit}>
-                <MuiTextField {...rest} />
-            </form>
-        </ClickAwayListener>
-    );
-}
+const TextField = withStyles({
+    form: {
+        flexGrow: 1,
+        display: 'flex',
+        flexFlow: 'row nowrap',
+    },
+})(
+    function ({ classes, onSubmit, onClickAway, ...rest }) {
+        return (
+            <ClickAwayListener onClickAway={onClickAway}>
+                <form className={classes.form} onSubmit={onSubmit}>
+                    <MuiTextField fullWidth={true} {...rest} />
+                </form>
+            </ClickAwayListener>
+        );
+    }
+)
 
-class Vacation extends Component {
+class Vacation extends PureComponent {
 
     constructor(props) {
         super(props);
@@ -63,11 +71,26 @@ class Vacation extends Component {
         return (
             <Card className={classes.root}>
                 <CardMedia className={classes.media} image={image} title={destination}>
-                    {userRole === 'admin' && editing === 'nothing' &&
+                    {userRole === 'admin' &&
                         <div className="overlay">
-                            <IconButton className={classes.imageEditButton}>
-                                <EditIcon />
-                            </IconButton>
+                            {editing === 'image'
+                                ? (
+                                    <TextField
+                                        autoFocus
+                                        type="url"
+                                        name="image"
+                                        value={this.state.image || image}
+                                        onChange={this.onChange.bind(this)}
+                                        onSubmit={this.onSubmitField.bind(this)}
+                                        onClickAway={this.onClickAway.bind(this)}
+                                        onKeyUp={this.onKeyUp.bind(this)}
+                                        className={classes.imageEditTextField}
+                                    />)
+                                : (
+                                    <IconButton className={classes.imageEditButton} onClick={this.onClickEditButton.bind(this, 'image')}>
+                                        <EditIcon />
+                                    </IconButton>)
+                            }
                         </div>
                     }
                 </CardMedia>
@@ -96,13 +119,13 @@ class Vacation extends Component {
                             </Typography>)
                     }
                     <Typography className={classes.contentRow} variant="subtitle1" gutterBottom>
-                        <strong
+                        <Box fontWeight="fontWeightBold"
                             contentEditable={userRole === 'admin'}
                             suppressContentEditableWarning={true}
                             onBlur={onBlur.bind(null, 'dates')}
                         >
                             {entities.decode(`${from.toDateString()}&ndash;${to.toDateString()}`)}
-                        </strong>
+                        </Box>
                     </Typography>
                     <Typography
                         className={classes.contentRow}
@@ -115,7 +138,7 @@ class Vacation extends Component {
                         {description}
                     </Typography>
                     <Typography className={classes.contentRow} variant="h6">
-                        <strong>
+                        <Box fontWeight="fontWeightBold">
                             &euro;
                             <span
                                 contentEditable={userRole === 'admin'}
@@ -124,7 +147,7 @@ class Vacation extends Component {
                             >
                                 {price}
                             </span>
-                        </strong>
+                        </Box>
                     </Typography>
                 </CardContent>
                 <CardActions className={classes.actions}>
@@ -155,7 +178,7 @@ const styles = {
         height: 140,
         '& .overlay': {
             display: 'none',
-            flexDirection: 'row-reverse',
+            flexFlow: 'row-reverse nowrap',
             position: 'absolute',
             right: 0,
             bottom: 0,
@@ -166,6 +189,9 @@ const styles = {
         '&:hover .overlay': {
             display: 'flex',
         },
+    },
+    imageEditTextField: {
+        backgroundColor: 'white',
     },
     imageEditButton: {
         color: 'rgba(255, 255, 255, 1.0)',
