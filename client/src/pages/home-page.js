@@ -1,5 +1,5 @@
 import MomentUtils from '@date-io/moment';
-import { Backdrop, Button, Grid, LinearProgress, Snackbar, Typography, withStyles } from '@material-ui/core';
+import { Backdrop, Button, Container, Grid, LinearProgress, Snackbar, Typography, withStyles } from '@material-ui/core';
 import Alert from '@material-ui/lab/Alert';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import Vacation from 'components/vacation';
@@ -63,7 +63,7 @@ class HomePage extends Component {
             finishToDelete = finishToDelete.toDateString();
         }
         return (
-            <div className={classes.root}>
+            <Container maxWidth="xl" className={classes.root}>
                 <MuiPickersUtilsProvider utils={MomentUtils}>
                     <Typography className={classes.logout}>
                         {username} (<Link to="/login" onClick={logOutAsync}>log out</Link>)
@@ -103,7 +103,7 @@ class HomePage extends Component {
                         <Alert variant="filled" severity="error" elevation={6}>{error?.message}</Alert>
                     </Snackbar>
                 </MuiPickersUtilsProvider>
-            </div>
+            </Container>
         );
     }
 
