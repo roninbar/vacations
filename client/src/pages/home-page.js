@@ -4,10 +4,10 @@ import Alert from '@material-ui/lab/Alert';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import Vacation from 'components/vacation';
 import { logOutAsync } from 'features/userSlice';
-import { deleteAsync, loadAllAsync, setFollowing, changeAsync } from 'features/vacationsSlice';
+import { changeAsync, deleteAsync, loadAllAsync, setFollowing } from 'features/vacationsSlice';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { Link, withRouter } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import DeleteDialog from './delete-dialog';
 
 class HomePage extends Component {
@@ -47,7 +47,7 @@ class HomePage extends Component {
     }
 
     render() {
-        const { classes, username, userRole, logOutAsync, vacations, loading, error } = this.props;
+        const { classes, userRole, vacations, loading, error } = this.props;
         const { idToDelete } = this.state;
         let destinationToDelete = '', startToDelete = '', finishToDelete = '';
         if (idToDelete > 0) {
@@ -65,9 +65,9 @@ class HomePage extends Component {
         return (
             <Container maxWidth="xl" className={classes.root}>
                 <MuiPickersUtilsProvider utils={MomentUtils}>
-                    <Typography className={classes.logout}>
-                        {username} (<Link to="/login" onClick={logOutAsync}>log out</Link>)
-                    </Typography>
+                {/* <Typography className={classes.logout}>
+                    {username} (<Link to="/login" onClick={logOutAsync}>log out</Link>)
+                </Typography> */}
                     <Grid container spacing={4}>
                         {vacations.map(({ id, ...rest }) => (
                             <Grid item key={id} xs={12} sm={6} md={4} xl={3}>
