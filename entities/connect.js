@@ -9,6 +9,10 @@ const getSqlConnection = (function () {
                 user: process.env['DBUSER'],
                 password: process.env['DBPASS'],
                 database: process.env['DBNAME'],
+                dateStrings: [
+                    'DATE',
+                    'DATETIME'
+                ],
             });
         }
         return await pool.promise().getConnection();
