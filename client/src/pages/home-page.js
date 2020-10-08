@@ -26,9 +26,9 @@ class HomePage extends Component {
         changeAsync(payload); // Dispatch an async action that updates the database.
     }
 
-    onChangeField(vacationId, name, value) {
+    onChangeFields(vacationId, fields) {
         const { changeAsync } = this.props;
-        changeAsync({ id: vacationId, [name]: value });
+        changeAsync({ id: vacationId, ...fields });
     }
 
     onDelete(vacationId) {
@@ -75,8 +75,8 @@ class HomePage extends Component {
                                     {...rest}
                                     userRole={userRole}
                                     onDelete={this.onDelete.bind(this, id)}
+                                    onChangeFields={this.onChangeFields.bind(this, id)}
                                     onChangeFollowing={this.onChangeFollowing.bind(this, id)}
-                                    onChangeField={this.onChangeField.bind(this, id)}
                                 />
                             </Grid>
                         ))}

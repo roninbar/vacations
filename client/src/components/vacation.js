@@ -1,10 +1,11 @@
-import { Badge, Box, Card, CardActions, CardContent, CardMedia, ClickAwayListener, IconButton, TextField as MuiTextField, Typography, withStyles } from '@material-ui/core';
+import { Badge, Box, Button, Card, CardActions, CardContent, CardMedia, ClickAwayListener, IconButton, TextField as MuiTextField, Typography, withStyles } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
 import EditIcon from '@material-ui/icons/Edit';
 import { ToggleButton } from '@material-ui/lab';
 import { KeyboardDatePicker } from '@material-ui/pickers';
 import { Html5Entities } from 'html-entities';
-import React, { PureComponent, Fragment } from 'react';
+import _ from 'lodash';
+import React, { PureComponent } from 'react';
 
 const entities = new Html5Entities();
 
@@ -32,64 +33,89 @@ class Vacation extends PureComponent {
         super(props);
         this.state = {
             editing: 'nothing',
+            fields: {},
         };
     }
 
-    fireChangeField() {
-        const { onChangeField } = this.props;
-        const { editing: name, [name]: value } = this.state;
-        if (value) {
-            onChangeField(name, value);
-        }
+    quitEditing() {
         this.setState({
-            [name]: undefined,
+            fields: {},
             editing: 'nothing',
         });
     }
 
     onClickEditButton(what) {
-        this.setState({ editing: what });
-    }
-
-    onChange({ target: { name, value } }) {
-        this.setState({ [name]: value });
-    }
-
-    onChangeDate(name, value) {
-        this.setState({ [name]: value });
-    }
-
-    onAcceptDate(name, value) {
         this.setState({
-            [name]: value,
-            editing: 'nothing',
+            editing: what,
         });
     }
 
-    onSubmitField(e) {
+    onChange({ target: { name, value } }) {
+        this.setField(name, value);
+    }
+
+    onChangeDate(name, date, value) {
+        this.setField(name, value);
+    }
+
+    onAcceptDate(name, date) {
+        this.setField(name, date.format('yyyy-MM-DD'));
+    }
+
+    setField(name, value) {
+        const { fields } = this.state;
+        this.setState({
+            fields: {
+                ...fields,
+                [name]: value,
+            },
+        });
+    }
+
+    onSubmitTextField(e) {
         e.preventDefault();
-        this.fireChangeField();
+        this.fireChangeFields();
+    }
+
+    onSubmitDates(e) {
+        e.preventDefault();
+        this.fireChangeFields();
     }
 
     onKeyUp(e) {
         if (e.key === 'Escape') {
-            this.setState({ editing: 'nothing' });
+            this.quitEditing();
         }
     }
 
     onClickAway() {
-        this.fireChangeField();
+        this.fireChangeFields();
+    }
+
+    fireChangeFields() {
+        const { fields } = this.state;
+        if (!_.isEmpty(fields)) {
+            const { onChangeFields } = this.props;
+            onChangeFields(fields);
+        }
+        this.quitEditing();
+    }
+
+    /**
+     * Method to call when a content-editable element loses focus.
+     * @param {string} name Name of field to update
+     * @param {Event} param1 "Blur" event
+     */
+    onBlur(name, { target: { innerText: value } }) {
+        const { onChangeFields, [name]: prevValue } = this.props;
+        if (value !== prevValue) {
+            return onChangeFields({ [name]: value });
+        }
     }
 
     render() {
-        const { destination, from, to, price, description, image, followers, isFollowing, onChangeFollowing, onChangeField, onDelete, userRole, classes } = this.props;
+        const { destination, from, to, price, description, image, followers, isFollowing, onChangeFollowing, onDelete, userRole, classes } = this.props;
         const { editing } = this.state;
-
-        const onBlur = (name, { target: { innerText: value } }) => {
-            if (value !== this.props[name]) {
-                return onChangeField(name, value);
-            }
-        };
 
         return (
             <Card className={classes.root}>
@@ -104,9 +130,9 @@ class Vacation extends PureComponent {
                                         autoFocus
                                         type="text"
                                         name="image"
-                                        value={typeof this?.state?.image === 'string' ? this?.state?.image : image}
+                                        value={typeof this.state.fields?.image === 'string' ? this.state.fields?.image : image}
                                         onChange={this.onChange.bind(this)}
-                                        onSubmit={this.onSubmitField.bind(this)}
+                                        onSubmit={this.onSubmitTextField.bind(this)}
                                         onClickAway={this.onClickAway.bind(this)}
                                         onKeyUp={this.onKeyUp.bind(this)}
                                         inputProps={{
@@ -130,15 +156,15 @@ class Vacation extends PureComponent {
                         ? (
                             <TextField
                                 variant="outlined"
-                                autoFocus
                                 name="destination"
-                                value={typeof this?.state?.destination === 'string' ? this?.state?.destination : destination}
+                                value={typeof this.state.fields?.destination === 'string' ? this.state.fields?.destination : destination}
                                 onChange={this.onChange.bind(this)}
-                                onSubmit={this.onSubmitField.bind(this)}
+                                onSubmit={this.onSubmitTextField.bind(this)}
                                 onClickAway={this.onClickAway.bind(this)}
                                 onKeyUp={this.onKeyUp.bind(this)}
-                            />)
-                        : (
+                                autoFocus
+                            />
+                        ) : (
                             <Typography className={classes.contentRow} variant="h5" gutterBottom>
                                 {destination}
                                 {userRole === 'admin' && editing === 'nothing' &&
@@ -148,13 +174,14 @@ class Vacation extends PureComponent {
                                         </IconButton>
                                     </div>
                                 }
-                            </Typography>)
+                            </Typography>
+                        )
                     }
 
                     {/* Dates */}
                     {editing === 'dates'
                         ? (
-                            <Fragment>
+                            <form onSubmit={this.onSubmitDates.bind(this)}>
                                 <KeyboardDatePicker
                                     disablePast
                                     disableToolbar
@@ -163,12 +190,9 @@ class Vacation extends PureComponent {
                                     margin="normal"
                                     label="Start Date"
                                     name="from"
-                                    value={this.state.from}
+                                    value={this.state.fields?.from || from}
                                     onChange={this.onChangeDate.bind(this, 'from')}
                                     onAccept={this.onAcceptDate.bind(this, 'from')}
-                                    KeyboardButtonProps={{
-                                        'aria-label': 'change date',
-                                    }}
                                 />
                                 <KeyboardDatePicker
                                     disablePast
@@ -178,18 +202,16 @@ class Vacation extends PureComponent {
                                     margin="normal"
                                     label="End Date"
                                     name="to"
-                                    value={this.state.to}
+                                    value={this.state.fields?.to || to}
                                     onChange={this.onChangeDate.bind(this, 'to')}
                                     onAccept={this.onAcceptDate.bind(this, 'to')}
-                                    KeyboardButtonProps={{
-                                        'aria-label': 'change date',
-                                    }}
                                 />
-                            </Fragment>)
+                                <Button type="submit">Update</Button>
+                            </form>)
                         : (
                             <Typography className={classes.contentRow} variant="subtitle1" gutterBottom>
                                 <Box fontWeight="fontWeightBold"
-                                    onBlur={onBlur.bind(null, 'dates')}
+                                    onBlur={this.onBlur.bind(this, 'dates')}
                                 >
                                     {entities.decode(`${from.toDateString()}&ndash;${to.toDateString()}`)}
                                 </Box>
@@ -200,7 +222,8 @@ class Vacation extends PureComponent {
                                         </IconButton>
                                     </div>
                                 }
-                            </Typography>)
+                            </Typography>
+                        )
                     }
 
                     {/* Description */}
@@ -210,7 +233,7 @@ class Vacation extends PureComponent {
                         gutterBottom component="div"
                         contentEditable={userRole === 'admin'}
                         suppressContentEditableWarning={true}
-                        onBlur={onBlur.bind(null, 'description')}
+                        onBlur={this.onBlur.bind(this, 'description')}
                     >
                         {description}
                     </Typography>
@@ -222,7 +245,7 @@ class Vacation extends PureComponent {
                             <span
                                 contentEditable={userRole === 'admin'}
                                 suppressContentEditableWarning={true}
-                                onBlur={onBlur.bind(null, 'price')}
+                                onBlur={this.onBlur.bind(this, 'price')}
                             >
                                 {price}
                             </span>
