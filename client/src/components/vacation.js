@@ -181,33 +181,35 @@ class Vacation extends PureComponent {
                     {/* Dates */}
                     {editing === 'dates'
                         ? (
-                            <form onSubmit={this.onSubmitDates.bind(this)}>
-                                <KeyboardDatePicker
-                                    disablePast
-                                    disableToolbar
-                                    variant="inline"
-                                    format="yyyy-MM-DD"
-                                    margin="normal"
-                                    label="Start Date"
-                                    name="from"
-                                    value={this.state.fields?.from || from}
-                                    onChange={this.onChangeDate.bind(this, 'from')}
-                                    onAccept={this.onAcceptDate.bind(this, 'from')}
-                                />
-                                <KeyboardDatePicker
-                                    disablePast
-                                    disableToolbar
-                                    variant="inline"
-                                    format="yyyy-MM-DD"
-                                    margin="normal"
-                                    label="End Date"
-                                    name="to"
-                                    value={this.state.fields?.to || to}
-                                    onChange={this.onChangeDate.bind(this, 'to')}
-                                    onAccept={this.onAcceptDate.bind(this, 'to')}
-                                />
-                                <Button type="submit">Update</Button>
-                            </form>)
+                            <ClickAwayListener onClickAway={this.onClickAway.bind(this)}>
+                                <form onSubmit={this.onSubmitDates.bind(this)}>
+                                    <KeyboardDatePicker
+                                        disablePast
+                                        disableToolbar
+                                        variant="inline"
+                                        format="yyyy-MM-DD"
+                                        margin="normal"
+                                        label="Start Date"
+                                        name="from"
+                                        value={this.state.fields?.from || from}
+                                        onChange={this.onChangeDate.bind(this, 'from')}
+                                        onAccept={this.onAcceptDate.bind(this, 'from')}
+                                    />
+                                    <KeyboardDatePicker
+                                        disablePast
+                                        disableToolbar
+                                        variant="inline"
+                                        format="yyyy-MM-DD"
+                                        margin="normal"
+                                        label="End Date"
+                                        name="to"
+                                        value={this.state.fields?.to || to}
+                                        onChange={this.onChangeDate.bind(this, 'to')}
+                                        onAccept={this.onAcceptDate.bind(this, 'to')}
+                                    />
+                                    <Button type="submit">Update</Button>
+                                </form>
+                            </ClickAwayListener>)
                         : (
                             <Typography className={classes.contentRow} variant="subtitle1" gutterBottom>
                                 <Box fontWeight="fontWeightBold"
