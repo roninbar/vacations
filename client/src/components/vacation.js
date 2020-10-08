@@ -182,7 +182,7 @@ class Vacation extends PureComponent {
                     {editing === 'dates'
                         ? (
                             <ClickAwayListener onClickAway={this.onClickAway.bind(this)}>
-                                <form onSubmit={this.onSubmitDates.bind(this)}>
+                                <form onSubmit={this.onSubmitDates.bind(this)} className={classes.datesForm}>
                                     <KeyboardDatePicker
                                         disablePast
                                         disableToolbar
@@ -319,6 +319,13 @@ const styles = {
         '&:hover .overlay': {
             display: 'flex',
         },
+    },
+    datesForm: {
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        border: '2px solid #3f51b5',
+        borderRadius: '3px',
     },
     actions: {
         flexDirection: ({ userRole }) => userRole === 'admin' ? 'row-reverse' : 'row',
