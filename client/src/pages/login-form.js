@@ -1,4 +1,4 @@
-import { Button, Snackbar } from '@material-ui/core';
+import { Button, CircularProgress, Snackbar } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import { Alert } from '@material-ui/lab';
@@ -14,7 +14,6 @@ class LoginForm extends Component {
         this.state = {
             username: '',
             password: '',
-            submitted: false,
         };
     }
 
@@ -32,8 +31,8 @@ class LoginForm extends Component {
     }
 
     render() {
-        const { classes, error } = this.props;
-        const { username, password, submitted } = this.state;
+        const { classes, loading, error } = this.props;
+        const { username, password } = this.state;
         return (
             <div className={classes.root}>
                 <form noValidate autoComplete="off" onSubmit={this.onSubmit.bind(this)}>
@@ -56,8 +55,10 @@ class LoginForm extends Component {
                         variant="contained"
                         color="primary"
                         size="large"
-                        disabled={!username || !password || submitted}
-                    >Log In</Button>
+                        disabled={!username || !password || loading}
+                    >
+                        {loading ? <CircularProgress></CircularProgress> : 'Log In'}
+                    </Button>
                 </form>
                 <Snackbar open={error}>
                     <Alert variant="filled" severity="error" elevation={6}>{error.message}</Alert>
@@ -79,7 +80,7 @@ const styles = theme => ({
     },
 });
 
-const withRedux = connect(({ user: { error } }) => ({ error }), { logInAsync });
+const withRedux = connect(({ user: { loading, error } }) => ({ loading, error }), { logInAsync });
 
 export default withRedux(withRouter(withStyles(styles)(LoginForm)));
 
