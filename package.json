@@ -3,7 +3,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "cross-env DEBUG=express-mysql-session* DBUSER=root DBPASS= DBNAME=vacations SECRET=xyzzy PORT=4000 node ./bin/www"
+    "start": "cross-env DBUSER=root DBPASS= DBNAME=vacations SECRET=xyzzy PORT=4000 node ./bin/www"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
