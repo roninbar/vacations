@@ -5,6 +5,8 @@ import { ToggleButton } from '@material-ui/lab';
 import { KeyboardDatePicker } from '@material-ui/pickers';
 import { Html5Entities } from 'html-entities';
 import _ from 'lodash';
+import moment from 'moment';
+import PropTypes from 'prop-types';
 import React, { PureComponent } from 'react';
 
 const entities = new Html5Entities();
@@ -215,7 +217,7 @@ class Vacation extends PureComponent {
                                 <Box fontWeight="fontWeightBold"
                                     onBlur={this.onBlur.bind(this, 'dates')}
                                 >
-                                    {entities.decode(`${from.toDateString()}&ndash;${to.toDateString()}`)}
+                                    {entities.decode(`${from}&ndash;${to}`)}
                                 </Box>
                                 {userRole === 'admin' && editing === 'nothing' &&
                                     <div className="overlay">
@@ -241,13 +243,14 @@ class Vacation extends PureComponent {
                     </Typography>
 
                     {/* Price */}
-                    <Typography className={classes.contentRow} variant="h6">
+                    <Typography variant="h6">
                         <Box fontWeight="fontWeightBold">
                             &euro;
                             <span
                                 contentEditable={userRole === 'admin'}
                                 suppressContentEditableWarning={true}
                                 onBlur={this.onBlur.bind(this, 'price')}
+                                className={classes.contentRow}
                             >
                                 {price}
                             </span>
@@ -277,12 +280,46 @@ class Vacation extends PureComponent {
 
 }
 
+Vacation.propTypes = {
+    userRole: PropTypes.oneOf(['user', 'admin']).isRequired,
+    destination: PropTypes.string.isRequired,
+    from: validDate,
+    to: validDate,
+    price: PropTypes.number,
+    description: PropTypes.string.isRequired,
+    image: function (props, propName, componentName) {
+        try {
+            return new URL(props[propName]);
+        }
+        catch (error) {
+            return newError(error.message, componentName, propName, props);
+        }
+    },
+    followers: PropTypes.number.isRequired,
+    isFollowing: PropTypes.bool.isRequired,
+    onChangeFollowing: PropTypes.func,
+    onDelete: PropTypes.func,
+};
+
+Vacation.defaultProps = {
+    destination: 'New Destination',
+    from: '2021-01-01',
+    to: '2021-01-07',
+    description: 'Lorem ipsum dolor sit amet consectetur, adipisicing elit. Labore consequuntur assumenda aspernatur dolore voluptatum nesciunt doloremque velit officia eius quia! Laudantium facere similique fugiat pariatur est. Quod repudiandae eveniet nihil.',
+    price: 0,
+    image: '/images/airplane.png',
+    followers: 0,
+    isFollowing: false,
+    userRole: 'admin',
+};
+
 const styles = {
     root: {
     },
     media: {
-        position: 'relative',
         height: 140,
+        position: 'relative',
+        backgroundSize: ({ image }) => image.endsWith('airplane.png') ? 'contain' : 'default',
         '& .overlay': {
             display: 'flex',
             flexFlow: 'row-reverse nowrap',
@@ -308,6 +345,7 @@ const styles = {
     },
     contentRow: {
         position: 'relative',
+        outlineColor: '#3f51b5',
         '& .overlay': {
             display: 'none',
             flexDirection: 'row-reverse',
@@ -324,8 +362,8 @@ const styles = {
         display: 'flex',
         flexDirection: 'column',
         alignItems: 'center',
-        border: '2px solid #3f51b5',
-        borderRadius: '3px',
+        outline: '2px solid #3f51b5',
+        outlineRadius: '4px', // Firefox only
     },
     actions: {
         flexDirection: ({ userRole }) => userRole === 'admin' ? 'row-reverse' : 'row',
@@ -333,4 +371,13 @@ const styles = {
 };
 
 export default withStyles(styles)(Vacation);
+
+function validDate(props, propName, componentName) {
+    const date = moment(props[propName], 'yyyy-MM-DD', true);
+    return date.isValid() ? date : newError('Invalid date string', componentName, propName, props);
+};
+
+function newError(message, componentName, propName, props) {
+    return new Error(`${message} (in <${componentName} ${propName}={${props[propName]}} />)`);
+}
 
