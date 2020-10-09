@@ -289,7 +289,7 @@ Vacation.propTypes = {
     description: PropTypes.string.isRequired,
     image: function (props, propName, componentName) {
         try {
-            return new URL(props[propName]);
+            return new URL(props[propName]) && null;
         }
         catch (error) {
             return newError(error.message, componentName, propName, props);
@@ -374,7 +374,7 @@ export default withStyles(styles)(Vacation);
 
 function validDate(props, propName, componentName) {
     const date = moment(props[propName], 'yyyy-MM-DD', true);
-    return date.isValid() ? date : newError('Invalid date string', componentName, propName, props);
+    return date.isValid() ? null : newError('Invalid date string', componentName, propName, props);
 };
 
 function newError(message, componentName, propName, props) {
