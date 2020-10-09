@@ -116,7 +116,7 @@ class Vacation extends PureComponent {
     }
 
     render() {
-        const { destination, from, to, price, description, image, followers, isFollowing, onChangeFollowing, onDelete, userRole, classes } = this.props;
+        const { id, destination, from, to, price, description, image, followers, isFollowing, onChangeFollowing, onDelete, userRole, classes } = this.props;
         const { editing } = this.state;
 
         return (
@@ -267,7 +267,7 @@ class Vacation extends PureComponent {
                             </ToggleButton>
                         </Badge>
                     }
-                    {userRole === 'admin' &&
+                    {userRole === 'admin' && id > 0 &&
                         <IconButton onClick={onDelete}>
                             <DeleteIcon />
                         </IconButton>
@@ -281,6 +281,7 @@ class Vacation extends PureComponent {
 }
 
 Vacation.propTypes = {
+    id: PropTypes.number,
     userRole: PropTypes.oneOf(['user', 'admin']).isRequired,
     destination: PropTypes.string.isRequired,
     from: validDate,
@@ -302,6 +303,7 @@ Vacation.propTypes = {
 };
 
 Vacation.defaultProps = {
+    id: 0,
     destination: 'New Destination',
     from: '2021-01-01',
     to: '2021-01-07',

@@ -75,6 +75,7 @@ class HomePage extends Component {
                         {vacations.map(({ id, ...rest }) => (
                             <Grid item key={id} xs={12} sm={6} md={4} xl={3}>
                                 <Vacation
+                                    id={id}
                                     {...rest}
                                     userRole={userRole}
                                     onDelete={this.onDelete.bind(this, id)}
