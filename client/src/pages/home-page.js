@@ -85,9 +85,11 @@ class HomePage extends Component {
                             </Grid>
                         ))}
                     </Grid>
+                    {userRole === 'admin' && (
                         <Fab color="primary" onClick={() => this.setState({ add: true })} className={classes.fab}>
                             <AddIcon />
-                    </Fab>
+                        </Fab>)
+                    }
                     <Dialog
                         open={add}
                         title="New Vacation"
