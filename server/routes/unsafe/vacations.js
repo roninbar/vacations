@@ -1,5 +1,7 @@
 const { getSqlConnection } = require('../../entities/connect');
 const { getAllVacations, getVacation } = require('../../entities/vacation/retrieve');
+const _ = require('lodash');
+
 const express = require('express');
 
 // eslint-disable-next-line new-cap
@@ -18,22 +20,28 @@ router.delete('/:id', async function ({ params: { id: vacationId }, user: { id: 
 });
 
 // Change other fields in the vacation, such as the destination or the dates.
-router.patch('/:id', async function ({ params: { id: vacationId }, user: { id: userId }, body: { image, destination, from, to, description, price } }, res, next) {
-    const body = { image, destination, from, to, description, price };
-    const assignments = Object.keys(body)
-        .filter(key => typeof body[key] === 'string')
-        .map(col => `\`${col}\` = :${col}`)
-        .join(', ')
-        .trim();
-    if (assignments.length > 0) {
-        const sql = `UPDATE \`vacation\` SET ${assignments} WHERE \`id\` = :vacationId`;
-        const conn = await getSqlConnection();
-        try {
-            conn.execute({ sql, namedPlaceholders: true }, { vacationId, ...body });
-        } finally {
-            conn.release();
+router.patch('/:id', async function ({ params: { id: vacationId }, user: { id: userId }, body: { image, destination, from, to, description, price }, vacation }, res, next) {
+    const values = { image, destination, from, to, description, price };
+    if (!_.isEmpty(values)) {
+        if (vacation) {
+            const assignments = Object.keys(values)
+                .filter(key => typeof values[key] === 'string')
+                .map(col => `\`${col}\` = :${col}`)
+                .join(', ')
+                .trim();
+            const sql = `UPDATE \`vacation\` SET ${assignments} WHERE \`id\` = :vacationId`;
+            const conn = await getSqlConnection();
+            try {
+                const [{ affectedRows }] = await conn.execute({ sql, namedPlaceholders: true }, { vacationId, ...values });
+                return affectedRows > 0
+                    ? res.json(await getVacation(userId, vacationId))
+                    : res.sendStatus(404);
+            } finally {
+                await conn.release();
+            }
+        } else {
+            return res.sendStatus(404);
         }
-        return res.json(await getVacation(userId, vacationId));
     }
     else {
         return next();
