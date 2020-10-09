@@ -1,5 +1,6 @@
 import MomentUtils from '@date-io/moment';
-import { Backdrop, Button, Container, Grid, LinearProgress, Paper, Snackbar, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, withStyles } from '@material-ui/core';
+import { Backdrop, Button, Container, Fab, Grid, LinearProgress, Paper, Snackbar, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, withStyles } from '@material-ui/core';
+import AddIcon from '@material-ui/icons/Add';
 import Alert from '@material-ui/lab/Alert';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import Vacation from 'components/vacation';
@@ -15,6 +16,8 @@ class HomePage extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            add: false,
+            newVacation: null,
             idToDelete: 0,
         };
     }
@@ -48,7 +51,7 @@ class HomePage extends Component {
 
     render() {
         const { classes, userRole, vacations, loading, error } = this.props;
-        const { idToDelete } = this.state;
+        const { add, idToDelete } = this.state;
         let destinationToDelete = '', startToDelete = '', finishToDelete = '';
         if (idToDelete > 0) {
             (
@@ -80,20 +83,23 @@ class HomePage extends Component {
                                 />
                             </Grid>
                         ))}
-                        {userRole === 'admin' && (
-                            <Grid item key={0} xs={12} sm={6} md={4} xl={3}>
-                                <Vacation
-                                    userRole={userRole}
-                                    onDelete={this.onDelete.bind(this, 0)}
-                                    onChangeFields={this.onChangeFields.bind(this, 0)}
-                                    onChangeFollowing={this.onChangeFollowing.bind(this, 0)}
-                                />
-                            </Grid>)
-                        }
                     </Grid>
+                    <Fab color="primary" onClick={() => this.setState({ add: true })} className={classes.fab}>
+                        <AddIcon />
+                    </Fab>
+                    <Dialog
+                        open={add}
+                        title="New Vacation"
+                        okButtonLabel="Create"
+                        onOk={() => this.setState({ add: false })}
+                        onCancel={() => this.setState({ add: false })}
+                    >
+                        <Vacation onChangeFields={fields => console.info(fields)} />
+                    </Dialog>
                     <Dialog
                         open={idToDelete > 0}
                         title="Delete this vacation?"
+                        okButtonLabel="Yes, delete"
                         onOk={this.onOkDelete.bind(this)}
                         onCancel={this.onCancelDelete.bind(this)}
                     >
@@ -153,6 +159,11 @@ const styles = theme => ({
     loadingBackdrop: {
         zIndex: theme.zIndex.drawer + 1,
         color: '#fff',
+    },
+    fab: {
+        position: 'fixed',
+        bottom: theme.spacing(2),
+        right: theme.spacing(2),
     },
     progress: {
         width: '90%',
