@@ -5,7 +5,7 @@ import Alert from '@material-ui/lab/Alert';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import Vacation from 'components/vacation';
 import { logOutAsync } from 'features/userSlice';
-import { changeAsync, deleteAsync, loadAllAsync, setFollowing } from 'features/vacationsSlice';
+import { addVacation, changeAsync, deleteAsync, loadAllAsync, setFollowing } from 'features/vacationsSlice';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
@@ -50,7 +50,7 @@ class HomePage extends Component {
     }
 
     render() {
-        const { classes, userRole, vacations, loading, error } = this.props;
+        const { classes, userRole, vacations, loading, error, addVacation } = this.props;
         const { add, newVacation, idToDelete } = this.state;
         let destinationToDelete = '', startToDelete = '', finishToDelete = '';
         if (idToDelete > 0) {
@@ -94,7 +94,10 @@ class HomePage extends Component {
                         open={add}
                         title="New Vacation"
                         okButtonLabel="Create"
-                        onOk={() => this.setState({ add: false })}
+                        onOk={() => {
+                            addVacation(newVacation);
+                            return this.setState({ add: false });
+                        }}
                         onCancel={() => this.setState({ add: false })}
                     >
                         <Vacation
@@ -212,7 +215,7 @@ const mapStateToProps = ({
     })),
 });
 
-const mapDispatchToProps = { logOutAsync, loadAllAsync, setFollowing, changeAsync, deleteAsync };
+const mapDispatchToProps = { addVacation, setFollowing, loadAllAsync, changeAsync, deleteAsync, logOutAsync };
 
 const withRedux = connect(mapStateToProps, mapDispatchToProps);
 

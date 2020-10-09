@@ -1,3 +1,8 @@
+/**
+ * Send an HTTP request that expects a JSON response.
+ * @param {string} url 
+ * @param {object} options 
+ */
 export async function requestJson(url, options) {
     const response = await fetch(url, options);
     const { status, statusText } = response;

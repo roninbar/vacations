@@ -14,16 +14,17 @@ export const loadOneAsync = createAsyncThunk(
     },
 );
 
+export const addAsync = createAsyncThunk(
+    'vacations/add',
+    async function (vacation) {
+        return await requestJsonWithBody('POST', '/vacation', vacation);
+    },
+);
+
 export const changeAsync = createAsyncThunk(
     'vacations/change',
     async function ({ id, ...rest }) {
-        return await requestJson(`/vacation/${id}`, {
-            method: 'PATCH',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify(rest),
-        });
+        return await requestJsonWithBody('PATCH', `/vacation/${id}`, rest);
     },
 );
 
@@ -33,6 +34,16 @@ export const deleteAsync = createAsyncThunk(
         return await requestJson(`/vacation/${id}`, { method: 'DELETE' });
     },
 );
+
+async function requestJsonWithBody(method, url, rest) {
+    return await requestJson(url, {
+        method,
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(rest),
+    });
+}
 
 function updateVacation(state, { id, ...rest }) {
     state.loading = false;
@@ -53,6 +64,9 @@ const vacationsSlice = createSlice({
         vacations: [],
     },
     reducers: {
+        add(state, { payload: vacation }) {
+            state.vacations.push(vacation);
+        },
         /**
          * This function is needed to give users immediate feedback when they press the 'Follow' button.
          */
@@ -91,6 +105,19 @@ const vacationsSlice = createSlice({
             state.loading = false;
             state.error = error;
         },
+        [addAsync.pending](state) {
+            state.error = false;
+            state.loading = true;
+        },
+        [addAsync.fulfilled](state, { payload: vacations }) {
+            state.loading = false;
+            state.error = false;
+            state.vacations = vacations;
+        },
+        [addAsync.rejected](state, { error }) {
+            state.loading = false;
+            state.error = error;
+        },
         [changeAsync.pending](state) {
             state.error = false;
             state.loading = true;
@@ -125,7 +152,7 @@ const vacationsSlice = createSlice({
     }
 });
 
-export const { setFollowing } = vacationsSlice.actions;
+export const { add: addVacation, setFollowing } = vacationsSlice.actions;
 
 export default vacationsSlice.reducer;
 
