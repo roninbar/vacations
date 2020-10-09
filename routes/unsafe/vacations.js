@@ -7,6 +7,27 @@ const express = require('express');
 // eslint-disable-next-line new-cap
 const router = express.Router();
 
+// Insert a new vacation.
+router.post('/', async function ({ user: { id: userId }, body }, res) {
+    // eslint-disable-next-line array-element-newline
+    const expectedFields = ['destination', 'from', 'to', 'price', 'description', 'image'];
+    if (_.isEmpty(_.xor(expectedFields, Object.keys(body)))) {
+        const conn = await getSqlConnection();
+        try {
+            const assignments = expectedFields.map(field => `\`${field}\` = :${field}`).join(', ');
+            const sql = `INSERT INTO \`vacation\` SET ${assignments}`;
+            const [{ insertId }] = await conn.execute({ sql, namedPlaceholders: true }, body);
+            return insertId > 0 ? res.json(await getAllVacations(userId)) : res.sendStatus(500);
+        }
+        finally {
+            await conn.release();
+        }
+    }
+    else {
+        return res.sendStatus(400);
+    }
+});
+
 // Delete vacation.
 router.delete('/:id', async function ({ params: { id: vacationId }, user: { id: userId }, vacation }, res) {
     if (vacation) {
