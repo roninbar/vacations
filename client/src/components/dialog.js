@@ -1,4 +1,4 @@
-import { Button, Dialog, DialogActions, DialogContent, DialogTitle as MuiDialogTitle, IconButton, Paper, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, withStyles } from '@material-ui/core';
+import { Button, Dialog as MuiDialog, DialogActions, DialogContent, DialogTitle as MuiDialogTitle, IconButton, Typography, withStyles } from '@material-ui/core';
 import CloseIcon from '@material-ui/icons/Close';
 import React from 'react';
 
@@ -30,39 +30,21 @@ const DialogTitle = withStyles(titleStyles)(
     }
 );
 
-const DeleteDialog = function ({ classes, destination, start, finish, open, onOk, onCancel }) {
+const Dialog = function ({ open, title, children, okButtonLabel, onOk, onCancel, classes }) {
     return (
-        <Dialog open={open}>
+        <MuiDialog open={open}>
             <DialogTitle onClose={onCancel}>
-                Delete this vacation?
+                {title}
             </DialogTitle>
             <DialogContent dividers className={classes.content}>
-                <TableContainer component={Paper}>
-                    <Table>
-                        <TableHead>
-                            <TableRow>
-                                <TableCell component="th" align="center" colSpan={2}>{destination}</TableCell>
-                            </TableRow>
-                        </TableHead>
-                        <TableBody>
-                            <TableRow>
-                                <TableCell component="th" scope="row">Start:</TableCell>
-                                <TableCell align="right">{start}</TableCell>
-                            </TableRow>
-                            <TableRow>
-                                <TableCell component="th" scope="row">Finish:</TableCell>
-                                <TableCell align="right">{finish}</TableCell>
-                            </TableRow>
-                        </TableBody>
-                    </Table>
-                </TableContainer>
+                {children}
             </DialogContent>
             <DialogActions>
                 <Button variant="text" color="primary" autoFocus className={classes.okButton} onClick={onOk}>
-                    Yes, delete
+                    {okButtonLabel}
                 </Button>
             </DialogActions>
-        </Dialog>
+        </MuiDialog>
     );
 };
 
@@ -85,5 +67,5 @@ const styles = theme => ({
     },
 });
 
-export default withStyles(styles)(DeleteDialog);
+export default withStyles(styles)(Dialog);
 

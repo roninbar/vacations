@@ -1,5 +1,5 @@
 import MomentUtils from '@date-io/moment';
-import { Backdrop, Button, Container, Grid, LinearProgress, Snackbar, Typography, withStyles } from '@material-ui/core';
+import { Backdrop, Button, Container, Grid, LinearProgress, Paper, Snackbar, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Typography, withStyles } from '@material-ui/core';
 import Alert from '@material-ui/lab/Alert';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import Vacation from 'components/vacation';
@@ -8,7 +8,7 @@ import { changeAsync, deleteAsync, loadAllAsync, setFollowing } from 'features/v
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
-import DeleteDialog from './delete-dialog';
+import Dialog from '../components/dialog';
 
 class HomePage extends Component {
 
@@ -91,14 +91,32 @@ class HomePage extends Component {
                             </Grid>)
                         }
                     </Grid>
-                    <DeleteDialog
-                        destination={destinationToDelete}
-                        start={startToDelete}
-                        finish={finishToDelete}
+                    <Dialog
                         open={idToDelete > 0}
+                        title="Delete this vacation?"
                         onOk={this.onOkDelete.bind(this)}
                         onCancel={this.onCancelDelete.bind(this)}
-                    />
+                    >
+                        <TableContainer component={Paper}>
+                            <Table>
+                                <TableHead>
+                                    <TableRow>
+                                        <TableCell component="th" align="center" colSpan={2}>{destinationToDelete}</TableCell>
+                                    </TableRow>
+                                </TableHead>
+                                <TableBody>
+                                    <TableRow>
+                                        <TableCell component="th" scope="row">Start:</TableCell>
+                                        <TableCell align="right">{startToDelete}</TableCell>
+                                    </TableRow>
+                                    <TableRow>
+                                        <TableCell component="th" scope="row">Finish:</TableCell>
+                                        <TableCell align="right">{finishToDelete}</TableCell>
+                                    </TableRow>
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
+                    </Dialog>
                     <Backdrop open={loading} className={classes.loadingBackdrop}>
                         <LinearProgress className={classes.progress} />
                     </Backdrop>
