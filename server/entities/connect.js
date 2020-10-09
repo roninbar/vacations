@@ -1,5 +1,5 @@
 /* eslint-disable dot-notation */
-const mysql = require('mysql2');
+const mysql = require('mysql2/promise');
 
 const getSqlConnection = (function () {
     let pool = null;
@@ -11,12 +11,13 @@ const getSqlConnection = (function () {
                 database: process.env['DBNAME'],
                 dateStrings: [
                     'DATE',
-                    'DATETIME'
+                    'DATETIME',
                 ],
             });
         }
-        return await pool.promise().getConnection();
+        return await pool.getConnection();
     };
 }());
 
 exports.getSqlConnection = getSqlConnection;
+
