@@ -8,6 +8,11 @@ const SELECT_VACATIONS =
     'RIGHT JOIN `vacation` ON `vacation_id` = `vacation`.`id` ' +
     'GROUP BY `vacation`.`id`';
 
+/**
+ * Get a single vacation.
+ * @param {number} userId 
+ * @param {number} vacationId 
+ */
 async function getVacation(userId, vacationId) {
     const conn = await getSqlConnection();
     try {
@@ -26,6 +31,10 @@ async function getVacation(userId, vacationId) {
     }
 }
 
+/**
+ * Get all the vacations
+ * @param {number} userId 
+ */
 async function getAllVacations(userId) {
     const conn = await getSqlConnection();
     try {
