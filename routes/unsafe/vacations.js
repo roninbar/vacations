@@ -8,15 +8,20 @@ const express = require('express');
 const router = express.Router();
 
 // Delete vacation.
-router.delete('/:id', async function ({ params: { id: vacationId }, user: { id: userId } }, res) {
-    const conn = await getSqlConnection();
-    try {
-        conn.execute('DELETE FROM `vacation` WHERE `id` = ?', [vacationId]);
+router.delete('/:id', async function ({ params: { id: vacationId }, user: { id: userId }, vacation }, res) {
+    if (vacation) {
+        const conn = await getSqlConnection();
+        try {
+            const [{ affectedRows }] = await conn.execute('DELETE FROM `vacation` WHERE `id` = ?', [vacationId]);
+            return affectedRows > 0 ? res.json(await getAllVacations(userId)) : res.sendStatus(500);
+        }
+        finally {
+            await conn.release();
+        }
     }
-    finally {
-        conn.release();
+    else {
+        return res.sendStatus(404);
     }
-    res.json(await getAllVacations(userId));
 });
 
 // Change other fields in the vacation, such as the destination or the dates.
