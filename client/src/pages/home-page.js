@@ -17,8 +17,8 @@ class HomePage extends Component {
         super(props);
         this.state = {
             add: false,
-            newVacation: null,
             idToDelete: 0,
+            newVacation: {},
         };
     }
 
@@ -51,7 +51,7 @@ class HomePage extends Component {
 
     render() {
         const { classes, userRole, vacations, loading, error } = this.props;
-        const { add, idToDelete } = this.state;
+        const { add, newVacation, idToDelete } = this.state;
         let destinationToDelete = '', startToDelete = '', finishToDelete = '';
         if (idToDelete > 0) {
             (
@@ -85,8 +85,8 @@ class HomePage extends Component {
                             </Grid>
                         ))}
                     </Grid>
-                    <Fab color="primary" onClick={() => this.setState({ add: true })} className={classes.fab}>
-                        <AddIcon />
+                        <Fab color="primary" onClick={() => this.setState({ add: true })} className={classes.fab}>
+                            <AddIcon />
                     </Fab>
                     <Dialog
                         open={add}
@@ -95,7 +95,17 @@ class HomePage extends Component {
                         onOk={() => this.setState({ add: false })}
                         onCancel={() => this.setState({ add: false })}
                     >
-                        <Vacation onChangeFields={fields => console.info(fields)} />
+                        <Vacation
+                            {...newVacation}
+                            onChangeFields={fields => {
+                                return this.setState({
+                                    newVacation: {
+                                        ...newVacation,
+                                        ...fields,
+                                    },
+                                });
+                            }}
+                        />
                     </Dialog>
                     <Dialog
                         open={idToDelete > 0}
