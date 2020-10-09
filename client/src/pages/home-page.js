@@ -65,9 +65,9 @@ class HomePage extends Component {
         return (
             <Container maxWidth="xl" className={classes.root}>
                 <MuiPickersUtilsProvider utils={MomentUtils}>
-                {/* <Typography className={classes.logout}>
-                    {username} (<Link to="/login" onClick={logOutAsync}>log out</Link>)
-                </Typography> */}
+                    {/* <Typography className={classes.logout}>
+                        {username} (<Link to="/login" onClick={logOutAsync}>log out</Link>)
+                    </Typography> */}
                     <Grid container spacing={4}>
                         {vacations.map(({ id, ...rest }) => (
                             <Grid item key={id} xs={12} sm={6} md={4} xl={3}>
@@ -80,6 +80,16 @@ class HomePage extends Component {
                                 />
                             </Grid>
                         ))}
+                        {userRole === 'admin' && (
+                            <Grid item key={0} xs={12} sm={6} md={4} xl={3}>
+                                <Vacation
+                                    userRole={userRole}
+                                    onDelete={this.onDelete.bind(this, 0)}
+                                    onChangeFields={this.onChangeFields.bind(this, 0)}
+                                    onChangeFollowing={this.onChangeFollowing.bind(this, 0)}
+                                />
+                            </Grid>)
+                        }
                     </Grid>
                     <DeleteDialog
                         destination={destinationToDelete}
