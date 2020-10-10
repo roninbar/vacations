@@ -9,10 +9,7 @@ import PrivateRoute from './components/private-route';
 import HomePage from './pages/home-page';
 import LoginForm from './pages/login-form';
 import SignupForm from './pages/signup-form';
-
-function Chart() {
-  return (<h1>Watch this space for chart.</h1>);
-}
+import Chart from 'pages/chart';
 
 class App extends PureComponent {
 
