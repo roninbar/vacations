@@ -21,6 +21,21 @@ class HomePage extends Component {
         };
     }
 
+    openAddDialog() {
+        return this.setState({ add: true });
+    }
+
+    closeAddDialog() {
+        return this.setState({ add: false });
+    }
+
+    onOkAddDialog() {
+        const { addAsync } = this.props;
+        const { newVacationProps } = this.state;
+        addAsync(newVacationProps);
+        return this.closeAddDialog();
+    }
+
     onChangeFollowing(vacationId, isFollowing) {
         const payload = { id: vacationId, isFollowing };
         const { setFollowing, changeAsync } = this.props;
@@ -49,7 +64,7 @@ class HomePage extends Component {
     }
 
     render() {
-        const { classes, userRole, vacations, loading, error, addAsync } = this.props;
+        const { classes, userRole, vacations, loading, error } = this.props;
         const { add, newVacationProps, idToDelete } = this.state;
         let destinationToDelete = '', startToDelete = '', finishToDelete = '';
         if (idToDelete > 0) {
@@ -80,7 +95,7 @@ class HomePage extends Component {
                         ))}
                     </Grid>
                     {userRole === 'admin' && (
-                        <Fab color="primary" onClick={() => this.setState({ add: true })} className={classes.fab}>
+                        <Fab color="primary" onClick={this.openAddDialog.bind(this)} className={classes.fab}>
                             <AddIcon />
                         </Fab>)
                     }
@@ -88,11 +103,8 @@ class HomePage extends Component {
                         open={add}
                         title="New Vacation"
                         okButtonLabel="Create"
-                        onOk={() => {
-                            addAsync(newVacationProps);
-                            return this.setState({ add: false });
-                        }}
-                        onCancel={() => this.setState({ add: false })}
+                        onOk={this.onOkAddDialog.bind(this)}
+                        onCancel={this.closeAddDialog.bind(this)}
                     >
                         <Vacation
                             {...newVacationProps}
@@ -139,7 +151,7 @@ class HomePage extends Component {
                     <Backdrop open={vacations.length === 0} className={classes.emptyBackdrop}>
                         <Typography variant="h3" component="h3">There are no vacations in the system.</Typography>
                         {userRole === 'admin' ?
-                            <Button variant="outlined">Click here to add some.</Button> :
+                            <Button variant="outlined" onClick={this.openAddDialog.bind(this)}>Click here to add some.</Button> :
                             <Typography variant="h5">Please try again later.</Typography>
                         }
                     </Backdrop>
