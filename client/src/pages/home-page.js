@@ -164,8 +164,10 @@ class HomePage extends Component {
     }
 
     async componentDidMount() {
-        const { loadAllAsync } = this.props;
-        loadAllAsync();
+        const { vacations, loadAllAsync } = this.props;
+        if (!vacations?.length) {
+            loadAllAsync();
+        }
     }
 
 }
@@ -196,21 +198,21 @@ const styles = theme => ({
 });
 
 const mapStateToProps = ({
-    user: {
-        name: username,
-        role: userRole,
-    },
-    vacations: {
+        user: {
+            name: username,
+            role: userRole,
+        },
+        vacations: {
+            error,
+            loading,
+            vacations,
+        },
+}) => ({
+        username,
+        userRole,
         error,
         loading,
-        vacations,
-    },
-}) => ({
-    username,
-    userRole,
-    error,
-    loading,
-    vacations: [...vacations].sort(({ isFollowing: a }, { isFollowing: b }) => b - a),
+        vacations: [...vacations].sort(({ isFollowing: a }, { isFollowing: b }) => b - a),
 });
 
 const mapDispatchToProps = { setFollowing, loadAllAsync, addAsync, changeAsync, deleteAsync };

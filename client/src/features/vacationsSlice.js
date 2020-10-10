@@ -4,7 +4,9 @@ import { requestJson } from './utils';
 
 export const loadAllAsync = createAsyncThunk(
     'vacations/loadAll',
-    requestJson.bind(null, '/vacation/all'),
+    async function() {
+        return await requestJson('/vacation/all');
+    },
 );
 
 export const loadOneAsync = createAsyncThunk(
