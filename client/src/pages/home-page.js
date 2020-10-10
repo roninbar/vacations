@@ -4,7 +4,6 @@ import AddIcon from '@material-ui/icons/Add';
 import Alert from '@material-ui/lab/Alert';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
 import Vacation from 'components/vacation';
-import { logOutAsync } from 'features/userSlice';
 import { addAsync, changeAsync, deleteAsync, loadAllAsync, setFollowing } from 'features/vacationsSlice';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
@@ -204,18 +203,10 @@ const mapStateToProps = ({
     userRole,
     error,
     loading,
-    vacations: vacations.map(({
-        from,
-        to,
-        ...rest
-    }) => ({
-        from: new Date(from),
-        to: new Date(to),
-        ...rest,
-    })),
+    vacations,
 });
 
-const mapDispatchToProps = { setFollowing, loadAllAsync, addAsync, changeAsync, deleteAsync, logOutAsync };
+const mapDispatchToProps = { setFollowing, loadAllAsync, addAsync, changeAsync, deleteAsync };
 
 const withRedux = connect(mapStateToProps, mapDispatchToProps);
 
