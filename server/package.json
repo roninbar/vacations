@@ -17,5 +17,8 @@
     "mysql2": "^2.1.0",
     "passport": "^0.4.1",
     "passport-local": "^1.0.0"
+  },
+  "devDependencies": {
+    "localtunnel": "^2.0.0"
   }
 }
