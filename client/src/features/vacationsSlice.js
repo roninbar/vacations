@@ -64,9 +64,6 @@ const vacationsSlice = createSlice({
         vacations: [],
     },
     reducers: {
-        add(state, { payload: vacation }) {
-            state.vacations.push(vacation);
-        },
         /**
          * This function is needed to give users immediate feedback when they press the 'Follow' button.
          */
@@ -152,7 +149,7 @@ const vacationsSlice = createSlice({
     }
 });
 
-export const { add: addVacation, setFollowing } = vacationsSlice.actions;
+export const { setFollowing } = vacationsSlice.actions;
 
 export default vacationsSlice.reducer;
 
