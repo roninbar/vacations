@@ -198,7 +198,7 @@ const mapStateToProps = ({
     userRole,
     error,
     loading,
-    vacations,
+    vacations: [...vacations].sort(({ isFollowing: a }, { isFollowing: b }) => b - a),
 });
 
 const mapDispatchToProps = { setFollowing, loadAllAsync, addAsync, changeAsync, deleteAsync };
