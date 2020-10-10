@@ -16,8 +16,8 @@ export const loadOneAsync = createAsyncThunk(
 
 export const addAsync = createAsyncThunk(
     'vacations/add',
-    async function (vacation) {
-        return await requestJsonWithBody('POST', '/vacation', vacation);
+    async function ({ destination, from, to, price, description, image }) {
+        return await requestJsonWithBody('POST', '/vacation', { destination, from, to, price, description, image });
     },
 );
 

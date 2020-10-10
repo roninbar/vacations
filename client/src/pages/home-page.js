@@ -3,7 +3,7 @@ import { Backdrop, Button, Container, Fab, Grid, LinearProgress, Paper, Snackbar
 import AddIcon from '@material-ui/icons/Add';
 import Alert from '@material-ui/lab/Alert';
 import { MuiPickersUtilsProvider } from '@material-ui/pickers';
-import Vacation from 'components/vacation';
+import Vacation, { defaultVacationProps } from 'components/vacation';
 import { addAsync, changeAsync, deleteAsync, loadAllAsync, setFollowing } from 'features/vacationsSlice';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
@@ -17,7 +17,7 @@ class HomePage extends Component {
         this.state = {
             add: false,
             idToDelete: 0,
-            newVacation: {},
+            newVacationProps: { ...defaultVacationProps },
         };
     }
 
@@ -50,7 +50,7 @@ class HomePage extends Component {
 
     render() {
         const { classes, userRole, vacations, loading, error, addAsync } = this.props;
-        const { add, newVacation, idToDelete } = this.state;
+        const { add, newVacationProps, idToDelete } = this.state;
         let destinationToDelete = '', startToDelete = '', finishToDelete = '';
         if (idToDelete > 0) {
             (
@@ -61,15 +61,10 @@ class HomePage extends Component {
                 }
                 = vacations.find(v => v.id === idToDelete)
             );
-            startToDelete = startToDelete.toDateString();
-            finishToDelete = finishToDelete.toDateString();
         }
         return (
             <Container maxWidth="xl" className={classes.root}>
                 <MuiPickersUtilsProvider utils={MomentUtils}>
-                    {/* <Typography className={classes.logout}>
-                        {username} (<Link to="/login" onClick={logOutAsync}>log out</Link>)
-                    </Typography> */}
                     <Grid container spacing={4}>
                         {vacations.map(({ id, ...rest }) => (
                             <Grid item key={id} xs={12} sm={6} md={4} xl={3}>
@@ -94,17 +89,17 @@ class HomePage extends Component {
                         title="New Vacation"
                         okButtonLabel="Create"
                         onOk={() => {
-                            addAsync(newVacation);
+                            addAsync(newVacationProps);
                             return this.setState({ add: false });
                         }}
                         onCancel={() => this.setState({ add: false })}
                     >
                         <Vacation
-                            {...newVacation}
+                            {...newVacationProps}
                             onChangeFields={fields => {
                                 return this.setState({
-                                    newVacation: {
-                                        ...newVacation,
+                                    newVacationProps: {
+                                        ...newVacationProps,
                                         ...fields,
                                     },
                                 });

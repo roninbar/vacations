@@ -302,7 +302,7 @@ Vacation.propTypes = {
     onDelete: PropTypes.func,
 };
 
-Vacation.defaultProps = {
+export const defaultVacationProps = {
     id: 0,
     destination: 'New Destination',
     from: '2021-01-01',
@@ -314,6 +314,8 @@ Vacation.defaultProps = {
     isFollowing: false,
     userRole: 'admin',
 };
+
+Vacation.defaultProps = defaultVacationProps;
 
 const styles = {
     root: {
