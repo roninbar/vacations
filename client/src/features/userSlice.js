@@ -29,22 +29,23 @@ export const logOutAsync = createAsyncThunk(
 const userSlice = createSlice({
     name: 'user',
     initialState: {
+        loading: false,
         error: false,
         id: 0,
         name: '',
         role: '',
+        firstName: '',
+        lastName: '',
     },
     extraReducers: {
         [logInAsync.pending](user) {
             user.error = false;
             user.loading = true;
         },
-        [logInAsync.fulfilled](user, { payload: { id, name, role } }) {
+        [logInAsync.fulfilled](user, { payload }) {
             user.loading = false;
             user.error = false;
-            user.id = id;
-            user.name = name;
-            user.role = role;
+            Object.assign(user, payload);
         },
         [logInAsync.rejected](user, { error }) {
             user.loading = false;
@@ -71,6 +72,8 @@ function reset(user) {
     user.id = 0;
     user.name = '';
     user.role = '';
+    user.firstName = '';
+    user.lastName = '';
 }
 
 export default userSlice.reducer;

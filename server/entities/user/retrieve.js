@@ -16,7 +16,7 @@ async function getUserByCredentials(username, password) {
     const conn = await getSqlConnection();
     try {
         const [[user]] = await conn.execute(
-            'SELECT `user`.`id` AS `id`, `user`.`name` as `name`, `role`.`name` AS `role` ' +
+            'SELECT `user`.`id` AS `id`, `user`.`name` as `name`, `user`.`first_name` as `firstName`, `user`.`last_name` as `lastName`, `role`.`name` AS `role` ' +
             'FROM `user` JOIN `role` ON `role_id` = `role`.`id` ' +
             'WHERE `user`.`name` = ? AND `password_hash` = ?',
             [

@@ -61,8 +61,8 @@ function updateVacation(state, { id, ...rest }) {
 const vacationsSlice = createSlice({
     name: 'vacations',
     initialState: {
-        error: false,
         loading: false,
+        error: false,
         vacations: [],
     },
     reducers: {
