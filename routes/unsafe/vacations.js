@@ -1,19 +1,19 @@
-const { getSqlConnection } = require('../../entities/connect');
+const _ = require('lodash');
 const { getVacation, getAllVacations } = require('../../entities/vacation/retrieve');
 const { addVacation } = require('../../entities/vacation/create');
+const { updateVacation } = require('../../entities/vacation/update');
 const { deleteVacation } = require('../../entities/vacation/delete');
-const _ = require('lodash');
-
 const express = require('express');
 
 // eslint-disable-next-line new-cap
 const router = express.Router();
 
+// eslint-disable-next-line array-element-newline
+const knownKeys = ['destination', 'from', 'to', 'price', 'description', 'image'];
+
 // Add a new vacation.
 router.post('/', async function ({ user: { id: userId }, body: vacation }, res) {
-    // eslint-disable-next-line array-element-newline
-    const expectedKeys = ['destination', 'from', 'to', 'price', 'description', 'image'];
-    if (_.isEmpty(_.xor(expectedKeys, Object.keys(vacation)))) {
+    if (_.isEmpty(_.xor(knownKeys, Object.keys(vacation)))) {
         const id = await addVacation(vacation);
         return id > 0
             ? res
@@ -39,25 +39,14 @@ router.delete('/:id', async function ({ params: { id: vacationId }, user: { id: 
 });
 
 // Change other fields in the vacation, such as the destination or the dates.
-router.patch('/:id', async function ({ params: { id: vacationId }, user: { id: userId }, body: { image, destination, from, to, description, price }, vacation }, res, next) {
-    const values = { image, destination, from, to, description, price };
-    if (!_.isEmpty(values)) {
+router.patch('/:id', async function ({ params: { id: vacationId }, user: { id: userId }, body, vacation }, res, next) {
+    const newValues = _.pick(body, knownKeys);
+    if (!_.isEmpty(newValues)) {
         if (vacation) {
-            const assignments = Object.keys(values)
-                .filter(key => typeof values[key] === 'string')
-                .map(col => `\`${col}\` = :${col}`)
-                .join(', ')
-                .trim();
-            const sql = `UPDATE \`vacation\` SET ${assignments} WHERE \`id\` = :vacationId`;
-            const conn = await getSqlConnection();
-            try {
-                const [{ affectedRows }] = await conn.execute({ sql, namedPlaceholders: true }, { vacationId, ...values });
-                return affectedRows > 0
-                    ? res.json(await getVacation(userId, vacationId))
-                    : res.sendStatus(404);
-            } finally {
-                await conn.release();
-            }
+            const affectedRows = await updateVacation(vacationId, newValues);
+            return affectedRows > 0
+                ? res.json(await getVacation(userId, vacationId))
+                : res.sendStatus(304); // Unchanged
         } else {
             return res.sendStatus(404);
         }
