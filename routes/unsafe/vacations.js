@@ -1,5 +1,7 @@
 const { getSqlConnection } = require('../../entities/connect');
-const { getAllVacations, getVacation } = require('../../entities/vacation/retrieve');
+const { getVacation, getAllVacations } = require('../../entities/vacation/retrieve');
+const { addVacation } = require('../../entities/vacation/create');
+const { deleteVacation } = require('../../entities/vacation/delete');
 const _ = require('lodash');
 
 const express = require('express');
@@ -7,21 +9,18 @@ const express = require('express');
 // eslint-disable-next-line new-cap
 const router = express.Router();
 
-// Insert a new vacation.
-router.post('/', async function ({ user: { id: userId }, body }, res) {
+// Add a new vacation.
+router.post('/', async function ({ user: { id: userId }, body: vacation }, res) {
     // eslint-disable-next-line array-element-newline
-    const expectedFields = ['destination', 'from', 'to', 'price', 'description', 'image'];
-    if (_.isEmpty(_.xor(expectedFields, Object.keys(body)))) {
-        const conn = await getSqlConnection();
-        try {
-            const assignments = expectedFields.map(field => `\`${field}\` = :${field}`).join(', ');
-            const sql = `INSERT INTO \`vacation\` SET ${assignments}`;
-            const [{ insertId }] = await conn.execute({ sql, namedPlaceholders: true }, body);
-            return insertId > 0 ? res.json(await getAllVacations(userId)) : res.sendStatus(500);
-        }
-        finally {
-            await conn.release();
-        }
+    const expectedKeys = ['destination', 'from', 'to', 'price', 'description', 'image'];
+    if (_.isEmpty(_.xor(expectedKeys, Object.keys(vacation)))) {
+        const id = await addVacation(vacation);
+        return id > 0
+            ? res
+                .status(201)
+                .set('Location', `/vacation/${id}`)
+                .json(await getAllVacations(userId))
+            : res.sendStatus(500);
     }
     else {
         return res.sendStatus(400);
@@ -31,14 +30,8 @@ router.post('/', async function ({ user: { id: userId }, body }, res) {
 // Delete vacation.
 router.delete('/:id', async function ({ params: { id: vacationId }, user: { id: userId }, vacation }, res) {
     if (vacation) {
-        const conn = await getSqlConnection();
-        try {
-            const [{ affectedRows }] = await conn.execute('DELETE FROM `vacation` WHERE `id` = ?', [vacationId]);
-            return affectedRows > 0 ? res.json(await getAllVacations(userId)) : res.sendStatus(500);
-        }
-        finally {
-            await conn.release();
-        }
+        const affectedRows = await deleteVacation(vacationId);
+        return affectedRows > 0 ? res.json(await getAllVacations(userId)) : res.sendStatus(500);
     }
     else {
         return res.sendStatus(404);
