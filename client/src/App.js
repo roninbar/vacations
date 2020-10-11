@@ -1,5 +1,5 @@
 import './App.css';
-import { AppBar, Button, Container, IconButton, Menu, MenuItem, Toolbar, Typography, withStyles } from '@material-ui/core';
+import { AppBar, Button, Container, CssBaseline, IconButton, Menu, MenuItem, Snackbar, Toolbar, Typography, withStyles } from '@material-ui/core';
 import MenuIcon from '@material-ui/icons/Menu';
 import { logInAsync, logOutAsync } from 'features/userSlice';
 import React, { PureComponent } from 'react';
@@ -10,6 +10,7 @@ import HomePage from './pages/home-page';
 import LoginForm from './pages/login-form';
 import SignupForm from './pages/signup-form';
 import Chart from 'pages/chart';
+import { Alert } from '@material-ui/lab';
 
 class App extends PureComponent {
 
@@ -33,32 +34,33 @@ class App extends PureComponent {
   }
 
   render() {
-    const { username, userRole, logOutAsync, classes } = this.props;
+    const { user, vacations, logOutAsync, classes } = this.props;
     const { menuAnchorEl } = this.state;
     return (
       <BrowserRouter>
         <Container maxWidth="xl" className={classes.root}>
+          <CssBaseline />
           <AppBar position="fixed">
             <Toolbar>
               <IconButton
                 edge="start"
                 color="inherit"
-                disabled={!username}
+                disabled={!user.name}
                 onClick={this.onClickMenuButton.bind(this)}
                 className={classes.menuButton}
               >
                 <MenuIcon />
               </IconButton>
-              <Menu anchorEl={menuAnchorEl} open={menuAnchorEl} onClose={this.onCloseMenu.bind(this)}>
+              <Menu anchorEl={menuAnchorEl} open={Boolean(menuAnchorEl)} onClose={this.onCloseMenu.bind(this)}>
                 <MenuItem>
                   <Link to="/">Home</Link>
                 </MenuItem>
                 <MenuItem>
-                  <Link to="/chart" disabled={userRole !== 'admin'}>Chart</Link>
+                  <Link to="/chart" disabled={user.role !== 'admin'}>Chart</Link>
                 </MenuItem>
               </Menu>
               <Typography variant="h6" className={classes.title}>Vacations</Typography>
-              {username ?
+              {user.name ?
                 <Button color="inherit" onClick={logOutAsync}>Log Out</Button> :
                 <Button color="inherit">Log In</Button>}
             </Toolbar>
@@ -71,13 +73,13 @@ class App extends PureComponent {
               <SignupForm />
               <Link to="/login">Already have an account?</Link>
             </Route>
-            <Route exact path="/login">
-              <LoginForm />
-              <Link to="/signup">Don't have an account yet?</Link>
-            </Route>
+            <Route exact path="/login" component={LoginForm} />
             <PrivateRoute exact path="/chart" component={Chart} />
             <PrivateRoute exact path="/" component={HomePage} />
           </Switch>
+          <Snackbar open={Boolean(user.error || vacations.error)}>
+            <Alert variant="filled" severity="error" elevation={6}>{user.error?.message || vacations.error?.message}</Alert>
+          </Snackbar>
         </Container>
       </BrowserRouter>
     );
@@ -100,8 +102,8 @@ const styles = theme => ({
   },
 });
 
-function mapStateToProps({ user: { name: username } }) {
-  return { username };
+function mapStateToProps({ user, vacations }) {
+  return { user, vacations };
 }
 
 const mapDispatchToProps = { logInAsync, logOutAsync };

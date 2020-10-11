@@ -1,11 +1,10 @@
-import { Button, CircularProgress, Snackbar } from '@material-ui/core';
+import { Button, CircularProgress, Grid } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
-import { Alert } from '@material-ui/lab';
 import { logInAsync } from 'features/userSlice';
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router-dom';
+import { NavLink, withRouter } from 'react-router-dom';
 
 class LoginForm extends Component {
 
@@ -21,7 +20,6 @@ class LoginForm extends Component {
         e.preventDefault();
         const { logInAsync, history } = this.props;
         const { username, password } = this.state;
-        this.setState({ submitted: true });
         await logInAsync({ username, password });
         history.push('/');
     }
@@ -31,38 +29,59 @@ class LoginForm extends Component {
     }
 
     render() {
-        const { classes, loading, error } = this.props;
+        const { loading, classes } = this.props;
         const { username, password } = this.state;
         return (
             <div className={classes.root}>
-                <form noValidate autoComplete="off" onSubmit={this.onSubmit.bind(this)}>
+                <form noValidate autoComplete="off" onSubmit={this.onSubmit.bind(this)} className={classes.form}>
                     <TextField
                         variant="outlined"
                         type="text"
                         name="username"
+                        margin="normal"
+                        required
+                        fullWidth
+                        id="email"
                         label="Username"
+                        // autoComplete="username"
+                        autoFocus
                         value={username}
-                        onChange={this.onChangeField.bind(this)} />
+                        onChange={this.onChangeField.bind(this)}
+                    />
                     <TextField
                         variant="outlined"
                         type="password"
+                        margin="normal"
+                        required
+                        fullWidth
                         name="password"
                         label="Password"
+                        id="password"
+                        // autoComplete="current-password"
                         value={password}
                         onChange={this.onChangeField.bind(this)}
                     />
-                    <Button type="submit"
+                    {/* <FormControlLabel
+                        control={<Checkbox value="remember" color="primary" />}
+                        label="Remember me"
+                    /> */}
+                    <Button
+                        type="submit"
+                        fullWidth
                         variant="contained"
-                        color="primary"
-                        size="large"
                         disabled={!username || !password || loading}
+                        className={classes.submit}
                     >
-                        {loading ? <CircularProgress></CircularProgress> : 'Log In'}
+                        {loading ? <CircularProgress /> : 'Log In'}
                     </Button>
+                    <Grid container>
+                        <Grid item>
+                            <NavLink to="/signup">
+                                {"Don't have an account? Sign Up"}
+                            </NavLink>
+                        </Grid>
+                    </Grid>
                 </form>
-                <Snackbar open={error}>
-                    <Alert variant="filled" severity="error" elevation={6}>{error.message}</Alert>
-                </Snackbar>
             </div>
         );
     }
@@ -70,17 +89,26 @@ class LoginForm extends Component {
 }
 
 const styles = theme => ({
-    root: {
-        '& .MuiTextField-root, & .MuiButton-root': {
-            margin: theme.spacing(1),
-        },
-        '& .MuiTextField-root': {
-            width: '25ch',
-        },
+    paper: {
+        marginTop: theme.spacing(8),
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+    },
+    avatar: {
+        margin: theme.spacing(1),
+        backgroundColor: theme.palette.secondary.main,
+    },
+    form: {
+        width: '100%', // Fix IE 11 issue.
+        marginTop: theme.spacing(1),
+    },
+    submit: {
+        margin: theme.spacing(3, 0, 2),
     },
 });
 
-const withRedux = connect(({ user: { loading, error } }) => ({ loading, error }), { logInAsync });
+const withRedux = connect(({ user: { loading } }) => ({ loading }), { logInAsync });
 
 export default withRedux(withRouter(withStyles(styles)(LoginForm)));
 
