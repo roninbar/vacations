@@ -217,7 +217,7 @@ class Vacation extends PureComponent {
                                 <Box fontWeight="fontWeightBold"
                                     onBlur={this.onBlur.bind(this, 'dates')}
                                 >
-                                    {entities.decode(`${from}&ndash;${to}`)}
+                                    {entities.decode(`${from} &ndash; ${to}`)}
                                 </Box>
                                 {userRole === 'admin' && editing === 'nothing' &&
                                     <div className="overlay">
