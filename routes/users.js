@@ -7,9 +7,9 @@ const router = express();
 
 // Create a new user account.
 router.post('/', async function (req, res) {
-  const { username, password, firstname, lastname } = req.body;
+  const { username, password, firstName, lastName } = req.body;
   try {
-    const id = await addUser(username, password, firstname, lastname);
+    const id = await addUser(username, password, firstName, lastName);
     res.set('Location', `${router.mountpath}/${id}`).sendStatus(201);
   } catch (error) {
     res.sendStatus(error.code === 'ER_DUP_ENTRY' ? 409 /* Conflict */ : 500);
