@@ -1,6 +1,23 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import { requestJson } from './utils';
 
+export const signUpAsync = createAsyncThunk(
+    'user/signup',
+    async function ({ username, password, firstName, lastName }) {
+        const body = new URLSearchParams();
+        body.set('username', username);
+        body.set('password', password);
+        body.set('firstName', firstName);
+        body.set('lastName', lastName);
+        const { status, statusText } = await fetch('/user', { method: 'POST', body });
+        if (200 <= status && status < 300) {
+            return { status, statusText };
+        } else {
+            throw new Error(`${status} ${statusText}`);
+        }
+    },
+);
+
 export const logInAsync = createAsyncThunk(
     'user/login',
     async function ({ username, password }) {
@@ -38,6 +55,18 @@ const userSlice = createSlice({
         lastName: '',
     },
     extraReducers: {
+        [signUpAsync.pending](user) {
+            user.error = false;
+            user.loading = true;
+        },
+        [signUpAsync.fulfilled](user) {
+            user.loading = false;
+            user.error = false;
+        },
+        [signUpAsync.rejected](user, { error }) {
+            user.loading = false;
+            user.error = error;
+        },
         [logInAsync.pending](user) {
             user.error = false;
             user.loading = true;

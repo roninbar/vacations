@@ -1,5 +1,7 @@
 import { Button, TextField, withStyles } from '@material-ui/core';
+import { logInAsync, signUpAsync } from 'features/userSlice';
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import { withRouter } from 'react-router-dom';
 
 class SignupForm extends Component {
@@ -7,8 +9,8 @@ class SignupForm extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            firstname: '',
-            lastname: '',
+            firstName: '',
+            lastName: '',
             username: '',
             password: '',
             password2: '',
@@ -23,55 +25,38 @@ class SignupForm extends Component {
 
     async onSubmit(e) {
         e.preventDefault();
-        this.setState({ submitted: true });
-        try {
-            const { firstname, lastname, username, password } = this.state;
-            const body = new URLSearchParams();
-            body.set('firstname', firstname);
-            body.set('lastname', lastname);
-            body.set('username', username);
-            body.set('password', password);
-            const { status } = await fetch('/user', {
-                method: 'POST',
-                body,
-            });
-            if (status === 201) {
-                this.setState({
-                    firstname: '',
-                    lastname: '',
-                    username: '',
-                    password: '',
-                    password2: '',
-                });
-            }
-        } finally {
-            this.setState({ submitted: false });
+        const { signUpAsync, logInAsync, history } = this.props;
+        const { username, password, firstName, lastName } = this.state;
+        const { payload: { status } } = await signUpAsync({ username, password, firstName, lastName });
+        if (status === 201) {
+            await logInAsync({ username, password });
+            history.push('/');
         }
     }
 
     render() {
-        const { firstname, lastname, username, available, password, password2, submitted } = this.state;
+        const { firstName, lastName, username, available, password, password2, submitted } = this.state;
         const { classes } = this.props;
         return (
             <form className={classes.root} noValidate autoComplete="off" onSubmit={this.onSubmit.bind(this)}>
                 <TextField
                     variant="outlined"
                     type="text"
-                    name="firstname"
+                    name="firstName"
                     label="First Name"
-                    helperText={!firstname && 'Required.'}
-                    error={!firstname}
-                    value={firstname}
+                    helperText={!firstName && 'Required.'}
+                    error={!firstName}
+                    value={firstName}
                     onChange={this.onChange.bind(this)}
                 />
                 <TextField
                     variant="outlined"
                     type="text"
-                    name="lastname"
+                    name="lastName"
                     label="Last Name"
-                    helperText={!lastname && 'Required.'}
-                    error={!lastname}
-                    value={lastname}
+                    helperText={!lastName && 'Required.'}
+                    error={!lastName}
+                    value={lastName}
                     onChange={this.onChange.bind(this)}
                 />
                 <TextField
@@ -109,7 +94,7 @@ class SignupForm extends Component {
                     type="submit"
                     color="primary"
                     size="large"
-                    disabled={!firstname || !lastname || !username || !available || !password || password !== password2 || submitted}
+                    disabled={!firstName || !lastName || !username || !available || !password || password !== password2 || submitted}
                     ref={this.submitButton}
                 >Sign Up</Button>
             </form>
@@ -126,6 +111,8 @@ class SignupForm extends Component {
 
 }
 
+const withRedux = connect(null, { signUpAsync, logInAsync });
+
 const styles = theme => ({
     root: {
         '& .MuiTextField-root, & .MuiButton-root': {
@@ -137,4 +124,4 @@ const styles = theme => ({
     },
 });
 
-export default withRouter(withStyles(styles)(SignupForm));
+export default withRedux(withRouter(withStyles(styles)(SignupForm)));
