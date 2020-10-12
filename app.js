@@ -19,6 +19,8 @@ app.use(session({
     resave: false,
     saveUninitialized: true,
     store: new MySQLStore({
+        host: process.env['DBHOST'],
+        port: process.env['DBPORT'],
         user: process.env['DBUSER'],
         password: process.env['DBPASS'],
         database: process.env['DBNAME'],
@@ -41,7 +43,7 @@ app.use(function (req, res, next) {
 app.use('/vacation', require('./routes/vacations'));
 
 // Block unauthorized requests from invoking unsafe operations.
-app.use(function(req, res, next) {
+app.use(function (req, res, next) {
     if (req.isAuthenticated() && req.user.role === 'admin') {
         return next();
     } else {
@@ -52,7 +54,7 @@ app.use(function(req, res, next) {
 app.use('/vacation', require('./routes/unsafe/vacations'));
 
 // Any request that was not handled by the previous middleware must be invalid.
-app.use('/vacation', function(req, res) {
+app.use('/vacation', function (req, res) {
     return res.sendStatus(400);
 });
 
