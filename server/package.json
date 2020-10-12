@@ -3,11 +3,10 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "start": "cross-env DBUSER=root DBPASS= DBNAME=vacations SECRET=xyzzy PORT=4000 node ./bin/www"
+    "start": "node ./bin/www"
   },
   "dependencies": {
     "cookie-parser": "~1.4.4",
-    "cross-env": "^7.0.2",
     "debug": "~2.6.9",
     "express": "~4.16.1",
     "express-mysql-session": "^2.1.4",
@@ -19,6 +18,7 @@
     "passport-local": "^1.0.0"
   },
   "devDependencies": {
+    "cross-env": "^7.0.2",
     "localtunnel": "^2.0.0"
   }
 }
