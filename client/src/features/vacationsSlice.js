@@ -4,7 +4,7 @@ import { requestJson } from './utils';
 
 export const loadAllAsync = createAsyncThunk(
     'vacations/loadAll',
-    async function() {
+    async function () {
         return await requestJson('/vacation/all');
     },
 );
@@ -117,9 +117,9 @@ const vacationsSlice = createSlice({
             state.loading = false;
             state.error = error;
         },
-        [changeAsync.pending](state) {
+        [changeAsync.pending](state, { meta: { arg: { showLoading } } }) {
             state.error = false;
-            state.loading = true;
+            state.loading = Boolean(showLoading);
         },
         [changeAsync.fulfilled](state, { payload: vacation }) {
             updateVacation(state, vacation);

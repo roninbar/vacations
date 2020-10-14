@@ -34,7 +34,7 @@ class HomePage extends Component {
     }
 
     onChangeFollowing(vacationId, isFollowing) {
-        const payload = { id: vacationId, isFollowing };
+        const payload = { id: vacationId, isFollowing, showLoading: false };
         const { setFollowing, changeAsync } = this.props;
         setFollowing(payload); // Give the user immediate feedback for the button press.
         changeAsync(payload); // Dispatch an async action that updates the database.
@@ -42,7 +42,7 @@ class HomePage extends Component {
 
     onChangeFields(vacationId, fields) {
         const { changeAsync } = this.props;
-        changeAsync({ id: vacationId, ...fields });
+        changeAsync({ id: vacationId, ...fields, showLoading: true });
     }
 
     onDelete(vacationId) {
