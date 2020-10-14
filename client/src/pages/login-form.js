@@ -8,13 +8,10 @@ import { NavLink, withRouter } from 'react-router-dom';
 
 class LoginForm extends Component {
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            username: '',
-            password: '',
-        };
-    }
+    state = {
+        username: '',
+        password: '',
+    };
 
     async onSubmit(e) {
         e.preventDefault();

@@ -14,12 +14,9 @@ import { Alert } from '@material-ui/lab';
 
 class App extends PureComponent {
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      menuAnchorEl: null,
-    };
-  }
+  state = {
+    menuAnchorEl: null,
+  };
 
   onClickMenuButton({ currentTarget }) {
     this.setState({

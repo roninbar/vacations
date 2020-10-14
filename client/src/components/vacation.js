@@ -31,13 +31,10 @@ const TextField = withStyles({
 
 class Vacation extends PureComponent {
 
-    constructor(props) {
-        super(props);
-        this.state = {
+    state = {
             editing: 'nothing',
             fields: {},
         };
-    }
 
     quitEditing() {
         this.setState({

@@ -6,18 +6,15 @@ import { withRouter } from 'react-router-dom';
 
 class SignupForm extends Component {
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            firstName: '',
-            lastName: '',
-            username: '',
-            password: '',
-            password2: '',
-            available: true,
-            submitted: false,
-        };
-    }
+    state = {
+        firstName: '',
+        lastName: '',
+        username: '',
+        password: '',
+        password2: '',
+        available: true,
+        submitted: false,
+    };
 
     onChange({ target: { name, value } }) {
         this.setState({ [name]: value });

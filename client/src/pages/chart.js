@@ -9,64 +9,53 @@ const entities = new Html5Entities();
 
 class Chart extends Component {
 
-    constructor(props) {
-        super(props);
-
-        this.state = {
-
-            chartOptions: {
-                chart: {
-                    type: 'bar'
-                },
-                title: {
-                    text: 'Followers by Vacation',
-                },
-                xAxis: {
-                    categories: ['Africa', 'America', 'Asia', 'Europe', 'Oceania'],
-                    title: {
-                        text: 'Vacation ID',
-                    },
-                },
-                yAxis: {
-                    min: 0,
-                    title: {
-                        text: null,
-                    },
-                    labels: {
-                        overflow: 'justify'
-                    }
-                },
-                tooltip: {
-                },
-                plotOptions: {
-                    bar: {
-                        dataLabels: {
-                            enabled: true
-                        }
-                    }
-                },
-                legend: {
-                },
-                credits: {
-                    enabled: false
-                },
-                series: [],
+    state = {
+        chartOptions: {
+            chart: {
+                type: 'bar'
             },
-        };
-    }
+            title: {
+                text: 'Followers by Vacation',
+            },
+            xAxis: {
+                categories: [],
+                title: {
+                    text: 'Vacation ID',
+                },
+            },
+            yAxis: {
+                min: 0,
+                title: {
+                    text: null,
+                },
+                labels: {
+                    overflow: 'justify'
+                }
+            },
+            tooltip: {
+            },
+            plotOptions: {
+                bar: {
+                    dataLabels: {
+                        enabled: true
+                    }
+                }
+            },
+            legend: {
+            },
+            credits: {
+                enabled: false
+            },
+            series: [],
+        },
+    };
 
     render() {
         const { vacations } = this.props;
         const { chartOptions } = this.state;
-        return (
-            vacations?.length > 0
-                ? (
-                    <HighchartsReact highcharts={Highcharts} options={chartOptions} />)
-                : (
-                    <h1>No vacation is being followed.</h1>
-                )
-        );
-
+        return vacations?.length > 0
+            ? <HighchartsReact highcharts={Highcharts} options={chartOptions} />
+            : <h1>No vacation is being followed.</h1>;
     }
 
     componentDidMount() {
@@ -83,12 +72,12 @@ class Chart extends Component {
     }
 
     updateChartOptions(vacations) {
-        const { chartOptions: { xAxis: { categories, ...restXAxis }, series, ...restChartOptions } } = this.state;
+        // const { chartOptions: { xAxis: { categories, ...restOfXAxisOptions }, series, ...restOfChartOptions } } = this.state;
         this.setState({
             chartOptions: {
                 xAxis: {
                     categories: vacations.map(({ id }) => id),
-                    ...restXAxis,
+                    // ...restOfXAxisOptions,
                 },
                 series: [
                     {
@@ -99,7 +88,7 @@ class Chart extends Component {
                         })),
                     },
                 ],
-                ...restChartOptions,
+                // ...restOfChartOptions,
             },
         });
     }

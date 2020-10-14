@@ -12,14 +12,11 @@ import Dialog from '../components/dialog';
 
 class HomePage extends Component {
 
-    constructor(props) {
-        super(props);
-        this.state = {
-            add: false,
-            idToDelete: 0,
-            newVacationProps: { ...defaultVacationProps },
-        };
-    }
+    state = {
+        add: false,
+        idToDelete: 0,
+        newVacationProps: { ...defaultVacationProps },
+    };
 
     openAddDialog() {
         return this.setState({ add: true });
