@@ -1,6 +1,6 @@
-const { addUser } = require('../entities/user/create');
-const { getUserByName } = require('../entities/user/retrieve');
-const passport = require('../util/passport');
+const { addUser } = require('../../entities/user/create');
+const { getUserByName } = require('../../entities/user/retrieve');
+const passport = require('../../util/passport');
 const express = require('express');
 
 const router = express();
