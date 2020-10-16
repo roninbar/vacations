@@ -1,8 +1,8 @@
 const _ = require('lodash');
-const { getVacation, getAllVacations } = require('../../entities/vacation/retrieve');
-const { addVacation } = require('../../entities/vacation/create');
-const { updateVacation } = require('../../entities/vacation/update');
-const { deleteVacation } = require('../../entities/vacation/delete');
+const { getVacation, getAllVacations } = require('../../../entities/vacation/retrieve');
+const { addVacation } = require('../../../entities/vacation/create');
+const { updateVacation } = require('../../../entities/vacation/update');
+const { deleteVacation } = require('../../../entities/vacation/delete');
 const express = require('express');
 
 // eslint-disable-next-line new-cap

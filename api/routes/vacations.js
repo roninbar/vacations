@@ -1,5 +1,5 @@
-const { getVacation, getAllVacations } = require('../entities/vacation/retrieve');
-const { followVacation, unfollowVacation } = require('../entities/vacation/update');
+const { getVacation, getAllVacations } = require('../../entities/vacation/retrieve');
+const { followVacation, unfollowVacation } = require('../../entities/vacation/update');
 const express = require('express');
 
 // eslint-disable-next-line new-cap
