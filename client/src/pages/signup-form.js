@@ -101,7 +101,7 @@ class SignupForm extends Component {
     async componentDidUpdate(prevProps, { username: prevUsername }) {
         const { username } = this.state;
         if (username && username !== prevUsername) {
-            const { status } = await fetch(`/user/${username}`, { method: 'HEAD' });
+            const { status } = await fetch(`/api/user/${username}`, { method: 'HEAD' });
             this.setState({ available: status === 404 });
         }
     }

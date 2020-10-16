@@ -9,7 +9,7 @@ export const signUpAsync = createAsyncThunk(
         body.set('password', password);
         body.set('firstName', firstName);
         body.set('lastName', lastName);
-        const { status, statusText } = await fetch('/user', { method: 'POST', body });
+        const { status, statusText } = await fetch('/api/user', { method: 'POST', body });
         if (200 <= status && status < 300) {
             return { status, statusText };
         } else {
@@ -24,7 +24,7 @@ export const logInAsync = createAsyncThunk(
         const body = new URLSearchParams();
         body.set('username', username);
         body.set('password', password);
-        return await requestJson('/user/login', {
+        return await requestJson('/api/user/login', {
             method: 'POST',
             body,
         });
@@ -34,7 +34,7 @@ export const logInAsync = createAsyncThunk(
 export const logOutAsync = createAsyncThunk(
     'user/logout',
     async function () {
-        const { status, statusText } = await fetch('/user/logout', { method: 'POST' });
+        const { status, statusText } = await fetch('/api/user/logout', { method: 'POST' });
         if (200 <= status && status < 300) {
             return statusText;
         } else {

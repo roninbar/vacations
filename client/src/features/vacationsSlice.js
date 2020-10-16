@@ -5,35 +5,35 @@ import { requestJson } from './utils';
 export const loadAllAsync = createAsyncThunk(
     'vacations/loadAll',
     async function () {
-        return await requestJson('/vacation/all');
+        return await requestJson('/api/vacation/all');
     },
 );
 
 export const loadOneAsync = createAsyncThunk(
     'vacations/loadOne',
     async function (id) {
-        return await requestJson(`/vacation/${id}`);
+        return await requestJson(`/api/vacation/${id}`);
     },
 );
 
 export const addAsync = createAsyncThunk(
     'vacations/add',
     async function ({ destination, from, to, price, description, image }) {
-        return await requestJsonWithBody('POST', '/vacation', { destination, from, to, price, description, image });
+        return await requestJsonWithBody('POST', '/api/vacation', { destination, from, to, price, description, image });
     },
 );
 
 export const changeAsync = createAsyncThunk(
     'vacations/change',
     async function ({ id, ...rest }) {
-        return await requestJsonWithBody('PATCH', `/vacation/${id}`, rest);
+        return await requestJsonWithBody('PATCH', `/api/vacation/${id}`, rest);
     },
 );
 
 export const deleteAsync = createAsyncThunk(
     'vacations/delete',
     async function (id) {
-        return await requestJson(`/vacation/${id}`, { method: 'DELETE' });
+        return await requestJson(`/api/vacation/${id}`, { method: 'DELETE' });
     },
 );
 
