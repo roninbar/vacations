@@ -29,10 +29,12 @@ app.use(session({
 app.use(passport.initialize());
 app.use(passport.session());
 
-app.use('/user', require('./routes/users'));
+const api = new express.Router();
+
+api.use('/user', require('./routes/users'));
 
 // Block unauthenticated requests from getting any further (e.g. to /vacation).
-app.use(function (req, res, next) {
+api.use(function (req, res, next) {
     if (req.isAuthenticated()) {
         return next();
     } else {
@@ -40,10 +42,10 @@ app.use(function (req, res, next) {
     }
 });
 
-app.use('/vacation', require('./routes/vacations'));
+api.use('/vacation', require('./routes/vacations'));
 
 // Block unauthorized requests from invoking unsafe operations.
-app.use(function (req, res, next) {
+api.use(function (req, res, next) {
     if (req.isAuthenticated() && req.user.role === 'admin') {
         return next();
     } else {
@@ -51,12 +53,14 @@ app.use(function (req, res, next) {
     }
 });
 
-app.use('/vacation', require('./routes/unsafe/vacations'));
+api.use('/vacation', require('./routes/unsafe/vacations'));
 
 // Any request that was not handled by the previous middleware must be invalid.
-app.use('/vacation', function (req, res) {
+api.use('/vacation', function (req, res) {
     return res.sendStatus(400);
 });
+
+app.use('/api', api);
 
 module.exports = app;
 
