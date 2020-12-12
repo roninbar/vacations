@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "start": "node ./bin/www",
+    "start-with-env": "env-cmd node ./bin/www",
     "start-heroku": "heroku local"
   },
   "dependencies": {
@@ -20,6 +21,7 @@
   },
   "devDependencies": {
     "cross-env": "^7.0.2",
+    "env-cmd": "^10.1.0",
     "localtunnel": "^2.0.0"
   }
 }
