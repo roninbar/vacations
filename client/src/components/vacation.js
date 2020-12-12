@@ -22,7 +22,7 @@ const TextField = withStyles({
         return (
             <ClickAwayListener onClickAway={onClickAway}>
                 <form className={classes.form} onSubmit={onSubmit}>
-                    <MuiTextField fullWidth={true} {...rest} />
+                    <MuiTextField fullWidth {...rest} />
                 </form>
             </ClickAwayListener>
         );
@@ -32,9 +32,9 @@ const TextField = withStyles({
 class Vacation extends PureComponent {
 
     state = {
-            editing: 'nothing',
-            fields: {},
-        };
+        editing: 'nothing',
+        fields: {},
+    };
 
     quitEditing() {
         this.setState({
@@ -112,6 +112,10 @@ class Vacation extends PureComponent {
         }
     }
 
+    onBlurDestination(e) {
+        this.fireChangeFields();
+    }
+
     render() {
         const { id, destination, from, to, price, description, image, followers, isFollowing, onChangeFollowing, onDelete, userRole, classes } = this.props;
         const { editing } = this.state;
@@ -161,6 +165,7 @@ class Vacation extends PureComponent {
                                 onSubmit={this.onSubmitTextField.bind(this)}
                                 onClickAway={this.onClickAway.bind(this)}
                                 onKeyUp={this.onKeyUp.bind(this)}
+                                onBlur={this.onBlurDestination.bind(this)}
                                 autoFocus
                             />
                         ) : (

@@ -1,4 +1,4 @@
-import { Button, CircularProgress, Grid } from '@material-ui/core';
+import { Button, CircularProgress, Container, Grid } from '@material-ui/core';
 import { withStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import { logInAsync } from 'features/userSlice';
@@ -29,7 +29,7 @@ class LoginForm extends Component {
         const { loading, classes } = this.props;
         const { username, password } = this.state;
         return (
-            <div className={classes.root}>
+            <Container maxWidth="xs" className={classes.root}>
                 <form noValidate autoComplete="off" onSubmit={this.onSubmit.bind(this)} className={classes.form}>
                     <TextField
                         variant="outlined"
@@ -79,7 +79,7 @@ class LoginForm extends Component {
                         </Grid>
                     </Grid>
                 </form>
-            </div>
+            </Container>
         );
     }
 
