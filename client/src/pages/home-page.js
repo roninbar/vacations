@@ -195,21 +195,21 @@ const styles = theme => ({
 });
 
 const mapStateToProps = ({
-        user: {
-            name: username,
-            role: userRole,
-        },
-        vacations: {
-            error,
-            loading,
-            vacations,
-        },
-}) => ({
-        username,
-        userRole,
+    user: {
+        name: username,
+        role: userRole,
+    },
+    vacations: {
         error,
         loading,
-        vacations: [...vacations].sort(({ isFollowing: a }, { isFollowing: b }) => b - a),
+        vacations,
+    },
+}) => ({
+    username,
+    userRole,
+    error,
+    loading,
+    vacations,
 });
 
 const mapDispatchToProps = { setFollowing, loadAllAsync, addAsync, changeAsync, deleteAsync };
