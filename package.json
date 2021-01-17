@@ -12,8 +12,9 @@
   "scripts": {
     "heroku-deploy": "git subtree push --prefix server heroku master",
     "heroku-local": "cd server && heroku local",
-    "heroku-open": "heroku open"
-},
+    "heroku-open": "heroku open",
+    "github-heroku-push": "git subtree push --prefix server origin heroku"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/roninbar/2020-09-11-vacations.git"
