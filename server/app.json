@@ -1,0 +1,52 @@
+{
+  "name": "Vacations",
+  "description": "An app that lets users follow vacations",
+  "keywords": [],
+  "stack": "heroku-20",
+  "buildpacks": [
+    {
+      "url": "heroku/nodejs"
+    }
+  ],
+  "env": {
+    "DBHOST": {
+      "description": "MySQL host name",
+      "value": "localhost"
+    },
+    "DBPORT": {
+      "description": "MySQL port",
+      "value": "3306"
+    },
+    "DBUSER": {
+      "description": "MySQL username",
+      "value": "root"
+    },
+    "DBPASS": {
+      "description": "MySQL password",
+      "value": "root"
+    },
+    "DBNAME": {
+      "description": "MySQL DB (schema) name",
+      "value": "vacations"
+    },
+    "DEBUG": {
+      "description": "Mask for log messages",
+      "value": "server:*",
+      "required": false
+    },
+    "MONGODBURL": {
+      "description": "MongoDB connection string (please change this to point to your own cluster)",
+      "value": "e.g. mongodb+srv://username:password@cluster0-jtpxd.mongodb.net/vacations",
+      "required": false
+    },
+    "SECRET": {
+      "description": "A secret key for signing passwords and session cookies",
+      "generator": "secret"
+    },
+    "SIDNAME": {
+      "description": "Session ID cookie name",
+      "value": "connect.sid",
+      "required": false
+    }
+  }
+}
