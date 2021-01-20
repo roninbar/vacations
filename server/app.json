@@ -19,11 +19,11 @@
     },
     "DBUSER": {
       "description": "MySQL username",
-      "value": "root"
+      "value": "heroku"
     },
     "DBPASS": {
       "description": "MySQL password",
-      "value": "root"
+      "value": ""
     },
     "DBNAME": {
       "description": "MySQL DB (schema) name",
