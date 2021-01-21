@@ -12,7 +12,7 @@ const database = process.env['DBNAME'];
 
 let pool = null;
 
-async function getSqlConnection() {
+function getSqlConnectionPool() {
     if (!pool) {
         log(`Connecting to \`${database}\` at ${host || '(localhost)'}:${port || '(3306)'}...`);
         pool = mysql.createPool({
@@ -22,8 +22,8 @@ async function getSqlConnection() {
             ],
         });
     }
-    return await pool.getConnection();
+    return pool;
 }
 
-exports.getSqlConnection = getSqlConnection;
+exports.getSqlConnection = getSqlConnectionPool;
 

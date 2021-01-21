@@ -3,30 +3,20 @@ const { getSqlConnection } = require('../connect');
 
 async function followVacation(userId, vacationId) {
     const conn = await getSqlConnection();
-    try {
-        const [{ insertId }] = await conn.execute('INSERT IGNORE INTO `user_vacation` (`user_id`, `vacation_id`) VALUES (?, ?)', [
-            userId,
-            vacationId
-        ]);
-        return insertId;
-    }
-    finally {
-        await conn.release();
-    }
+    const [{ insertId }] = await conn.execute('INSERT IGNORE INTO `user_vacation` (`user_id`, `vacation_id`) VALUES (?, ?)', [
+        userId,
+        vacationId
+    ]);
+    return insertId;
 }
 
 async function unfollowVacation(userId, vacationId) {
     const conn = await getSqlConnection();
-    try {
-        const [{ affectedRows }] = await conn.execute('DELETE FROM `user_vacation` WHERE `user_id` = ? AND `vacation_id` = ?', [
-            userId,
-            vacationId
-        ]);
-        return affectedRows;
-    }
-    finally {
-        await conn.release();
-    }
+    const [{ affectedRows }] = await conn.execute('DELETE FROM `user_vacation` WHERE `user_id` = ? AND `vacation_id` = ?', [
+        userId,
+        vacationId
+    ]);
+    return affectedRows;
 }
 
 /**
@@ -43,12 +33,8 @@ async function updateVacation(id, newValues) {
             .trim();
         const sql = `UPDATE \`vacation\` SET ${assignments} WHERE \`id\` = :id`;
         const conn = await getSqlConnection();
-        try {
-            const [{ affectedRows }] = await conn.execute({ sql, namedPlaceholders: true }, { id, ...newValues });
-            return affectedRows;
-        } finally {
-            await conn.release();
-        }
+        const [{ affectedRows }] = await conn.execute({ sql, namedPlaceholders: true }, { id, ...newValues });
+        return affectedRows;
     }
     else {
         return 0;

@@ -15,20 +15,15 @@ const SELECT_VACATIONS =
  */
 async function getVacation(userId, vacationId) {
     const conn = await getSqlConnection();
-    try {
-        const [[vacation]] = await conn.execute({
-            // eslint-disable-next-line prefer-template
-            sql: SELECT_VACATIONS + ' HAVING `vacation`.`id` = :vacationId',
-            namedPlaceholders: true,
-        }, {
-            userId,
-            vacationId,
-        });
-        return vacation;
-    }
-    finally {
-        await conn.release();
-    }
+    const [[vacation]] = await conn.execute({
+        // eslint-disable-next-line prefer-template
+        sql: SELECT_VACATIONS + ' HAVING `vacation`.`id` = :vacationId',
+        namedPlaceholders: true,
+    }, {
+        userId,
+        vacationId,
+    });
+    return vacation;
 }
 
 /**
@@ -37,18 +32,13 @@ async function getVacation(userId, vacationId) {
  */
 async function getAllVacations(userId) {
     const conn = await getSqlConnection();
-    try {
-        const [vacations] = await conn.execute({
-            sql: SELECT_VACATIONS,
-            namedPlaceholders: true,
-        }, {
-            userId,
-        });
-        return vacations;
-    }
-    finally {
-        await conn.release();
-    }
+    const [vacations] = await conn.execute({
+        sql: SELECT_VACATIONS,
+        namedPlaceholders: true,
+    }, {
+        userId,
+    });
+    return vacations;
 }
 
 Object.assign(exports, { getVacation, getAllVacations });
