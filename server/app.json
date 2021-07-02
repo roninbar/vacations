@@ -9,25 +9,9 @@
     }
   ],
   "env": {
-    "DBHOST": {
-      "description": "MySQL host name",
-      "value": "localhost"
-    },
-    "DBPORT": {
-      "description": "MySQL port",
-      "value": "3306"
-    },
-    "DBUSER": {
-      "description": "MySQL username",
-      "value": "heroku"
-    },
-    "DBPASS": {
-      "description": "MySQL password",
-      "value": ""
-    },
-    "DBNAME": {
-      "description": "MySQL DB (schema) name",
-      "value": "vacations"
+    "JAWSDB_MARIA_URL": {
+      "description": "URL of MariaDB server",
+      "value": "mysql://<username>:<password>@<hostname>:3306/<database>"
     },
     "DEBUG": {
       "description": "Mask for log messages",
