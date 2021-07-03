@@ -6,7 +6,7 @@
     "node": "14.x"
   },
   "scripts": {
-    "start-heroku": "node ./bin/www",
+    "start-heroku": "node --inspect-brk ./bin/www",
     "start": "env-cmd node ./bin/www"
   },
   "dependencies": {
