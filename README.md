@@ -1,5 +1,9 @@
 # React.js + Express.js + MySQL Project
 
+## Live Version
+
+https://bzique.herokuapp.com/
+
 ## Credentials for testing:
 
 | Role  | Username | Password |
@@ -9,5 +13,4 @@
 
 ## Hosting
 
-[![Deploy to Heroku](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy?template=https://github.com/roninbar/2020-09-11-vacations/tree/heroku)
-
+[![Deploy to Heroku](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy?template=https://github.com/roninbar/vacations/tree/heroku)
